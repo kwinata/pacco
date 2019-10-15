@@ -1,3 +1,0 @@
-cd docs_src
-make github
-cd ..
