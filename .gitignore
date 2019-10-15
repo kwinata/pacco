@@ -2,3 +2,6 @@
 **/.DS_Store
 **/__pycache__
 docs_src/build/
+build/
+dist/
+pacco.egg-info/
