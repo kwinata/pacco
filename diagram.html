@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Pacco Documentation &mdash; Pacco - binary package manager  documentation</title>
+  <title>Design Diagram &mdash; Pacco - binary package manager  documentation</title>
   
 
   
@@ -35,7 +35,7 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="API Documentation" href="api_docs/index.html" /> 
+    <link rel="prev" title="Clients" href="api_docs/clients.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -49,7 +49,7 @@
           
 
           
-            <a href="#" class="icon icon-home"> Pacco - binary package manager
+            <a href="index.html" class="icon icon-home"> Pacco - binary package manager
           
 
           
@@ -79,9 +79,12 @@
               
             
             
-              <ul>
+              <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="api_docs/index.html">API Documentation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="diagram.html">Design Diagram</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Design Diagram</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#class-diagram">Class Diagram</a></li>
+</ul>
+</li>
 </ul>
 
             
@@ -96,7 +99,7 @@
       <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="#">Pacco - binary package manager</a>
+          <a href="index.html">Pacco - binary package manager</a>
         
       </nav>
 
@@ -125,15 +128,15 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="#">Docs</a> &raquo;</li>
+      <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>Pacco Documentation</li>
+      <li>Design Diagram</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/diagram.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -146,30 +149,25 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="pacco-documentation">
-<h1>Pacco Documentation<a class="headerlink" href="#pacco-documentation" title="Permalink to this headline">¶</a></h1>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="api_docs/index.html">API Documentation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="api_docs/classes.html">Classes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api_docs/clients.html">Clients</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="diagram.html">Design Diagram</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="diagram.html#class-diagram">Class Diagram</a></li>
-</ul>
-</li>
-</ul>
+  <div class="section" id="design-diagram">
+<h1>Design Diagram<a class="headerlink" href="#design-diagram" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="class-diagram">
+<h2>Class Diagram<a class="headerlink" href="#class-diagram" title="Permalink to this headline">¶</a></h2>
+<p>There is some known violation of best practices in the design. The most prominent one is probably the violation of
+Liskov Substitution Principle. As quoted from Wikipedia:</p>
+<blockquote>
+<div><p>Substitutability is a principle in object-oriented programming stating that, in a computer program, if S is a
+subtype of T, then objects of type T may be replaced with objects of type S (i.e. an object of type T may be
+substituted with any object of a subtype S) without altering any of the desirable properties of the program
+(correctness, task performed, etc.).</p>
+</div></blockquote>
+<p>For the current implementation, the PackageManagerFileBased directly depends on FileBasedClientAbstract. Thus we can’t
+use it to replace the abstract PackageManager to use any client. And it also uses directly the PackageRegistryFileBased
+rather than a generic PackageRegistry. Decoupling PackageRegistryFileBased from PackageRegistryFileBased seems to be
+more likelihood but it may be very difficult to have an implementation of PackageRegistry that is independent of the
+Client implementation.</p>
+<img alt="_images/pacco.png" src="_images/pacco.png" />
 </div>
-<p>Pacco is intended to be used a simple tool for storing binaries. Most of the existing tools found available
-handles to much detail, usually because it is manifested as package manager for certain language.</p>
-<p>Pacco knows three kinds of things: package manager, package registry, and package binary.
-Package manager represent an existing of pacco managed “space”. Package manager will store several package registries.
-Each package registry represent a collection of binaries with different configuration. For example, we can have
-a package registry of “openssl”, which means it will store different variants or configurations of openssl.
-The different variants or configuration is stored as package binaries. Technically, it does not need to be a program
-binary, but rather any file. We store a directory inside the binary with the specified variant and configuration.</p>
-<p>For more examples, you can see the API docs.</p>
 </div>
 
 
@@ -180,8 +178,8 @@ binary, but rather any file. We store a directory inside the binary with the spe
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="api_docs/index.html" class="btn btn-neutral float-right" title="API Documentation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
+        <a href="api_docs/clients.html" class="btn btn-neutral float-left" title="Clients" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
