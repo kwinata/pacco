@@ -7,7 +7,7 @@ SPHINXOPTS    ?=
 SPHINXBUILD   ?= sphinx-build
 SOURCEDIR     = source
 BUILDDIR      = build
-HTMLDIR       = ../docs
+HTMLDIR       = ..
 
 # Put it first so that "make" without argument is like "make help".
 help:
@@ -17,7 +17,13 @@ help:
 
 github:
 	@make html
-	@rm -rf $(HTMLDIR)
+	@rm -rf $(HTMLDIR)/_static/
+	@rm -rf $(HTMLDIR)/_images/
+	@rm -rf $(HTMLDIR)/.buildinfo
+	@rm -rf $(HTMLDIR)/_sources/
+	@rm -f $(HTMLDIR)/*.html
+	@rm -f $(HTMLDIR)/objects.inv
+	@rm -f $(HTMLDIR)/searchindex.js
 	@cp -a $(BUILDDIR)/html/. $(HTMLDIR)
 	@touch $(HTMLDIR)/.nojekyll
 
