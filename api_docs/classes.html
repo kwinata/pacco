@@ -215,6 +215,27 @@ expected behavior defined below.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="pacco.classes_interface.PackageManager.get_package_registry">
+<code class="sig-name descname">get_package_registry</code><span class="sig-paren">(</span><em class="sig-param">name</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.classes_interface.PackageManager.get_package_registry" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a reference to the <code class="docutils literal notranslate"><span class="pre">PackageRegistry</span></code> object based on the settings value</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>name</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – the name of the package registry to get</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#pacco.classes_interface.PackageRegistry" title="pacco.classes_interface.PackageRegistry"><code class="xref py py-class docutils literal notranslate"><span class="pre">PackageRegistry</span></code></a></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the object</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Exceptions:</dt><dd><p>FileNotFoundError: when that package is not found or it is not set properly.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
 <dt id="pacco.classes_interface.PackageManager.list_package_registries">
 <code class="sig-name descname">list_package_registries</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pacco.classes_interface.PackageManager.list_package_registries" title="Permalink to this definition">¶</a></dt>
 <dd><p>List package registries in this package manager.</p>
@@ -256,6 +277,8 @@ expected behavior defined below.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pm</span><span class="o">.</span><span class="n">delete_package_registry</span><span class="p">(</span><span class="s1">&#39;openssl&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pm</span><span class="o">.</span><span class="n">list_package_registries</span><span class="p">()</span>
 <span class="go">[(&#39;boost&#39;, PR[boost, os, target, type])]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pm</span><span class="o">.</span><span class="n">get_package_registry</span><span class="p">(</span><span class="s1">&#39;boost&#39;</span><span class="p">)</span>
+<span class="go">PR[boost, os, target, type]</span>
 </pre></div>
 </div>
 <dl class="method">
@@ -292,6 +315,27 @@ expected behavior defined below.</p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pacco.classes_file_based.PackageManagerFileBased.get_package_registry">
+<code class="sig-name descname">get_package_registry</code><span class="sig-paren">(</span><em class="sig-param">name</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.classes_file_based.PackageManagerFileBased.get_package_registry" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a reference to the <code class="docutils literal notranslate"><span class="pre">PackageRegistry</span></code> object based on the settings value</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>name</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – the name of the package registry to get</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#pacco.classes_file_based.PackageRegistryFileBased" title="pacco.classes_file_based.PackageRegistryFileBased"><code class="xref py py-class docutils literal notranslate"><span class="pre">PackageRegistryFileBased</span></code></a></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the object</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Exceptions:</dt><dd><p>FileNotFoundError: when that package is not found or it is not set properly.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -357,6 +401,28 @@ FileExistsError: raised if a package binary with the same configuration already 
 </dd></dl>
 
 <dl class="method">
+<dt id="pacco.classes_interface.PackageRegistry.get_package_binary">
+<code class="sig-name descname">get_package_binary</code><span class="sig-paren">(</span><em class="sig-param">settings_value</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.classes_interface.PackageRegistry.get_package_binary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a reference to the <code class="docutils literal notranslate"><span class="pre">PackageBinary</span></code> object based on the settings value</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>settings_value</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – the configuration of the the package binary to get</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#pacco.classes_interface.PackageBinary" title="pacco.classes_interface.PackageBinary"><code class="xref py py-class docutils literal notranslate"><span class="pre">PackageBinary</span></code></a></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the object</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Exceptions:</dt><dd><p>KeyError: when the key of the settings passed is not correct
+FileNotFoundError: when there is no binary with the configuration of settings value</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
 <dt id="pacco.classes_interface.PackageRegistry.list_package_binaries">
 <code class="sig-name descname">list_package_binaries</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pacco.classes_interface.PackageRegistry.list_package_binaries" title="Permalink to this definition">¶</a></dt>
 <dd><p>List the package binaries registered in this package registry</p>
@@ -405,6 +471,8 @@ FileExistsError: raised if a package binary with the same configuration already 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pr</span><span class="o">.</span><span class="n">delete_package_binary</span><span class="p">({</span><span class="s1">&#39;os&#39;</span><span class="p">:</span><span class="s1">&#39;osx&#39;</span><span class="p">,</span> <span class="s1">&#39;compiler&#39;</span><span class="p">:</span><span class="s1">&#39;clang&#39;</span><span class="p">,</span> <span class="s1">&#39;version&#39;</span><span class="p">:</span><span class="s1">&#39;1.0&#39;</span><span class="p">})</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pr</span><span class="o">.</span><span class="n">list_package_binaries</span><span class="p">()</span>
 <span class="go">[(&#39;compiler=gcc==os=linux==version=1.0&#39;, PackageBinaryObject)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pr</span><span class="o">.</span><span class="n">get_package_binary</span><span class="p">({</span><span class="s1">&#39;os&#39;</span><span class="p">:</span><span class="s1">&#39;linux&#39;</span><span class="p">,</span> <span class="s1">&#39;compiler&#39;</span><span class="p">:</span><span class="s1">&#39;gcc&#39;</span><span class="p">,</span> <span class="s1">&#39;version&#39;</span><span class="p">:</span><span class="s1">&#39;1.0&#39;</span><span class="p">})</span>
+<span class="go">PackageBinaryObject</span>
 </pre></div>
 </div>
 <dl class="method">
@@ -438,6 +506,28 @@ FileExistsError: raised if a package binary with the same configuration already 
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>settings_value</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – the configuration of the the package binary to be deleted</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pacco.classes_file_based.PackageRegistryFileBased.get_package_binary">
+<code class="sig-name descname">get_package_binary</code><span class="sig-paren">(</span><em class="sig-param">settings_value</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.classes_file_based.PackageRegistryFileBased.get_package_binary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a reference to the <code class="docutils literal notranslate"><span class="pre">PackageBinary</span></code> object based on the settings value</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>settings_value</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – the configuration of the the package binary to get</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#pacco.classes_file_based.PackageBinaryFileBased" title="pacco.classes_file_based.PackageBinaryFileBased"><code class="xref py py-class docutils literal notranslate"><span class="pre">PackageBinaryFileBased</span></code></a></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the object</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Exceptions:</dt><dd><p>KeyError: when the key of the settings passed is not correct
+FileNotFoundError: when there is no binary with the configuration of settings value</p>
 </dd>
 </dl>
 </dd></dl>
@@ -519,7 +609,8 @@ This class is the interface class with the expected behavior defined below.</p>
 <span class="gt">Traceback (most recent call last):</span>
     <span class="o">...</span>
 <span class="gr">FileNotFoundError</span>: <span class="n">[Errno 2] No such file or directory: &#39;testfolder&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pb</span><span class="o">.</span><span class="n">download_content</span><span class="p">(</span><span class="s1">&#39;testfolder&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pb_get</span> <span class="o">=</span> <span class="n">pr</span><span class="o">.</span><span class="n">get_package_binary</span><span class="p">({</span><span class="s1">&#39;os&#39;</span><span class="p">:</span><span class="s1">&#39;osx&#39;</span><span class="p">,</span> <span class="s1">&#39;compiler&#39;</span><span class="p">:</span><span class="s1">&#39;clang&#39;</span><span class="p">,</span> <span class="s1">&#39;version&#39;</span><span class="p">:</span><span class="s1">&#39;1.0&#39;</span><span class="p">})</span>  <span class="c1"># use a new reference</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pb_get</span><span class="o">.</span><span class="n">download_content</span><span class="p">(</span><span class="s1">&#39;testfolder&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="s1">&#39;testfolder&#39;</span><span class="p">)</span>
 <span class="go">[&#39;testfile&#39;]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="s1">&#39;testfolder&#39;</span><span class="p">)</span>
