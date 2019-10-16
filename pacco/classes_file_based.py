@@ -30,6 +30,8 @@ class PackageManagerFileBased(PackageManager):
         >>> pm.delete_package_registry('openssl')
         >>> pm.list_package_registries()
         [('boost', PR[boost, os, target, type])]
+        >>> pm.get_package_registry('boost')
+        PR[boost, os, target, type]
     """
     def __init__(self, client: FileBasedClientAbstract):
         if not isinstance(client, FileBasedClientAbstract):
@@ -50,6 +52,12 @@ class PackageManagerFileBased(PackageManager):
             raise FileExistsError("The package registry {} is already found".format(name))
         self.client.mkdir(name)
         return PackageRegistryFileBased(name, self.client.dispatch_subdir(name), settings_key)
+
+    def get_package_registry(self, name: str) -> PackageRegistryFileBased:
+        dirs = self.client.ls()
+        if name not in dirs:
+            raise FileNotFoundError("The package registry {} is not found".format(name))
+        return PackageRegistryFileBased(name, self.client.dispatch_subdir(name))
 
 
 class PackageRegistryFileBased(PackageRegistry):
@@ -84,6 +92,8 @@ class PackageRegistryFileBased(PackageRegistry):
         >>> pr.delete_package_binary({'os':'osx', 'compiler':'clang', 'version':'1.0'})
         >>> pr.list_package_binaries()
         [('compiler=gcc==os=linux==version=1.0', PackageBinaryObject)]
+        >>> pr.get_package_binary({'os':'linux', 'compiler':'gcc', 'version':'1.0'})
+        PackageBinaryObject
     """
 
     def __init__(self, name: str, client: FileBasedClientAbstract, settings_key: Optional[List[str]] = None):
@@ -92,7 +102,9 @@ class PackageRegistryFileBased(PackageRegistry):
         super(PackageRegistryFileBased, self).__init__(name, client, settings_key)
         from_remote = self.__get_settings_key()
         if settings_key is None and from_remote is None:
-            raise FileNotFoundError("declare settings_key")
+            raise FileNotFoundError("you need to declare settings_key if you are adding, if you are getting, this"
+                                    "means that the package registry is not properly set, you need to delete and"
+                                    "add again")
         elif from_remote is not None:  # ignore the passed settings_key and use the remote one
             self.settings_key = from_remote
         else:
@@ -141,6 +153,15 @@ class PackageRegistryFileBased(PackageRegistry):
         dir_name = PackageRegistryFileBased.__generate_dir_name_from_settings_value(settings_value)
         self.client.rmdir(dir_name)
 
+    def get_package_binary(self, settings_value: Dict[str, str]) -> PackageBinaryFileBased:
+        dir_name = PackageRegistryFileBased.__generate_dir_name_from_settings_value(settings_value)
+        if set(settings_value.keys()) != set(self.settings_key):
+            raise KeyError("wrong settings key: {} is not {}".format(sorted(settings_value.keys()),
+                                                                     sorted(self.settings_key)))
+        if dir_name not in self.client.ls():
+            raise FileNotFoundError("such configuration does not exist")
+        return PackageBinaryFileBased(self.client.dispatch_subdir(dir_name))
+
 
 class PackageBinaryFileBased(PackageBinary):
     """
@@ -162,7 +183,8 @@ class PackageBinaryFileBased(PackageBinary):
         Traceback (most recent call last):
             ...
         FileNotFoundError: [Errno 2] No such file or directory: 'testfolder'
-        >>> pb.download_content('testfolder')
+        >>> pb_get = pr.get_package_binary({'os':'osx', 'compiler':'clang', 'version':'1.0'})  # use a new reference
+        >>> pb_get.download_content('testfolder')
         >>> os.listdir('testfolder')
         ['testfile']
         >>> shutil.rmtree('testfolder')
