@@ -232,7 +232,7 @@ class RemoteManager:
         raise FileNotFoundError("Such binary does not exist in any remotes in the default remote list")
 
 
-class _Remote:
+class _RemoteFileBased:
     package_manager: PackageManagerFileBased = None
 
     def __init__(self, name: str, remote_type: str, client: FileBasedClientAbstract):
@@ -244,14 +244,14 @@ class _Remote:
         return "[{}, {}]".format(self.name, self.remote_type)
 
     @staticmethod
-    def create(name: str, serialized: Dict[str, str]) -> _Remote:
+    def create(name: str, serialized: Dict[str, str]) -> _RemoteFileBased:
         raise NotImplementedError()
 
     def serialize(self) -> Dict[str, str]:
         raise NotImplementedError()
 
 
-class _LocalRemote(_Remote):
+class _LocalRemote(_RemoteFileBased):
     def __init__(self, name: str, remote_type: str, path: Optional[str] = "", clean: Optional[bool] = False):
         if path:
             self.__path = os.path.abspath(path)
@@ -270,7 +270,7 @@ class _LocalRemote(_Remote):
         return {'remote_type': 'local', 'path': self.__path}
 
 
-class _NexusSiteRemote(_Remote):
+class _NexusSiteRemote(_RemoteFileBased):
     def __init__(self, name: str, remote_type: str, url: str, username: str, password: str,
                  clean: Optional[bool] = False):
         self.__url = url
