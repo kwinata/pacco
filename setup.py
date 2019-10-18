@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='pacco',
-    version='0.2.5',
+    version='0.2.6',
     packages=find_packages(),
     author="Kevin Winata",
     author_email="kevinwinatamichael@gmail.com",

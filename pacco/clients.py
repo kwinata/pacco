@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import glob
 import io
+import logging
 import os
 import re
 import shutil
@@ -113,6 +114,7 @@ class LocalClient(FileBasedClientAbstract):
     def download_dir(self, download_path: str) -> None:
         os.makedirs(download_path, exist_ok=True)
         for file_name in glob.iglob(os.path.join(self.__bin_dir, '*')):
+            logging.info("Downloading file/folder {}".format(file_name))
             if os.path.isdir(file_name):
                 shutil.copytree(file_name, os.path.join(download_path, os.path.relpath(file_name, self.__bin_dir)))
             else:
@@ -183,6 +185,7 @@ class NexusFileClient(FileBasedClientAbstract):
         for file_name in file_names:
             resp = requests.get(self.__url+file_name, auth=(self.__username, self.__password))
             NexusFileClient.__validate_status_code(resp.status_code, [200])
+            logging.info("Downloading file {}".format(file_name))
             with open(os.path.join(download_path, file_name), 'wb') as f:
                 f.write(resp.content)
         for dir_name in dir_names:
@@ -202,6 +205,7 @@ class NexusFileClient(FileBasedClientAbstract):
             for file_name in glob.iglob('**/*', recursive=True):
                 if os.path.isdir(file_name):
                     continue
+                logging.info("Uploading file {}".format(file_name))
                 with open(file_name, 'rb') as f:
                     resp = requests.post(self.__url + file_name, data=f, auth=(self.__username, self.__password))
                 NexusFileClient.__validate_status_code(resp.status_code, [200, 201])
