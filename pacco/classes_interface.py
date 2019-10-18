@@ -31,6 +31,9 @@ class PackageManager:
         """
         raise NotImplementedError()
 
+    def new_intrusive_function(self):
+        print("print something")
+
     def add_package_registry(self, name: str, settings_key: List[str]) -> PackageRegistry:
         """
         Add a new package registry to this package manager.
