@@ -1,6 +1,10 @@
 # pacco
 Pacco is a simple package manager (used for prebuilt binary) that is interoperable with Nexus repository manager.
 
+## Usage
+
+To download a registry, run `pacco download <registry> <path> <settings_key=settings_value> (<settings_key=settings_value> ...)`.
+
 ## Publish to PyPI
 
 To generate distribution archives, run `python3 setup.py sdist bdist_wheel`.

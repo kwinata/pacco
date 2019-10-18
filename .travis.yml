@@ -1,0 +1,13 @@
+language: python
+python:
+  - "3.7"
+
+script:
+  - python -m doctest pacco/classes_file_based.py -f
+  - python -m doctest pacco/remote_manager.py -f
+
+deploy:
+  provider: script
+  script: bash scripts/pypi_publish.sh
+  on:
+    branch: master

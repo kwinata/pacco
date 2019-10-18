@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import re
 from typing import List, Tuple, Optional, Dict
 
 from pacco.classes_interface import PackageManager, PackageRegistry, PackageBinary
@@ -11,9 +12,8 @@ class PackageManagerFileBased(PackageManager):
     An implementation of the PackageManager interface
 
     Examples:
-        >>> from pacco.clients import LocalClient
-        >>> LocalClient().rmdir('')  # clean the .pacco directory
-        >>> client = LocalClient()
+        >>> from pacco.clients import LocalClient, NexusFileClient
+        >>> client = LocalClient(clean=True)
         >>> pm = PackageManagerFileBased(client)
         >>> pm.list_package_registries()
         []
@@ -26,10 +26,10 @@ class PackageManagerFileBased(PackageManager):
             ...
         FileExistsError: The package registry openssl is already found
         >>> pm.list_package_registries()
-        [('boost', PR[boost, os, target, type]), ('openssl', PR[openssl, compiler, os, version])]
+        ['boost', 'openssl']
         >>> pm.delete_package_registry('openssl')
         >>> pm.list_package_registries()
-        [('boost', PR[boost, os, target, type])]
+        ['boost']
         >>> pm.get_package_registry('boost')
         PR[boost, os, target, type]
     """
@@ -38,10 +38,8 @@ class PackageManagerFileBased(PackageManager):
             raise TypeError("Must be using FileBasedClient")
         super(PackageManagerFileBased, self).__init__(client)
 
-    def list_package_registries(self) -> List[Tuple[str, PackageRegistryFileBased]]:
-        dir_names = self.client.ls()
-        return sorted([(dir_name, PackageRegistryFileBased(dir_name, self.client.dispatch_subdir(dir_name)))
-                       for dir_name in dir_names], key=lambda x: x[0])
+    def list_package_registries(self) -> List[str]:
+        return sorted(self.client.ls())
 
     def delete_package_registry(self, name: str) -> None:
         self.client.rmdir(name)
@@ -59,21 +57,23 @@ class PackageManagerFileBased(PackageManager):
             raise FileNotFoundError("The package registry {} is not found".format(name))
         return PackageRegistryFileBased(name, self.client.dispatch_subdir(name))
 
+    def __repr__(self):
+        return "PackageManagerObject"
+
 
 class PackageRegistryFileBased(PackageRegistry):
     """
     An implementation of the PackageRegistry interface
 
     Examples:
-        >>> from pacco.clients import LocalClient
-        >>> LocalClient().rmdir('')  # clean the .pacco directory
-        >>> client = LocalClient()
+        >>> from pacco.clients import LocalClient, NexusFileClient
+        >>> client = LocalClient(clean=True)
         >>> pm = PackageManagerFileBased(client)
         >>> pr = pm.add_package_registry('openssl', ['os', 'compiler', 'version'])
         >>> pr.list_package_binaries()
         []
         >>> pr.add_package_binary({'os':'osx', 'compiler':'clang', 'version':'1.0'})
-        ('compiler=clang==os=osx==version=1.0', PackageBinaryObject)
+        PackageBinaryObject
         >>> pr.add_package_binary({'host_os':'osx', 'compiler':'clang', 'version':'1.0'})
         Traceback (most recent call last):
             ...
@@ -82,16 +82,15 @@ class PackageRegistryFileBased(PackageRegistry):
         Traceback (most recent call last):
             ...
         FileExistsError: such binary already exist
-        >>> pr.list_package_binaries()
-        [('compiler=clang==os=osx==version=1.0', PackageBinaryObject)]
+        >>> len(pr.list_package_binaries())
+        1
         >>> pr.add_package_binary({'os':'linux', 'compiler':'gcc', 'version':'1.0'})
-        ('compiler=gcc==os=linux==version=1.0', PackageBinaryObject)
-        >>> pr.list_package_binaries()
-        [('compiler=clang==os=osx==version=1.0', PackageBinaryObject), \
-('compiler=gcc==os=linux==version=1.0', PackageBinaryObject)]
+        PackageBinaryObject
+        >>> len(pr.list_package_binaries())
+        2
         >>> pr.delete_package_binary({'os':'osx', 'compiler':'clang', 'version':'1.0'})
-        >>> pr.list_package_binaries()
-        [('compiler=gcc==os=linux==version=1.0', PackageBinaryObject)]
+        >>> len(pr.list_package_binaries())
+        1
         >>> pr.get_package_binary({'os':'linux', 'compiler':'gcc', 'version':'1.0'})
         PackageBinaryObject
     """
@@ -133,13 +132,18 @@ class PackageRegistryFileBased(PackageRegistry):
         zipped_assignments = ['='.join(pair) for pair in sorted_settings_value_pair]
         return '=='.join(zipped_assignments)
 
-    def list_package_binaries(self) -> List[Tuple[str, PackageBinaryFileBased]]:
+    @staticmethod
+    def __generate_settings_value_from_dir_name(dir_name: str) -> Dict[str, str]:
+        if not re.match(r"((\w+=\w+)==)*(\w+=\w+)", dir_name):
+            raise ValueError("Invalid dir_name syntax {}".format(dir_name))
+        return {arg.split('=')[0]: arg.split('=')[1] for arg in dir_name.split('==')}
+
+    def list_package_binaries(self) -> List[Dict[str, str]]:
         dirs = self.client.ls()
         dirs.remove(self.__generate_settings_key_dir_name(self.settings_key))
-        return sorted([(name, PackageBinaryFileBased(self.client.dispatch_subdir(name))) for name in dirs],
-                      key=lambda x: x[0])
+        return [PackageRegistryFileBased.__generate_settings_value_from_dir_name(name) for name in dirs]
 
-    def add_package_binary(self, settings_value: Dict[str, str]) -> Tuple[str, PackageBinaryFileBased]:
+    def add_package_binary(self, settings_value: Dict[str, str]) -> PackageBinaryFileBased:
         if set(settings_value.keys()) != set(self.settings_key):
             raise KeyError("wrong settings key: {} is not {}".format(sorted(settings_value.keys()),
                                                                      sorted(self.settings_key)))
@@ -147,7 +151,7 @@ class PackageRegistryFileBased(PackageRegistry):
         if dir_name in self.client.ls():
             raise FileExistsError("such binary already exist")
         self.client.mkdir(dir_name)
-        return dir_name, PackageBinaryFileBased(self.client.dispatch_subdir(dir_name))
+        return PackageBinaryFileBased(self.client.dispatch_subdir(dir_name))
 
     def delete_package_binary(self, settings_value: Dict[str, str]):
         dir_name = PackageRegistryFileBased.__generate_dir_name_from_settings_value(settings_value)
@@ -168,25 +172,20 @@ class PackageBinaryFileBased(PackageBinary):
     An implementation of the PackageBinary interface
 
     Examples:
-        >>> from pacco.clients import LocalClient
-        >>> LocalClient().rmdir('')  # clean the .pacco directory
-        >>> client = LocalClient()
+        >>> from pacco.clients import LocalClient, NexusFileClient
+        >>> client = LocalClient(clean=True)
         >>> pm = PackageManagerFileBased(client)
         >>> pr = pm.add_package_registry('openssl', ['os', 'compiler', 'version'])
-        >>> name, pb = pr.add_package_binary({'os':'osx', 'compiler':'clang', 'version':'1.0'})
+        >>> pb = pr.add_package_binary({'os':'osx', 'compiler':'clang', 'version':'1.0'})
         >>> import os, shutil
         >>> os.makedirs('testfolder', exist_ok=True)
         >>> open('testfolder/testfile', 'w').close()
         >>> pb.upload_content('testfolder')
-        >>> shutil.rmtree('testfolder')
-        >>> os.listdir('testfolder')
-        Traceback (most recent call last):
-            ...
-        FileNotFoundError: [Errno 2] No such file or directory: 'testfolder'
+        >>> __ = shutil.move('testfolder/testfile', 'testfolder/testfile2')
         >>> pb_get = pr.get_package_binary({'os':'osx', 'compiler':'clang', 'version':'1.0'})  # use a new reference
         >>> pb_get.download_content('testfolder')
-        >>> os.listdir('testfolder')
-        ['testfile']
+        >>> sorted(os.listdir('testfolder'))
+        ['testfile', 'testfile2']
         >>> shutil.rmtree('testfolder')
     """
 

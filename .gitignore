@@ -4,4 +4,5 @@
 docs_src/build/
 build/
 dist/
+env/
 pacco.egg-info/

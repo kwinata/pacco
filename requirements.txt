@@ -1,3 +1,3 @@
-sphinx==2.2.0
-sphinx-rtd-theme==0.4.3
-sphinx-autodoc-typehints==1.8.0
+requests==2.22.0
+beautifulsoup4==4.8.0
+PyYAML==5.1.2
