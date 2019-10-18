@@ -98,6 +98,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="clients.html">Clients</a></li>
+<li class="toctree-l2"><a class="reference internal" href="remote_manager.html">Remote Manager</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../diagram.html">Design Diagram</a></li>
@@ -241,10 +242,10 @@ expected behavior defined below.</p>
 <dd><p>List package registries in this package manager.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <a class="reference internal" href="#pacco.classes_interface.PackageRegistry" title="pacco.classes_interface.PackageRegistry"><code class="xref py py-class docutils literal notranslate"><span class="pre">PackageRegistry</span></code></a>]]</p>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>The list of package registry name and package registry object tuples</p>
+<dd class="field-even"><p>The list of package registry name</p>
 </dd>
 </dl>
 </dd></dl>
@@ -258,9 +259,8 @@ expected behavior defined below.</p>
 <em class="property">class </em><code class="sig-prename descclassname">pacco.classes_file_based.</code><code class="sig-name descname">PackageManagerFileBased</code><span class="sig-paren">(</span><em class="sig-param">client</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.classes_file_based.PackageManagerFileBased" title="Permalink to this definition">¶</a></dt>
 <dd><p>An implementation of the PackageManager interface</p>
 <p class="rubric">Examples</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pacco.clients</span> <span class="k">import</span> <span class="n">LocalClient</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">LocalClient</span><span class="p">()</span><span class="o">.</span><span class="n">rmdir</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>  <span class="c1"># clean the .pacco directory</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">client</span> <span class="o">=</span> <span class="n">LocalClient</span><span class="p">()</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pacco.clients</span> <span class="k">import</span> <span class="n">LocalClient</span><span class="p">,</span> <span class="n">NexusFileClient</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">client</span> <span class="o">=</span> <span class="n">LocalClient</span><span class="p">(</span><span class="n">clean</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pm</span> <span class="o">=</span> <span class="n">PackageManagerFileBased</span><span class="p">(</span><span class="n">client</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pm</span><span class="o">.</span><span class="n">list_package_registries</span><span class="p">()</span>
 <span class="go">[]</span>
@@ -273,10 +273,10 @@ expected behavior defined below.</p>
     <span class="o">...</span>
 <span class="gr">FileExistsError</span>: <span class="n">The package registry openssl is already found</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pm</span><span class="o">.</span><span class="n">list_package_registries</span><span class="p">()</span>
-<span class="go">[(&#39;boost&#39;, PR[boost, os, target, type]), (&#39;openssl&#39;, PR[openssl, compiler, os, version])]</span>
+<span class="go">[&#39;boost&#39;, &#39;openssl&#39;]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pm</span><span class="o">.</span><span class="n">delete_package_registry</span><span class="p">(</span><span class="s1">&#39;openssl&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pm</span><span class="o">.</span><span class="n">list_package_registries</span><span class="p">()</span>
-<span class="go">[(&#39;boost&#39;, PR[boost, os, target, type])]</span>
+<span class="go">[&#39;boost&#39;]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pm</span><span class="o">.</span><span class="n">get_package_registry</span><span class="p">(</span><span class="s1">&#39;boost&#39;</span><span class="p">)</span>
 <span class="go">PR[boost, os, target, type]</span>
 </pre></div>
@@ -346,10 +346,10 @@ expected behavior defined below.</p>
 <dd><p>List package registries in this package manager.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <a class="reference internal" href="#pacco.classes_file_based.PackageRegistryFileBased" title="pacco.classes_file_based.PackageRegistryFileBased"><code class="xref py py-class docutils literal notranslate"><span class="pre">PackageRegistryFileBased</span></code></a>]]</p>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>The list of package registry name and package registry object tuples</p>
+<dd class="field-even"><p>The list of package registry name</p>
 </dd>
 </dl>
 </dd></dl>
@@ -376,10 +376,10 @@ object itself.</p>
 <dd class="field-odd"><p><strong>settings_value</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – the assignment of key value of the settings_key.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <a class="reference internal" href="#pacco.classes_interface.PackageBinary" title="pacco.classes_interface.PackageBinary"><code class="xref py py-class docutils literal notranslate"><span class="pre">PackageBinary</span></code></a>]</p>
+<dd class="field-even"><p><a class="reference internal" href="#pacco.classes_interface.PackageBinary" title="pacco.classes_interface.PackageBinary"><code class="xref py py-class docutils literal notranslate"><span class="pre">PackageBinary</span></code></a></p>
 </dd>
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>The tuple of the name of the directory name (serialized version of the configuration) and the object</p>
+<dd class="field-odd"><p>The package binary object</p>
 </dd>
 </dl>
 <dl class="simple">
@@ -428,10 +428,10 @@ FileNotFoundError: when there is no binary with the configuration of settings va
 <dd><p>List the package binaries registered in this package registry</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <a class="reference internal" href="#pacco.classes_interface.PackageBinary" title="pacco.classes_interface.PackageBinary"><code class="xref py py-class docutils literal notranslate"><span class="pre">PackageBinary</span></code></a>]]</p>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]]</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>list of tuples of the package binary name and object</p>
+<dd class="field-even"><p>list of the package binary settings_value dictionaries</p>
 </dd>
 </dl>
 </dd></dl>
@@ -445,15 +445,14 @@ FileNotFoundError: when there is no binary with the configuration of settings va
 <em class="property">class </em><code class="sig-prename descclassname">pacco.classes_file_based.</code><code class="sig-name descname">PackageRegistryFileBased</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">client</em>, <em class="sig-param">settings_key=None</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.classes_file_based.PackageRegistryFileBased" title="Permalink to this definition">¶</a></dt>
 <dd><p>An implementation of the PackageRegistry interface</p>
 <p class="rubric">Examples</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pacco.clients</span> <span class="k">import</span> <span class="n">LocalClient</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">LocalClient</span><span class="p">()</span><span class="o">.</span><span class="n">rmdir</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>  <span class="c1"># clean the .pacco directory</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">client</span> <span class="o">=</span> <span class="n">LocalClient</span><span class="p">()</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pacco.clients</span> <span class="k">import</span> <span class="n">LocalClient</span><span class="p">,</span> <span class="n">NexusFileClient</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">client</span> <span class="o">=</span> <span class="n">LocalClient</span><span class="p">(</span><span class="n">clean</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pm</span> <span class="o">=</span> <span class="n">PackageManagerFileBased</span><span class="p">(</span><span class="n">client</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pr</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">add_package_registry</span><span class="p">(</span><span class="s1">&#39;openssl&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;os&#39;</span><span class="p">,</span> <span class="s1">&#39;compiler&#39;</span><span class="p">,</span> <span class="s1">&#39;version&#39;</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pr</span><span class="o">.</span><span class="n">list_package_binaries</span><span class="p">()</span>
 <span class="go">[]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pr</span><span class="o">.</span><span class="n">add_package_binary</span><span class="p">({</span><span class="s1">&#39;os&#39;</span><span class="p">:</span><span class="s1">&#39;osx&#39;</span><span class="p">,</span> <span class="s1">&#39;compiler&#39;</span><span class="p">:</span><span class="s1">&#39;clang&#39;</span><span class="p">,</span> <span class="s1">&#39;version&#39;</span><span class="p">:</span><span class="s1">&#39;1.0&#39;</span><span class="p">})</span>
-<span class="go">(&#39;compiler=clang==os=osx==version=1.0&#39;, PackageBinaryObject)</span>
+<span class="go">PackageBinaryObject</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pr</span><span class="o">.</span><span class="n">add_package_binary</span><span class="p">({</span><span class="s1">&#39;host_os&#39;</span><span class="p">:</span><span class="s1">&#39;osx&#39;</span><span class="p">,</span> <span class="s1">&#39;compiler&#39;</span><span class="p">:</span><span class="s1">&#39;clang&#39;</span><span class="p">,</span> <span class="s1">&#39;version&#39;</span><span class="p">:</span><span class="s1">&#39;1.0&#39;</span><span class="p">})</span>
 <span class="gt">Traceback (most recent call last):</span>
     <span class="o">...</span>
@@ -462,15 +461,15 @@ FileNotFoundError: when there is no binary with the configuration of settings va
 <span class="gt">Traceback (most recent call last):</span>
     <span class="o">...</span>
 <span class="gr">FileExistsError</span>: <span class="n">such binary already exist</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pr</span><span class="o">.</span><span class="n">list_package_binaries</span><span class="p">()</span>
-<span class="go">[(&#39;compiler=clang==os=osx==version=1.0&#39;, PackageBinaryObject)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">pr</span><span class="o">.</span><span class="n">list_package_binaries</span><span class="p">())</span>
+<span class="go">1</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pr</span><span class="o">.</span><span class="n">add_package_binary</span><span class="p">({</span><span class="s1">&#39;os&#39;</span><span class="p">:</span><span class="s1">&#39;linux&#39;</span><span class="p">,</span> <span class="s1">&#39;compiler&#39;</span><span class="p">:</span><span class="s1">&#39;gcc&#39;</span><span class="p">,</span> <span class="s1">&#39;version&#39;</span><span class="p">:</span><span class="s1">&#39;1.0&#39;</span><span class="p">})</span>
-<span class="go">(&#39;compiler=gcc==os=linux==version=1.0&#39;, PackageBinaryObject)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pr</span><span class="o">.</span><span class="n">list_package_binaries</span><span class="p">()</span>
-<span class="go">[(&#39;compiler=clang==os=osx==version=1.0&#39;, PackageBinaryObject), (&#39;compiler=gcc==os=linux==version=1.0&#39;, PackageBinaryObject)]</span>
+<span class="go">PackageBinaryObject</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">pr</span><span class="o">.</span><span class="n">list_package_binaries</span><span class="p">())</span>
+<span class="go">2</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pr</span><span class="o">.</span><span class="n">delete_package_binary</span><span class="p">({</span><span class="s1">&#39;os&#39;</span><span class="p">:</span><span class="s1">&#39;osx&#39;</span><span class="p">,</span> <span class="s1">&#39;compiler&#39;</span><span class="p">:</span><span class="s1">&#39;clang&#39;</span><span class="p">,</span> <span class="s1">&#39;version&#39;</span><span class="p">:</span><span class="s1">&#39;1.0&#39;</span><span class="p">})</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pr</span><span class="o">.</span><span class="n">list_package_binaries</span><span class="p">()</span>
-<span class="go">[(&#39;compiler=gcc==os=linux==version=1.0&#39;, PackageBinaryObject)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">pr</span><span class="o">.</span><span class="n">list_package_binaries</span><span class="p">())</span>
+<span class="go">1</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pr</span><span class="o">.</span><span class="n">get_package_binary</span><span class="p">({</span><span class="s1">&#39;os&#39;</span><span class="p">:</span><span class="s1">&#39;linux&#39;</span><span class="p">,</span> <span class="s1">&#39;compiler&#39;</span><span class="p">:</span><span class="s1">&#39;gcc&#39;</span><span class="p">,</span> <span class="s1">&#39;version&#39;</span><span class="p">:</span><span class="s1">&#39;1.0&#39;</span><span class="p">})</span>
 <span class="go">PackageBinaryObject</span>
 </pre></div>
@@ -486,10 +485,10 @@ object itself.</p>
 <dd class="field-odd"><p><strong>settings_value</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – the assignment of key value of the settings_key.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <a class="reference internal" href="#pacco.classes_file_based.PackageBinaryFileBased" title="pacco.classes_file_based.PackageBinaryFileBased"><code class="xref py py-class docutils literal notranslate"><span class="pre">PackageBinaryFileBased</span></code></a>]</p>
+<dd class="field-even"><p><a class="reference internal" href="#pacco.classes_file_based.PackageBinaryFileBased" title="pacco.classes_file_based.PackageBinaryFileBased"><code class="xref py py-class docutils literal notranslate"><span class="pre">PackageBinaryFileBased</span></code></a></p>
 </dd>
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>The tuple of the name of the directory name (serialized version of the configuration) and the object</p>
+<dd class="field-odd"><p>The package binary object</p>
 </dd>
 </dl>
 <dl class="simple">
@@ -538,10 +537,10 @@ FileNotFoundError: when there is no binary with the configuration of settings va
 <dd><p>List the package binaries registered in this package registry</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <a class="reference internal" href="#pacco.classes_file_based.PackageBinaryFileBased" title="pacco.classes_file_based.PackageBinaryFileBased"><code class="xref py py-class docutils literal notranslate"><span class="pre">PackageBinaryFileBased</span></code></a>]]</p>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]]</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>list of tuples of the package binary name and object</p>
+<dd class="field-even"><p>list of the package binary settings_value dictionaries</p>
 </dd>
 </dl>
 </dd></dl>
@@ -594,25 +593,20 @@ This class is the interface class with the expected behavior defined below.</p>
 <em class="property">class </em><code class="sig-prename descclassname">pacco.classes_file_based.</code><code class="sig-name descname">PackageBinaryFileBased</code><span class="sig-paren">(</span><em class="sig-param">client</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.classes_file_based.PackageBinaryFileBased" title="Permalink to this definition">¶</a></dt>
 <dd><p>An implementation of the PackageBinary interface</p>
 <p class="rubric">Examples</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pacco.clients</span> <span class="k">import</span> <span class="n">LocalClient</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">LocalClient</span><span class="p">()</span><span class="o">.</span><span class="n">rmdir</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>  <span class="c1"># clean the .pacco directory</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">client</span> <span class="o">=</span> <span class="n">LocalClient</span><span class="p">()</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pacco.clients</span> <span class="k">import</span> <span class="n">LocalClient</span><span class="p">,</span> <span class="n">NexusFileClient</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">client</span> <span class="o">=</span> <span class="n">LocalClient</span><span class="p">(</span><span class="n">clean</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pm</span> <span class="o">=</span> <span class="n">PackageManagerFileBased</span><span class="p">(</span><span class="n">client</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pr</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">add_package_registry</span><span class="p">(</span><span class="s1">&#39;openssl&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;os&#39;</span><span class="p">,</span> <span class="s1">&#39;compiler&#39;</span><span class="p">,</span> <span class="s1">&#39;version&#39;</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">name</span><span class="p">,</span> <span class="n">pb</span> <span class="o">=</span> <span class="n">pr</span><span class="o">.</span><span class="n">add_package_binary</span><span class="p">({</span><span class="s1">&#39;os&#39;</span><span class="p">:</span><span class="s1">&#39;osx&#39;</span><span class="p">,</span> <span class="s1">&#39;compiler&#39;</span><span class="p">:</span><span class="s1">&#39;clang&#39;</span><span class="p">,</span> <span class="s1">&#39;version&#39;</span><span class="p">:</span><span class="s1">&#39;1.0&#39;</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pb</span> <span class="o">=</span> <span class="n">pr</span><span class="o">.</span><span class="n">add_package_binary</span><span class="p">({</span><span class="s1">&#39;os&#39;</span><span class="p">:</span><span class="s1">&#39;osx&#39;</span><span class="p">,</span> <span class="s1">&#39;compiler&#39;</span><span class="p">:</span><span class="s1">&#39;clang&#39;</span><span class="p">,</span> <span class="s1">&#39;version&#39;</span><span class="p">:</span><span class="s1">&#39;1.0&#39;</span><span class="p">})</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">shutil</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="s1">&#39;testfolder&#39;</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">open</span><span class="p">(</span><span class="s1">&#39;testfolder/testfile&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pb</span><span class="o">.</span><span class="n">upload_content</span><span class="p">(</span><span class="s1">&#39;testfolder&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="s1">&#39;testfolder&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="s1">&#39;testfolder&#39;</span><span class="p">)</span>
-<span class="gt">Traceback (most recent call last):</span>
-    <span class="o">...</span>
-<span class="gr">FileNotFoundError</span>: <span class="n">[Errno 2] No such file or directory: &#39;testfolder&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">__</span> <span class="o">=</span> <span class="n">shutil</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="s1">&#39;testfolder/testfile&#39;</span><span class="p">,</span> <span class="s1">&#39;testfolder/testfile2&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pb_get</span> <span class="o">=</span> <span class="n">pr</span><span class="o">.</span><span class="n">get_package_binary</span><span class="p">({</span><span class="s1">&#39;os&#39;</span><span class="p">:</span><span class="s1">&#39;osx&#39;</span><span class="p">,</span> <span class="s1">&#39;compiler&#39;</span><span class="p">:</span><span class="s1">&#39;clang&#39;</span><span class="p">,</span> <span class="s1">&#39;version&#39;</span><span class="p">:</span><span class="s1">&#39;1.0&#39;</span><span class="p">})</span>  <span class="c1"># use a new reference</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pb_get</span><span class="o">.</span><span class="n">download_content</span><span class="p">(</span><span class="s1">&#39;testfolder&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="s1">&#39;testfolder&#39;</span><span class="p">)</span>
-<span class="go">[&#39;testfile&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">sorted</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="s1">&#39;testfolder&#39;</span><span class="p">))</span>
+<span class="go">[&#39;testfile&#39;, &#39;testfile2&#39;]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="s1">&#39;testfolder&#39;</span><span class="p">)</span>
 </pre></div>
 </div>

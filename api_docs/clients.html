@@ -35,7 +35,7 @@
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Design Diagram" href="../diagram.html" />
+    <link rel="next" title="Remote Manager" href="remote_manager.html" />
     <link rel="prev" title="Classes" href="classes.html" /> 
 </head>
 
@@ -84,6 +84,7 @@
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">API Documentation</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="classes.html">Classes</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Clients</a></li>
+<li class="toctree-l2"><a class="reference internal" href="remote_manager.html">Remote Manager</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../diagram.html">Design Diagram</a></li>
@@ -254,7 +255,7 @@ file.</p>
 
 <dl class="class">
 <dt id="pacco.clients.LocalClient">
-<em class="property">class </em><code class="sig-prename descclassname">pacco.clients.</code><code class="sig-name descname">LocalClient</code><span class="sig-paren">(</span><em class="sig-param">path=''</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.clients.LocalClient" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pacco.clients.</code><code class="sig-name descname">LocalClient</code><span class="sig-paren">(</span><em class="sig-param">path=''</em>, <em class="sig-param">clean=False</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.clients.LocalClient" title="Permalink to this definition">¶</a></dt>
 <dd><p>An implementation of <code class="docutils literal notranslate"><span class="pre">FileBasedClientAbstract</span></code>, using <code class="docutils literal notranslate"><span class="pre">homepath/.pacco</span></code> as the file storage.</p>
 <dl class="method">
 <dt id="pacco.clients.LocalClient.dispatch_subdir">
@@ -348,6 +349,102 @@ file.</p>
 
 </dd></dl>
 
+<dl class="class">
+<dt id="pacco.clients.NexusFileClient">
+<em class="property">class </em><code class="sig-prename descclassname">pacco.clients.</code><code class="sig-name descname">NexusFileClient</code><span class="sig-paren">(</span><em class="sig-param">url</em>, <em class="sig-param">username</em>, <em class="sig-param">password</em>, <em class="sig-param">clean=False</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.clients.NexusFileClient" title="Permalink to this definition">¶</a></dt>
+<dd><p>An implementation of <code class="docutils literal notranslate"><span class="pre">FileBasedClientAbstract</span></code>, using Nexus site repository as the file storage.</p>
+<dl class="method">
+<dt id="pacco.clients.NexusFileClient.dispatch_subdir">
+<code class="sig-name descname">dispatch_subdir</code><span class="sig-paren">(</span><em class="sig-param">name</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.clients.NexusFileClient.dispatch_subdir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create and return new instance whose context is the join of this current directory with <code class="docutils literal notranslate"><span class="pre">name</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>name</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – the directory name as namespace to the new client</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#pacco.clients.NexusFileClient" title="pacco.clients.NexusFileClient"><code class="xref py py-class docutils literal notranslate"><span class="pre">NexusFileClient</span></code></a></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the newly instantiated client</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pacco.clients.NexusFileClient.download_dir">
+<code class="sig-name descname">download_dir</code><span class="sig-paren">(</span><em class="sig-param">download_path</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.clients.NexusFileClient.download_dir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fetch the file content of this current directory (shall be used only by package binary), and put it
+into the <code class="docutils literal notranslate"><span class="pre">download_path</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>download_path</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – the location destination of the downloaded directory</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pacco.clients.NexusFileClient.ls">
+<code class="sig-name descname">ls</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pacco.clients.NexusFileClient.ls" title="Permalink to this definition">¶</a></dt>
+<dd><p>List down the list of files and directories in it’s directory</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>list of files and directories as list of string</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pacco.clients.NexusFileClient.mkdir">
+<code class="sig-name descname">mkdir</code><span class="sig-paren">(</span><em class="sig-param">name</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.clients.NexusFileClient.mkdir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new directory under the current directory</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>name</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The name of the directory ot be created</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pacco.clients.NexusFileClient.rmdir">
+<code class="sig-name descname">rmdir</code><span class="sig-paren">(</span><em class="sig-param">name</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.clients.NexusFileClient.rmdir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove a directory recursively. The <code class="docutils literal notranslate"><span class="pre">name</span></code> directory must be inside
+this current directory.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>name</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – the name of directory to be deleted</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pacco.clients.NexusFileClient.upload_dir">
+<code class="sig-name descname">upload_dir</code><span class="sig-paren">(</span><em class="sig-param">dir_path</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.clients.NexusFileClient.upload_dir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Upload the <code class="docutils literal notranslate"><span class="pre">dir_path</span></code> to this current directory by first removing all the content then placing the uploaded
+file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>dir_path</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – the directory to be uploaded</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 
 
@@ -358,7 +455,7 @@ file.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../diagram.html" class="btn btn-neutral float-right" title="Design Diagram" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="remote_manager.html" class="btn btn-neutral float-right" title="Remote Manager" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="classes.html" class="btn btn-neutral float-left" title="Classes" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
