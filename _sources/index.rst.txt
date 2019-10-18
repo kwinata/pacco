@@ -2,6 +2,8 @@
 Pacco Documentation
 *******************
 
+.. image:: _images/pacco.png
+
 .. toctree::
    :maxdepth: 2
 
