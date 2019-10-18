@@ -149,6 +149,8 @@ class RemoteManager:
         """
         if name in self.default_remotes:
             raise ValueError("The remote {} is still in default remote, remove it first".format(name))
+        if name not in self.remotes:
+            raise KeyError("The remote {} is not registered".format(name))
         del self.remotes[name]
 
     def get_default(self) -> List[str]:
@@ -171,7 +173,7 @@ class RemoteManager:
         """
         for remote in remotes:
             if remote not in self.remotes:
-                raise KeyError("remote {} not exists".format(remote))
+                raise KeyError("remote {} does not exist".format(remote))
         self.default_remotes = remotes
 
     def default_download(self, package_name: str, settings_value: Dict[str, str], dir_path: str) -> None:

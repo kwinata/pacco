@@ -1,0 +1,38 @@
+{% extends "!layout.html" %}
+  {% block footer %} {{ super() }}
+
+  <style>
+    /* Sidebar header (and topbar for mobile) */
+    .wy-side-nav-search, .wy-nav-top {
+      background: #424770;
+    }
+    /* Sidebar */
+    .wy-nav-side {
+      background: #525F7F;
+    }
+     /* unvisited link */
+    .wy-nav-content a:link {
+      color: #6772e5;
+    }
+
+    /* visited link */
+    .wy-nav-content a:visited {
+      color: #6772e5;
+    }
+
+    /* mouse over link */
+    .wy-nav-content a:hover {
+      color: #050505;
+    }
+
+    /* selected link */
+    .wy-nav-content a:active {
+      color: #050505;
+    }
+
+    code.docutils.literal {
+      color: #43458B;
+    }
+
+  </style>
+{% endblock %}
