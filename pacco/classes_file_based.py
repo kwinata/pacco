@@ -15,7 +15,7 @@ class PackageManagerFileBased(PackageManager):
     Examples:
         >>> from pacco.clients import LocalClient, NexusFileClient
         >>> client = LocalClient(clean=True)
-        >>> if 'NEXUS_URL' in os.environ: client = NexusFileClient(os.environ['NEXUS_URL'], 'admin', 'admin123')
+        >>> if 'NEXUS_URL' in os.environ: client = NexusFileClient(os.environ['NEXUS_URL'], 'admin', 'admin123', clean=True)
         >>> pm = PackageManagerFileBased(client)
         >>> pm.list_package_registries()
         []
@@ -70,7 +70,7 @@ class PackageRegistryFileBased(PackageRegistry):
     Examples:
         >>> from pacco.clients import LocalClient, NexusFileClient
         >>> client = LocalClient(clean=True)
-        >>> if 'NEXUS_URL' in os.environ: client = NexusFileClient(os.environ['NEXUS_URL'], 'admin', 'admin123')
+        >>> if 'NEXUS_URL' in os.environ: client = NexusFileClient(os.environ['NEXUS_URL'], 'admin', 'admin123', clean=True)
         >>> pm = PackageManagerFileBased(client)
         >>> pr = pm.add_package_registry('openssl', ['os', 'compiler', 'version'])
         >>> pr.list_package_binaries()
@@ -177,7 +177,7 @@ class PackageBinaryFileBased(PackageBinary):
     Examples:
         >>> from pacco.clients import LocalClient, NexusFileClient
         >>> client = LocalClient(clean=True)
-        >>> if 'NEXUS_URL' in os.environ: client = NexusFileClient(os.environ['NEXUS_URL'], 'admin', 'admin123')
+        >>> if 'NEXUS_URL' in os.environ: client = NexusFileClient(os.environ['NEXUS_URL'], 'admin', 'admin123', clean=True)
         >>> pm = PackageManagerFileBased(client)
         >>> pr = pm.add_package_registry('openssl', ['os', 'compiler', 'version'])
         >>> pb = pr.add_package_binary({'os':'osx', 'compiler':'clang', 'version':'1.0'})
