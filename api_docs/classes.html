@@ -261,6 +261,7 @@ expected behavior defined below.</p>
 <p class="rubric">Examples</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pacco.clients</span> <span class="k">import</span> <span class="n">LocalClient</span><span class="p">,</span> <span class="n">NexusFileClient</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">client</span> <span class="o">=</span> <span class="n">LocalClient</span><span class="p">(</span><span class="n">clean</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">if</span> <span class="s1">&#39;NEXUS_URL&#39;</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">:</span> <span class="n">client</span> <span class="o">=</span> <span class="n">NexusFileClient</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;NEXUS_URL&#39;</span><span class="p">],</span> <span class="s1">&#39;admin&#39;</span><span class="p">,</span> <span class="s1">&#39;admin123&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pm</span> <span class="o">=</span> <span class="n">PackageManagerFileBased</span><span class="p">(</span><span class="n">client</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pm</span><span class="o">.</span><span class="n">list_package_registries</span><span class="p">()</span>
 <span class="go">[]</span>
@@ -447,6 +448,7 @@ FileNotFoundError: when there is no binary with the configuration of settings va
 <p class="rubric">Examples</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pacco.clients</span> <span class="k">import</span> <span class="n">LocalClient</span><span class="p">,</span> <span class="n">NexusFileClient</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">client</span> <span class="o">=</span> <span class="n">LocalClient</span><span class="p">(</span><span class="n">clean</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">if</span> <span class="s1">&#39;NEXUS_URL&#39;</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">:</span> <span class="n">client</span> <span class="o">=</span> <span class="n">NexusFileClient</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;NEXUS_URL&#39;</span><span class="p">],</span> <span class="s1">&#39;admin&#39;</span><span class="p">,</span> <span class="s1">&#39;admin123&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pm</span> <span class="o">=</span> <span class="n">PackageManagerFileBased</span><span class="p">(</span><span class="n">client</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pr</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">add_package_registry</span><span class="p">(</span><span class="s1">&#39;openssl&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;os&#39;</span><span class="p">,</span> <span class="s1">&#39;compiler&#39;</span><span class="p">,</span> <span class="s1">&#39;version&#39;</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pr</span><span class="o">.</span><span class="n">list_package_binaries</span><span class="p">()</span>
@@ -595,6 +597,7 @@ This class is the interface class with the expected behavior defined below.</p>
 <p class="rubric">Examples</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pacco.clients</span> <span class="k">import</span> <span class="n">LocalClient</span><span class="p">,</span> <span class="n">NexusFileClient</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">client</span> <span class="o">=</span> <span class="n">LocalClient</span><span class="p">(</span><span class="n">clean</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">if</span> <span class="s1">&#39;NEXUS_URL&#39;</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">:</span> <span class="n">client</span> <span class="o">=</span> <span class="n">NexusFileClient</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;NEXUS_URL&#39;</span><span class="p">],</span> <span class="s1">&#39;admin&#39;</span><span class="p">,</span> <span class="s1">&#39;admin123&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pm</span> <span class="o">=</span> <span class="n">PackageManagerFileBased</span><span class="p">(</span><span class="n">client</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pr</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">add_package_registry</span><span class="p">(</span><span class="s1">&#39;openssl&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;os&#39;</span><span class="p">,</span> <span class="s1">&#39;compiler&#39;</span><span class="p">,</span> <span class="s1">&#39;version&#39;</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pb</span> <span class="o">=</span> <span class="n">pr</span><span class="o">.</span><span class="n">add_package_binary</span><span class="p">({</span><span class="s1">&#39;os&#39;</span><span class="p">:</span><span class="s1">&#39;osx&#39;</span><span class="p">,</span> <span class="s1">&#39;compiler&#39;</span><span class="p">:</span><span class="s1">&#39;clang&#39;</span><span class="p">,</span> <span class="s1">&#39;version&#39;</span><span class="p">:</span><span class="s1">&#39;1.0&#39;</span><span class="p">})</span>
@@ -690,7 +693,43 @@ This class is the interface class with the expected behavior defined below.</p>
   
   
     
-   
+    
+
+  <style>
+    /* Sidebar header (and topbar for mobile) */
+    .wy-side-nav-search, .wy-nav-top {
+      background: #424770;
+    }
+    /* Sidebar */
+    .wy-nav-side {
+      background: #525F7F;
+    }
+     /* unvisited link */
+    .wy-nav-content a:link {
+      color: #6772e5;
+    }
+
+    /* visited link */
+    .wy-nav-content a:visited {
+      color: #6772e5;
+    }
+
+    /* mouse over link */
+    .wy-nav-content a:hover {
+      color: #050505;
+    }
+
+    /* selected link */
+    .wy-nav-content a:active {
+      color: #050505;
+    }
+
+    code.docutils.literal {
+      color: #43458B;
+    }
+
+  </style>
+
 
 </body>
 </html>
