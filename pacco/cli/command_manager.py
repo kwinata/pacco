@@ -1,9 +1,14 @@
 import argparse
 import inspect
+import logging
+import os
 import re
+import shutil
+from pathlib import Path
 from typing import Callable, Dict
 
 from pacco import __version__ as client_version
+from pacco.cache import Cache
 from pacco.cli.output_stream import OutputStream
 from pacco.remote_manager import RemoteManager, ALLOWED_REMOTE_TYPES
 
@@ -392,15 +397,22 @@ class Binary:
         parser.add_argument("dir_path", help="download path")
         parser.add_argument("settings", help="settings for the specified registry "
                                              "(e.g. os=linux,version=2.1.0,type=debug")
+        parser.add_argument("--fresh_download", help="add this flag to not use local cache",
+                            action="store_true")
         parsed_args = parser.parse_args(args)
 
         settings_dict = Binary.__parse_settings_args(parsed_args.settings)
+
         if parsed_args.remote_name == 'default':
-            self.__rm.default_download(parsed_args.registry_name, settings_dict, parsed_args.dir_path)
+            if not parsed_args.fresh_download and \
+                    Cache().download_from_cache(parsed_args.registry_name, settings_dict, parsed_args.dir_path):
+                return
+            self.__rm.default_download(parsed_args.registry_name, settings_dict, parsed_args.dir_path,
+                                       fresh_download=parsed_args.fresh_download)
         pm = self.__rm.get_remote(parsed_args.remote_name)
         pr = pm.get_package_registry(parsed_args.registry_name)
         pb = pr.get_package_binary(settings_dict)
-        pb.download_content(parsed_args.dir_path)
+        pb.download_content(parsed_args.dir_path, fresh_download=parsed_args.fresh_download)
 
     def upload(self, *args):
         parser = argparse.ArgumentParser(prog="pacco binary upload")
@@ -452,6 +464,27 @@ class Binary:
         pm = self.__rm.get_remote(parsed_args.remote_name)
         pr = pm.get_package_registry(parsed_args.registry_name)
         pr.reassign_binary(old_assignment, new_assignment)
+
+    def get_location(self, *args):
+        parser = argparse.ArgumentParser(prog="pacco binary get_location")
+        parser.add_argument("registry_name", help="registry name")
+        parser.add_argument("settings", help="settings for the specified registry "
+                                             "(e.g. os=linux,version=2.1.0,type=debug")
+        parser.add_argument("--fresh_download", help="add this flag to not use local cache",
+                            action="store_true")
+        parsed_args = parser.parse_args(args)
+        assignment = Binary.__parse_settings_args(parsed_args.settings)
+        if not parsed_args.fresh_download:
+            try:
+                self.__out.write(Cache().get_path(parsed_args.registry_name, assignment))
+                return
+            except ValueError:
+                logging.warning("The binary is not found in cache, will attemp fresh download")
+        download_path = os.path.join(str(Path.home()), '.pacco_tmp')
+        self.__rm.default_download(parsed_args.registry_name, assignment,
+                                   download_path, fresh_download=parsed_args.fresh_download)
+        shutil.rmtree(download_path)
+        self.__out.write(Cache().get_path(parsed_args.registry_name, assignment))
 
 
 def main(args):
