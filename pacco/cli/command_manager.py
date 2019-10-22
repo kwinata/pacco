@@ -392,15 +392,18 @@ class Binary:
         parser.add_argument("dir_path", help="download path")
         parser.add_argument("settings", help="settings for the specified registry "
                                              "(e.g. os=linux,version=2.1.0,type=debug")
+        parser.add_argument("--fresh_download", help="add this flag to not use local cache",
+                            action="store_true")
         parsed_args = parser.parse_args(args)
 
         settings_dict = Binary.__parse_settings_args(parsed_args.settings)
         if parsed_args.remote_name == 'default':
-            self.__rm.default_download(parsed_args.registry_name, settings_dict, parsed_args.dir_path)
+            self.__rm.default_download(parsed_args.registry_name, settings_dict, parsed_args.dir_path,
+                                       fresh_download=parsed_args)
         pm = self.__rm.get_remote(parsed_args.remote_name)
         pr = pm.get_package_registry(parsed_args.registry_name)
         pb = pr.get_package_binary(settings_dict)
-        pb.download_content(parsed_args.dir_path)
+        pb.download_content(parsed_args.dir_path, fresh_download=parsed_args.fresh_download)
 
     def upload(self, *args):
         parser = argparse.ArgumentParser(prog="pacco binary upload")

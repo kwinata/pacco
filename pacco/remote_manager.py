@@ -176,7 +176,8 @@ class RemoteManager:
                 raise KeyError("remote {} does not exist".format(remote))
         self.default_remotes = remotes
 
-    def default_download(self, package_name: str, assignment: Dict[str, str], dir_path: str) -> None:
+    def default_download(self, package_name: str, assignment: Dict[str, str],
+                         dir_path: str, fresh_download: Optional[bool] = False) -> None:
         """
         Try to download a package binary from the remotes in the default remote list.
 
@@ -226,7 +227,7 @@ class RemoteManager:
                 except (KeyError, FileNotFoundError):
                     continue
                 else:
-                    pb.download_content(dir_path)
+                    pb.download_content(dir_path, fresh_download)
                     return
         raise FileNotFoundError("Such binary does not exist in any remotes in the default remote list")
 

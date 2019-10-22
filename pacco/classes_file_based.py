@@ -1,11 +1,13 @@
 from __future__ import annotations
 
+import logging
 import os
 import random
 import re
 import string
 from typing import List, Optional, Dict, Callable
 
+from pacco.cache import Cache
 from pacco.classes_interface import PackageManager, PackageRegistry, PackageBinary
 from pacco.clients import FileBasedClientAbstract
 
@@ -216,7 +218,9 @@ class PackageRegistryFileBased(PackageRegistry):
         return PackageBinaryFileBased(
             self.client.dispatch_subdir(
                 self.__get_serialized_assignment_to_wrapper_mapping()[serialized_assignment]
-            )
+            ),
+            registry_name=self.name,
+            assignment=assignment,
         )
 
     def __rename_serialized_assignment(self, action: Callable[[Dict[str, str]], None]):
@@ -306,16 +310,31 @@ class PackageBinaryFileBased(PackageBinary):
         >>> shutil.rmtree('testfolder')
     """
 
-    def __init__(self, client: FileBasedClientAbstract):
+    def __init__(self, client: FileBasedClientAbstract, registry_name: Optional[str] = None,
+                 assignment: Optional[Dict[str, str]] = None):
         if not isinstance(client, FileBasedClientAbstract):
             raise TypeError("Must be using FileBasedClient")
         super(PackageBinaryFileBased, self).__init__(client)
+        self.__registry_name = registry_name
+        self.__cache = Cache()
+        self.__assignment = assignment
+        self.__cache_enabled = bool(self.__registry_name) and bool(self.__assignment)
 
     def __repr__(self):
         return "PackageBinaryObject"
 
-    def download_content(self, download_dir_path: str) -> None:
+    def download_content(self, download_dir_path: str, force_download: Optional[bool] = False) -> None:
+        if self.__cache_enabled and (not force_download) and \
+                self.__cache.download_from_cache(self.__registry_name, self.__assignment, download_dir_path):
+            logging.info("use cache")
+            return
+        logging.info("fresh download")
         self.client.download_dir(download_dir_path)
+        if self.__cache_enabled:
+            logging.info("save cache")
+            self.__cache.upload_to_cache(self.__registry_name, self.__assignment, download_dir_path)
 
     def upload_content(self, dir_path: str) -> None:
         self.client.upload_dir(dir_path)
+        if self.__cache_enabled:
+            self.__cache.upload_to_cache(self.__registry_name, self.__assignment, dir_path)
