@@ -176,13 +176,13 @@ class RemoteManager:
                 raise KeyError("remote {} does not exist".format(remote))
         self.default_remotes = remotes
 
-    def default_download(self, package_name: str, settings_value: Dict[str, str], dir_path: str) -> None:
+    def default_download(self, package_name: str, assignment: Dict[str, str], dir_path: str) -> None:
         """
         Try to download a package binary from the remotes in the default remote list.
 
         Args:
             package_name: package registry name of the binary
-            settings_value: the dictionary of the binary configuration
+            assignment: the dictionary of the binary configuration
             dir_path: the download destination
         Examples:
             >>> import os
@@ -222,7 +222,7 @@ class RemoteManager:
             if package_name in remote.list_package_registries():
                 pr = remote.get_package_registry(package_name)
                 try:
-                    pb = pr.get_package_binary(settings_value)
+                    pb = pr.get_package_binary(assignment)
                 except (KeyError, FileNotFoundError):
                     continue
                 else:

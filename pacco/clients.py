@@ -152,8 +152,10 @@ class NexusFileClient(FileBasedClientAbstract):
         if received not in expected:
             raise ValueError("Receiving http status {}, expecting one of {}".format(received, expected))
 
-    def __ls_unformatted(self) -> List[str]:
-        resp = requests.get(self.__url, auth=(self.__username, self.__password))
+    def __ls_unformatted(self, path: Optional[str] = "") -> List[str]:
+        if path and path[:-1] != "/":
+            path += "/"
+        resp = requests.get(self.__url + path, auth=(self.__username, self.__password))
         NexusFileClient.__validate_status_code(resp.status_code, [200])
         soup = BeautifulSoup(resp.content, 'html.parser')
         content = [str(tr.td.a.text) for tr in soup.find_all('tr')[2:]]  # skip table header and parent dir
@@ -178,6 +180,9 @@ class NexusFileClient(FileBasedClientAbstract):
         return NexusFileClient(self.__url+name+'/', self.__username, self.__password)
 
     def download_dir(self, download_path: str) -> None:
+        self.dispatch_subdir('bin').__download_dir(download_path)
+
+    def __download_dir(self, download_path: str) -> None:
         dirs_and_files = self.__ls_unformatted()
         os.makedirs(download_path, exist_ok=True)
         file_names = [name for name in dirs_and_files if name[-1] != '/']
@@ -195,9 +200,10 @@ class NexusFileClient(FileBasedClientAbstract):
     def upload_dir(self, dir_path: str) -> None:
         if dir_path[:-1] != '/':
             dir_path += '/'
-        contents = self.__ls_unformatted()
-        for content in contents:
-            self.__rm(content)
+
+        if 'bin' in self.__ls_unformatted():
+            self.rmdir('bin')
+        self.mkdir('bin')
 
         prev_path = os.getcwd()
         os.chdir(dir_path)
@@ -207,7 +213,7 @@ class NexusFileClient(FileBasedClientAbstract):
                     continue
                 logging.info("Uploading file {}".format(file_name))
                 with open(file_name, 'rb') as f:
-                    resp = requests.post(self.__url + file_name, data=f, auth=(self.__username, self.__password))
+                    resp = requests.post(self.__bin_dir + file_name, data=f, auth=(self.__username, self.__password))
                 NexusFileClient.__validate_status_code(resp.status_code, [200, 201])
         except Exception as e:
             raise e

@@ -284,6 +284,35 @@ class Registry:
         pr = pm.get_package_registry(parsed_args.name)
         self.__out.writeln(pr.list_package_binaries())
 
+    def append_param(self, *args):
+        """
+        Add new parameter with default value to the binaries
+        """
+        parser = argparse.ArgumentParser(prog="pacco registry append_param")
+        parser.add_argument("remote", help="remote name")
+        parser.add_argument("name", help="registry name")
+        parser.add_argument("param_name", help="the new param name to be added")
+        parser.add_argument("default_value", help="the default_value assigned to the new param")
+
+        parsed_args = parser.parse_args(args)
+        pm = self.__rm.get_remote(parsed_args.remote)
+        pr = pm.get_package_registry(parsed_args.name)
+        pr.append_param(parsed_args.param_name, parsed_args.default_value)
+
+    def remove_param(self, *args):
+        """
+        Remove an existing parameter from all binaries
+        """
+        parser = argparse.ArgumentParser(prog="pacco registry remove_param")
+        parser.add_argument("remote", help="remote name")
+        parser.add_argument("name", help="registry name")
+        parser.add_argument("param_name", help="the param name to be removed")
+
+        parsed_args = parser.parse_args(args)
+        pm = self.__rm.get_remote(parsed_args.remote)
+        pr = pm.get_package_registry(parsed_args.name)
+        pr.delete_param(parsed_args.param_name)
+
 
 class Binary:
     def __init__(self, output, remote_manager: RemoteManager):
@@ -369,17 +398,17 @@ class Binary:
                                              "(e.g. os=linux,version=2.1.0,type=debug")
         parsed_args = parser.parse_args(args)
 
-        settings_value = Binary.__parse_settings_args(parsed_args.settings)
+        assignment = Binary.__parse_settings_args(parsed_args.settings)
         pm = self.__rm.get_remote(parsed_args.remote_name)
         pr = pm.get_package_registry(parsed_args.registry_name)
         try:
-            pr.get_package_binary(settings_value)
+            pr.get_package_binary(assignment)
         except FileNotFoundError:
-            pr.add_package_binary(settings_value)
+            pr.add_package_binary(assignment)
         else:
             self.__out.writeln("WARNING: Existing binary found, overwriting")
         finally:
-            pb = pr.get_package_binary(settings_value)
+            pb = pr.get_package_binary(assignment)
             pb.upload_content(parsed_args.dir_path)
 
     def remove(self, *args):
@@ -390,10 +419,26 @@ class Binary:
                                              "(e.g. os=linux,version=2.1.0,type=debug")
         parsed_args = parser.parse_args(args)
 
-        settings_value = Binary.__parse_settings_args(parsed_args.settings)
+        assignment = Binary.__parse_settings_args(parsed_args.settings)
         pm = self.__rm.get_remote(parsed_args.remote_name)
         pr = pm.get_package_registry(parsed_args.registry_name)
-        pr.remove_package_binary(settings_value)
+        pr.remove_package_binary(assignment)
+
+    def reassign(self, *args):
+        """
+        Change the assignment of a binary to a new one
+        """
+        parser = argparse.ArgumentParser(prog="pacco binary reassign")
+        parser.add_argument("remote_name", help="remote name")
+        parser.add_argument("registry_name", help="registry name")
+        parser.add_argument("old_settings", help="old settings (e.g. os=linux,version=2.1.0,type=debug")
+        parser.add_argument("new_settings", help="new settings (e.g. os=osx,version=2.1.1,type=debug")
+        parsed_args = parser.parse_args(args)
+        old_assignment = Binary.__parse_settings_args(parsed_args.old_settings)
+        new_assignment = Binary.__parse_settings_args(parsed_args.new_settings)
+        pm = self.__rm.get_remote(parsed_args.remote_name)
+        pr = pm.get_package_registry(parsed_args.registry_name)
+        pr.reassign_binary(old_assignment, new_assignment)
 
 
 def main(args):

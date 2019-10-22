@@ -8,7 +8,7 @@ Pacco is a simple package manager (used for prebuilt binary) that is interoperab
 
 ## Usage
 
-To download a registry, run `pacco download <registry> <path> <settings_key=settings_value> (<settings_key=settings_value> ...)`.
+To download a registry, run `pacco download <registry> <path> <param=value> (<param=value> ...)`.
 
 ## Install
 ```
