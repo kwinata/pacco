@@ -37,12 +37,12 @@ class RemoteManager:
         >>> rm.set_default(['local_test_2', 'local_test'])
         >>> rm.get_default()
         ['local_test_2', 'local_test']
-        >>> rm.delete_remote('local_test')
+        >>> rm.remove_remote('local_test')
         Traceback (most recent call last):
         ...
         ValueError: The remote local_test is still in default remote, remove it first
         >>> rm.set_default(['local_test_2'])
-        >>> rm.delete_remote('local_test')
+        >>> rm.remove_remote('local_test')
         >>> del rm  # auto save
         >>> other_rm = RemoteManager()
         >>> other_rm.list_remote()
@@ -140,12 +140,12 @@ class RemoteManager:
             raise NameError("The remote with name {} already exists".format(name))
         self.remotes[name] = RemoteManager.__instantiate_remote(name, configuration)
 
-    def delete_remote(self, name: str) -> None:
+    def remove_remote(self, name: str) -> None:
         """
-        Deregister a remote from this remote manager.
+        De-register a remote from this remote manager.
 
         Args:
-            name: the name of the remote to be deregistered
+            name: the name of the remote to be de-registered
         """
         if name in self.default_remotes:
             raise ValueError("The remote {} is still in default remote, remove it first".format(name))
@@ -192,10 +192,8 @@ class RemoteManager:
             >>> rm.add_remote('local', {'remote_type': 'local'})
             >>> pm = rm.get_remote('local')
             >>> pm.add_package_registry('openssl', ['os'])
-            PR[openssl, os]
             >>> pr = pm.get_package_registry('openssl')
             >>> pr.add_package_binary({'os': 'osx'})
-            PackageBinaryObject
             >>> pb = pr.get_package_binary({'os': 'osx'})
             >>> os.makedirs('tempfolder')
             >>> open("tempfolder/testfile", "w").close()
@@ -203,7 +201,6 @@ class RemoteManager:
             >>> rm.add_remote('local2', {'remote_type': 'local', 'path': 'pacco_storage'})
             >>> pm2 = rm.get_remote('local2')
             >>> pm2.add_package_registry('openssl', ['os'])
-            PR[openssl, os]
             >>> rm.add_remote('local3', {'remote_type': 'local', 'path': 'local3'})
             >>> rm.set_default(['local2', 'local3', 'local'])
             >>> rm.default_download('openssl', {'os': 'osx'}, 'download_folder')

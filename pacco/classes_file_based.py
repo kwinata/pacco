@@ -20,16 +20,14 @@ class PackageManagerFileBased(PackageManager):
         >>> pm.list_package_registries()
         []
         >>> pm.add_package_registry('openssl', ['os', 'compiler', 'version'])
-        PR[openssl, compiler, os, version]
         >>> pm.add_package_registry('boost', ['os', 'target', 'type'])
-        PR[boost, os, target, type]
         >>> pm.add_package_registry('openssl', ['os', 'compiler', 'version'])
         Traceback (most recent call last):
             ...
         FileExistsError: The package registry openssl is already found
         >>> pm.list_package_registries()
         ['boost', 'openssl']
-        >>> pm.delete_package_registry('openssl')
+        >>> pm.remove_package_registry('openssl')
         >>> pm.list_package_registries()
         ['boost']
         >>> pm.get_package_registry('boost')
@@ -43,15 +41,16 @@ class PackageManagerFileBased(PackageManager):
     def list_package_registries(self) -> List[str]:
         return sorted(self.client.ls())
 
-    def delete_package_registry(self, name: str) -> None:
+    def remove_package_registry(self, name: str) -> None:
         self.client.rmdir(name)
 
-    def add_package_registry(self, name: str, settings_key: List[str]) -> PackageRegistryFileBased:
+    def add_package_registry(self, name: str, settings_key: List[str]) -> None:
         dirs = self.client.ls()
         if name in dirs:
             raise FileExistsError("The package registry {} is already found".format(name))
         self.client.mkdir(name)
-        return PackageRegistryFileBased(name, self.client.dispatch_subdir(name), settings_key)
+        PackageRegistryFileBased(name, self.client.dispatch_subdir(name), settings_key)
+        return
 
     def get_package_registry(self, name: str) -> PackageRegistryFileBased:
         dirs = self.client.ls()
@@ -72,11 +71,11 @@ class PackageRegistryFileBased(PackageRegistry):
         >>> client = LocalClient(clean=True)
         >>> if 'NEXUS_URL' in os.environ: client = NexusFileClient(os.environ['NEXUS_URL'], 'admin', 'admin123', clean=True)
         >>> pm = PackageManagerFileBased(client)
-        >>> pr = pm.add_package_registry('openssl', ['os', 'compiler', 'version'])
+        >>> pm.add_package_registry('openssl', ['os', 'compiler', 'version'])
+        >>> pr = pm.get_package_registry('openssl')
         >>> pr.list_package_binaries()
         []
         >>> pr.add_package_binary({'os':'osx', 'compiler':'clang', 'version':'1.0'})
-        PackageBinaryObject
         >>> pr.add_package_binary({'host_os':'osx', 'compiler':'clang', 'version':'1.0'})
         Traceback (most recent call last):
             ...
@@ -88,10 +87,9 @@ class PackageRegistryFileBased(PackageRegistry):
         >>> len(pr.list_package_binaries())
         1
         >>> pr.add_package_binary({'os':'linux', 'compiler':'gcc', 'version':'1.0'})
-        PackageBinaryObject
         >>> len(pr.list_package_binaries())
         2
-        >>> pr.delete_package_binary({'os':'osx', 'compiler':'clang', 'version':'1.0'})
+        >>> pr.remove_package_binary({'os':'osx', 'compiler':'clang', 'version':'1.0'})
         >>> len(pr.list_package_binaries())
         1
         >>> pr.get_package_binary({'os':'linux', 'compiler':'gcc', 'version':'1.0'})
@@ -146,7 +144,7 @@ class PackageRegistryFileBased(PackageRegistry):
         dirs.remove(self.__generate_settings_key_dir_name(self.settings_key))
         return [PackageRegistryFileBased.__generate_settings_value_from_dir_name(name) for name in dirs]
 
-    def add_package_binary(self, settings_value: Dict[str, str]) -> PackageBinaryFileBased:
+    def add_package_binary(self, settings_value: Dict[str, str]) -> None:
         if set(settings_value.keys()) != set(self.settings_key):
             raise KeyError("wrong settings key: {} is not {}".format(sorted(settings_value.keys()),
                                                                      sorted(self.settings_key)))
@@ -154,9 +152,9 @@ class PackageRegistryFileBased(PackageRegistry):
         if dir_name in self.client.ls():
             raise FileExistsError("such binary already exist")
         self.client.mkdir(dir_name)
-        return PackageBinaryFileBased(self.client.dispatch_subdir(dir_name))
+        return
 
-    def delete_package_binary(self, settings_value: Dict[str, str]):
+    def remove_package_binary(self, settings_value: Dict[str, str]):
         dir_name = PackageRegistryFileBased.__generate_dir_name_from_settings_value(settings_value)
         self.client.rmdir(dir_name)
 
@@ -179,8 +177,10 @@ class PackageBinaryFileBased(PackageBinary):
         >>> client = LocalClient(clean=True)
         >>> if 'NEXUS_URL' in os.environ: client = NexusFileClient(os.environ['NEXUS_URL'], 'admin', 'admin123', clean=True)
         >>> pm = PackageManagerFileBased(client)
-        >>> pr = pm.add_package_registry('openssl', ['os', 'compiler', 'version'])
-        >>> pb = pr.add_package_binary({'os':'osx', 'compiler':'clang', 'version':'1.0'})
+        >>> pm.add_package_registry('openssl', ['os', 'compiler', 'version'])
+        >>> pr = pm.get_package_registry('openssl')
+        >>> pr.add_package_binary({'os':'osx', 'compiler':'clang', 'version':'1.0'})
+        >>> pb = pr.get_package_binary({'os':'osx', 'compiler':'clang', 'version':'1.0'})
         >>> import os, shutil
         >>> os.makedirs('testfolder', exist_ok=True)
         >>> open('testfolder/testfile', 'w').close()

@@ -22,7 +22,7 @@ class PackageManager:
         """
         raise NotImplementedError()
 
-    def delete_package_registry(self, name: str) -> None:
+    def remove_package_registry(self, name: str) -> None:
         """
         Delete a package registry from the package manager.
 
@@ -31,15 +31,13 @@ class PackageManager:
         """
         raise NotImplementedError()
 
-    def add_package_registry(self, name: str, settings_key: List[str]) -> PackageRegistry:
+    def add_package_registry(self, name: str, settings_key: List[str]) -> None:
         """
         Add a new package registry to this package manager.
 
         Args:
             name: the name of the package. For printing purposes only.
             settings_key: the list of keys for the configuration parameter, e.g. ['os', 'compiler', 'version']
-        Returns:
-            The package registry object.
         Exception:
             FileExistsError: raised if the package with the same name is found
         """
@@ -78,7 +76,7 @@ class PackageRegistry:
         """
         raise NotImplementedError()
 
-    def add_package_binary(self, settings_value: Dict[str, str]) -> PackageBinary:
+    def add_package_binary(self, settings_value: Dict[str, str]) -> None:
         """
         Add a new package binary to this registry. Note that this will only declare the existance of the binary
         by creating a new directory, to upload the binary must be done through the ``PackageBinaryFileBased``
@@ -86,15 +84,13 @@ class PackageRegistry:
 
         Args:
             settings_value: the assignment of key value of the settings_key.
-        Returns:
-            The package binary object
         Exceptions:
             KeyError: raised if the set of keys in the passed ``settings_value`` is different with ``settings_key``
             FileExistsError: raised if a package binary with the same configuration already exist.
         """
         raise NotImplementedError()
 
-    def delete_package_binary(self, settings_value: Dict[str, str]):
+    def remove_package_binary(self, settings_value: Dict[str, str]):
         """
         Delete the package binary folder
 
