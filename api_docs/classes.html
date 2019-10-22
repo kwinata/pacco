@@ -179,13 +179,13 @@
 expected behavior defined below.</p>
 <dl class="method">
 <dt id="pacco.classes_interface.PackageManager.add_package_registry">
-<code class="sig-name descname">add_package_registry</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">settings_key</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.classes_interface.PackageManager.add_package_registry" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">add_package_registry</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">params</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.classes_interface.PackageManager.add_package_registry" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add a new package registry to this package manager.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>name</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – the name of the package. For printing purposes only.</p></li>
-<li><p><strong>settings_key</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – the list of keys for the configuration parameter, e.g. [‘os’, ‘compiler’, ‘version’]</p></li>
+<li><p><strong>params</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – the list of keys for the configuration parameter, e.g. [‘os’, ‘compiler’, ‘version’]</p></li>
 </ul>
 </dd>
 </dl>
@@ -281,13 +281,13 @@ expected behavior defined below.</p>
 </div>
 <dl class="method">
 <dt id="pacco.classes_file_based.PackageManagerFileBased.add_package_registry">
-<code class="sig-name descname">add_package_registry</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">settings_key</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.classes_file_based.PackageManagerFileBased.add_package_registry" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">add_package_registry</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">params</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.classes_file_based.PackageManagerFileBased.add_package_registry" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add a new package registry to this package manager.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>name</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – the name of the package. For printing purposes only.</p></li>
-<li><p><strong>settings_key</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – the list of keys for the configuration parameter, e.g. [‘os’, ‘compiler’, ‘version’]</p></li>
+<li><p><strong>params</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – the list of keys for the configuration parameter, e.g. [‘os’, ‘compiler’, ‘version’]</p></li>
 </ul>
 </dd>
 </dl>
@@ -359,22 +359,22 @@ expected behavior defined below.</p>
 <h2>PackageRegistry<a class="headerlink" href="#packageregistry" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="pacco.classes_interface.PackageRegistry">
-<em class="property">class </em><code class="sig-prename descclassname">pacco.classes_interface.</code><code class="sig-name descname">PackageRegistry</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">client</em>, <em class="sig-param">settings_key=None</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.classes_interface.PackageRegistry" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pacco.classes_interface.</code><code class="sig-name descname">PackageRegistry</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">client</em>, <em class="sig-param">params=None</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.classes_interface.PackageRegistry" title="Permalink to this definition">¶</a></dt>
 <dd><p>Represent the existence of a package (e.g. openssl) in the package manager.
 This class is the interface class with the expected behavior defined below.</p>
 <dl class="method">
 <dt id="pacco.classes_interface.PackageRegistry.add_package_binary">
-<code class="sig-name descname">add_package_binary</code><span class="sig-paren">(</span><em class="sig-param">settings_value</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.classes_interface.PackageRegistry.add_package_binary" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">add_package_binary</code><span class="sig-paren">(</span><em class="sig-param">assignment</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.classes_interface.PackageRegistry.add_package_binary" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add a new package binary to this registry. Note that this will only declare the existance of the binary
 by creating a new directory, to upload the binary must be done through the <code class="docutils literal notranslate"><span class="pre">PackageBinaryFileBased</span></code>
 object itself.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>settings_value</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – the assignment of key value of the settings_key.</p>
+<dd class="field-odd"><p><strong>assignment</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – the assignment of key value of the params.</p>
 </dd>
 </dl>
 <dl class="simple">
-<dt>Exceptions:</dt><dd><p>KeyError: raised if the set of keys in the passed <code class="docutils literal notranslate"><span class="pre">settings_value</span></code> is different with <code class="docutils literal notranslate"><span class="pre">settings_key</span></code>
+<dt>Exceptions:</dt><dd><p>KeyError: raised if the set of keys in the passed <code class="docutils literal notranslate"><span class="pre">assignment</span></code> is different with <code class="docutils literal notranslate"><span class="pre">params</span></code>
 FileExistsError: raised if a package binary with the same configuration already exist.</p>
 </dd>
 </dl>
@@ -386,12 +386,57 @@ FileExistsError: raised if a package binary with the same configuration already 
 </dd></dl>
 
 <dl class="method">
+<dt id="pacco.classes_interface.PackageRegistry.append_param">
+<code class="sig-name descname">append_param</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">default_value='default'</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.classes_interface.PackageRegistry.append_param" title="Permalink to this definition">¶</a></dt>
+<dd><p>Append new parameter to each <code class="docutils literal notranslate"><span class="pre">PackageBinary</span></code> object and assign <code class="docutils literal notranslate"><span class="pre">default_value</span></code> as
+the default value to the new parameter</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – the new param name</p></li>
+<li><p><strong>default_value</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – the default value to be assigned</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Exceptions:</dt><dd><p>ValueError: if the param is already exist</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pacco.classes_interface.PackageRegistry.delete_param">
+<code class="sig-name descname">delete_param</code><span class="sig-paren">(</span><em class="sig-param">name</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.classes_interface.PackageRegistry.delete_param" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove a parameter from each <code class="docutils literal notranslate"><span class="pre">PackageBinary</span></code> object</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>name</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – the param name to be deleted</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Exceptions:</dt><dd><p>ValueError: if the param name does not exist
+NameError: if the resulting assignments will have duplicate when the param is removed</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
 <dt id="pacco.classes_interface.PackageRegistry.get_package_binary">
-<code class="sig-name descname">get_package_binary</code><span class="sig-paren">(</span><em class="sig-param">settings_value</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.classes_interface.PackageRegistry.get_package_binary" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_package_binary</code><span class="sig-paren">(</span><em class="sig-param">assignment</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.classes_interface.PackageRegistry.get_package_binary" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a reference to the <code class="docutils literal notranslate"><span class="pre">PackageBinary</span></code> object based on the settings value</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>settings_value</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – the configuration of the the package binary to get</p>
+<dd class="field-odd"><p><strong>assignment</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – the configuration of the the package binary to get</p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p><a class="reference internal" href="#pacco.classes_interface.PackageBinary" title="pacco.classes_interface.PackageBinary"><code class="xref py py-class docutils literal notranslate"><span class="pre">PackageBinary</span></code></a></p>
@@ -416,18 +461,43 @@ FileNotFoundError: when there is no binary with the configuration of settings va
 <dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]]</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>list of the package binary settings_value dictionaries</p>
+<dd class="field-even"><p>list of the package binary assignment dictionaries</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pacco.classes_interface.PackageRegistry.reassign_binary">
+<code class="sig-name descname">reassign_binary</code><span class="sig-paren">(</span><em class="sig-param">old_assignment</em>, <em class="sig-param">new_assignment</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.classes_interface.PackageRegistry.reassign_binary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reassign a new assignment to an existing binary</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>old_assignment</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – the old assignment</p></li>
+<li><p><strong>new_assignment</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – the new assignment</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Exceptions:</dt><dd><p>KeyError: if the key in the new assignment does not match with params
+ValueError: if there is no binary that match old_assignment
+NameError: there already exist binary with the same configuration as new_assignment</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="pacco.classes_interface.PackageRegistry.remove_package_binary">
-<code class="sig-name descname">remove_package_binary</code><span class="sig-paren">(</span><em class="sig-param">settings_value</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.classes_interface.PackageRegistry.remove_package_binary" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">remove_package_binary</code><span class="sig-paren">(</span><em class="sig-param">assignment</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.classes_interface.PackageRegistry.remove_package_binary" title="Permalink to this definition">¶</a></dt>
 <dd><p>Delete the package binary folder</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>settings_value</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – the configuration of the the package binary to be deleted</p>
+<dd class="field-odd"><p><strong>assignment</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – the configuration of the the package binary to be deleted</p>
 </dd>
 </dl>
 </dd></dl>
@@ -438,7 +508,7 @@ FileNotFoundError: when there is no binary with the configuration of settings va
 <h3>File-based implementations<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
 <dt id="pacco.classes_file_based.PackageRegistryFileBased">
-<em class="property">class </em><code class="sig-prename descclassname">pacco.classes_file_based.</code><code class="sig-name descname">PackageRegistryFileBased</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">client</em>, <em class="sig-param">settings_key=None</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.classes_file_based.PackageRegistryFileBased" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pacco.classes_file_based.</code><code class="sig-name descname">PackageRegistryFileBased</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">client</em>, <em class="sig-param">params=None</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.classes_file_based.PackageRegistryFileBased" title="Permalink to this definition">¶</a></dt>
 <dd><p>An implementation of the PackageRegistry interface</p>
 <p class="rubric">Examples</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pacco.clients</span> <span class="k">import</span> <span class="n">LocalClient</span><span class="p">,</span> <span class="n">NexusFileClient</span>
@@ -468,21 +538,35 @@ FileNotFoundError: when there is no binary with the configuration of settings va
 <span class="go">1</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pr</span><span class="o">.</span><span class="n">get_package_binary</span><span class="p">({</span><span class="s1">&#39;os&#39;</span><span class="p">:</span><span class="s1">&#39;linux&#39;</span><span class="p">,</span> <span class="s1">&#39;compiler&#39;</span><span class="p">:</span><span class="s1">&#39;gcc&#39;</span><span class="p">,</span> <span class="s1">&#39;version&#39;</span><span class="p">:</span><span class="s1">&#39;1.0&#39;</span><span class="p">})</span>
 <span class="go">PackageBinaryObject</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pr</span><span class="o">.</span><span class="n">add_package_binary</span><span class="p">({</span><span class="s1">&#39;os&#39;</span><span class="p">:</span><span class="s1">&#39;linux&#39;</span><span class="p">,</span> <span class="s1">&#39;compiler&#39;</span><span class="p">:</span><span class="s1">&#39;g++&#39;</span><span class="p">,</span> <span class="s1">&#39;version&#39;</span><span class="p">:</span><span class="s1">&#39;1.0&#39;</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pr</span><span class="o">.</span><span class="n">delete_param</span><span class="p">(</span><span class="s1">&#39;compiler&#39;</span><span class="p">)</span>
+<span class="gt">Traceback (most recent call last):</span>
+<span class="c">...</span>
+<span class="gr">NameError</span>: <span class="n">Cannot remove parameter compiler since it will cause two binary to have the same value</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pr</span><span class="o">.</span><span class="n">append_param</span><span class="p">(</span><span class="s1">&#39;stdlib&#39;</span><span class="p">,</span> <span class="n">default_value</span><span class="o">=</span><span class="s1">&#39;c++11&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pr</span>
+<span class="go">PR[openssl, compiler, os, stdlib, version]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">old_assignment</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;os&#39;</span><span class="p">:</span><span class="s1">&#39;linux&#39;</span><span class="p">,</span> <span class="s1">&#39;compiler&#39;</span><span class="p">:</span><span class="s1">&#39;g++&#39;</span><span class="p">,</span> <span class="s1">&#39;version&#39;</span><span class="p">:</span><span class="s1">&#39;1.0&#39;</span><span class="p">,</span> <span class="s1">&#39;stdlib&#39;</span><span class="p">:</span> <span class="s1">&#39;c++11&#39;</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">new_assignment</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;os&#39;</span><span class="p">:</span><span class="s1">&#39;linux&#39;</span><span class="p">,</span> <span class="s1">&#39;compiler&#39;</span><span class="p">:</span><span class="s1">&#39;g++&#39;</span><span class="p">,</span> <span class="s1">&#39;version&#39;</span><span class="p">:</span><span class="s1">&#39;1.0&#39;</span><span class="p">,</span> <span class="s1">&#39;stdlib&#39;</span><span class="p">:</span> <span class="s1">&#39;static_c++&#39;</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pr</span><span class="o">.</span><span class="n">reassign_binary</span><span class="p">(</span><span class="n">old_assignment</span><span class="p">,</span> <span class="n">new_assignment</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pr</span><span class="o">.</span><span class="n">delete_param</span><span class="p">(</span><span class="s1">&#39;compiler&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pr</span>
+<span class="go">PR[openssl, os, stdlib, version]</span>
 </pre></div>
 </div>
 <dl class="method">
 <dt id="pacco.classes_file_based.PackageRegistryFileBased.add_package_binary">
-<code class="sig-name descname">add_package_binary</code><span class="sig-paren">(</span><em class="sig-param">settings_value</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.classes_file_based.PackageRegistryFileBased.add_package_binary" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">add_package_binary</code><span class="sig-paren">(</span><em class="sig-param">assignment</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.classes_file_based.PackageRegistryFileBased.add_package_binary" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add a new package binary to this registry. Note that this will only declare the existance of the binary
 by creating a new directory, to upload the binary must be done through the <code class="docutils literal notranslate"><span class="pre">PackageBinaryFileBased</span></code>
 object itself.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>settings_value</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – the assignment of key value of the settings_key.</p>
+<dd class="field-odd"><p><strong>assignment</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – the assignment of key value of the params.</p>
 </dd>
 </dl>
 <dl class="simple">
-<dt>Exceptions:</dt><dd><p>KeyError: raised if the set of keys in the passed <code class="docutils literal notranslate"><span class="pre">settings_value</span></code> is different with <code class="docutils literal notranslate"><span class="pre">settings_key</span></code>
+<dt>Exceptions:</dt><dd><p>KeyError: raised if the set of keys in the passed <code class="docutils literal notranslate"><span class="pre">assignment</span></code> is different with <code class="docutils literal notranslate"><span class="pre">params</span></code>
 FileExistsError: raised if a package binary with the same configuration already exist.</p>
 </dd>
 </dl>
@@ -494,12 +578,57 @@ FileExistsError: raised if a package binary with the same configuration already 
 </dd></dl>
 
 <dl class="method">
+<dt id="pacco.classes_file_based.PackageRegistryFileBased.append_param">
+<code class="sig-name descname">append_param</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">default_value='default'</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.classes_file_based.PackageRegistryFileBased.append_param" title="Permalink to this definition">¶</a></dt>
+<dd><p>Append new parameter to each <code class="docutils literal notranslate"><span class="pre">PackageBinary</span></code> object and assign <code class="docutils literal notranslate"><span class="pre">default_value</span></code> as
+the default value to the new parameter</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – the new param name</p></li>
+<li><p><strong>default_value</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – the default value to be assigned</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Exceptions:</dt><dd><p>ValueError: if the param is already exist</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pacco.classes_file_based.PackageRegistryFileBased.delete_param">
+<code class="sig-name descname">delete_param</code><span class="sig-paren">(</span><em class="sig-param">name</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.classes_file_based.PackageRegistryFileBased.delete_param" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove a parameter from each <code class="docutils literal notranslate"><span class="pre">PackageBinary</span></code> object</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>name</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – the param name to be deleted</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Exceptions:</dt><dd><p>ValueError: if the param name does not exist
+NameError: if the resulting assignments will have duplicate when the param is removed</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
 <dt id="pacco.classes_file_based.PackageRegistryFileBased.get_package_binary">
-<code class="sig-name descname">get_package_binary</code><span class="sig-paren">(</span><em class="sig-param">settings_value</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.classes_file_based.PackageRegistryFileBased.get_package_binary" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_package_binary</code><span class="sig-paren">(</span><em class="sig-param">assignment</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.classes_file_based.PackageRegistryFileBased.get_package_binary" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a reference to the <code class="docutils literal notranslate"><span class="pre">PackageBinary</span></code> object based on the settings value</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>settings_value</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – the configuration of the the package binary to get</p>
+<dd class="field-odd"><p><strong>assignment</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – the configuration of the the package binary to get</p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p><a class="reference internal" href="#pacco.classes_file_based.PackageBinaryFileBased" title="pacco.classes_file_based.PackageBinaryFileBased"><code class="xref py py-class docutils literal notranslate"><span class="pre">PackageBinaryFileBased</span></code></a></p>
@@ -524,18 +653,43 @@ FileNotFoundError: when there is no binary with the configuration of settings va
 <dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]]</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>list of the package binary settings_value dictionaries</p>
+<dd class="field-even"><p>list of the package binary assignment dictionaries</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pacco.classes_file_based.PackageRegistryFileBased.reassign_binary">
+<code class="sig-name descname">reassign_binary</code><span class="sig-paren">(</span><em class="sig-param">old_assignment</em>, <em class="sig-param">new_assignment</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.classes_file_based.PackageRegistryFileBased.reassign_binary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reassign a new assignment to an existing binary</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>old_assignment</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – the old assignment</p></li>
+<li><p><strong>new_assignment</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – the new assignment</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Exceptions:</dt><dd><p>KeyError: if the key in the new assignment does not match with params
+ValueError: if there is no binary that match old_assignment
+NameError: there already exist binary with the same configuration as new_assignment</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="pacco.classes_file_based.PackageRegistryFileBased.remove_package_binary">
-<code class="sig-name descname">remove_package_binary</code><span class="sig-paren">(</span><em class="sig-param">settings_value</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.classes_file_based.PackageRegistryFileBased.remove_package_binary" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">remove_package_binary</code><span class="sig-paren">(</span><em class="sig-param">assignment</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.classes_file_based.PackageRegistryFileBased.remove_package_binary" title="Permalink to this definition">¶</a></dt>
 <dd><p>Delete the package binary folder</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>settings_value</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – the configuration of the the package binary to be deleted</p>
+<dd class="field-odd"><p><strong>assignment</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – the configuration of the the package binary to be deleted</p>
 </dd>
 </dl>
 </dd></dl>
