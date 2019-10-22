@@ -29,3 +29,9 @@ class Cache:
         dir_name = Cache.__serialize(registry_name, assignment)
         os.makedirs(dir_name, exist_ok=True)
         self.client.dispatch_subdir(dir_name).upload_dir(source_path)
+
+    def get_path(self, registry_name: str, assignment: Dict[str, str]) -> str:
+        dir_name = Cache.__serialize(registry_name, assignment)
+        if dir_name in self.client.ls():
+            return self.client.dispatch_subdir(dir_name).bin_dir_for_cache
+        raise ValueError("No cache found")

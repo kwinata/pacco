@@ -323,8 +323,8 @@ class PackageBinaryFileBased(PackageBinary):
     def __repr__(self):
         return "PackageBinaryObject"
 
-    def download_content(self, download_dir_path: str, force_download: Optional[bool] = False) -> None:
-        if self.__cache_enabled and (not force_download) and \
+    def download_content(self, download_dir_path: str, fresh_download: Optional[bool] = False) -> None:
+        if self.__cache_enabled and (not fresh_download) and \
                 self.__cache.download_from_cache(self.__registry_name, self.__assignment, download_dir_path):
             logging.info("use cache")
             return

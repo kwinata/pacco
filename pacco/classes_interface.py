@@ -170,7 +170,7 @@ class PackageBinary:
     def __init__(self, client: ClientAbstract):
         self.client = client
 
-    def download_content(self, download_dir_path: str, force_download: Optional[bool] = False) -> None:
+    def download_content(self, download_dir_path: str, fresh_download: Optional[bool] = False) -> None:
         """
         Download content of uploaded binary from the remote to the ``download_dir_path``
 

@@ -99,6 +99,8 @@ class LocalClient(FileBasedClientAbstract):
             self.rmdir(self.__root_dir)
             os.makedirs(self.__root_dir)
 
+        self.bin_dir_for_cache = self.__bin_dir
+
     def ls(self) -> List[str]:
         return os.listdir(self.__root_dir)
 
