@@ -188,29 +188,14 @@ expected behavior defined below.</p>
 <li><p><strong>settings_key</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – the list of keys for the configuration parameter, e.g. [‘os’, ‘compiler’, ‘version’]</p></li>
 </ul>
 </dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference internal" href="#pacco.classes_interface.PackageRegistry" title="pacco.classes_interface.PackageRegistry"><code class="xref py py-class docutils literal notranslate"><span class="pre">PackageRegistry</span></code></a></p>
-</dd>
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>The package registry object.</p>
-</dd>
 </dl>
 <dl class="simple">
 <dt>Exception:</dt><dd><p>FileExistsError: raised if the package with the same name is found</p>
 </dd>
 </dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="pacco.classes_interface.PackageManager.delete_package_registry">
-<code class="sig-name descname">delete_package_registry</code><span class="sig-paren">(</span><em class="sig-param">name</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.classes_interface.PackageManager.delete_package_registry" title="Permalink to this definition">¶</a></dt>
-<dd><p>Delete a package registry from the package manager.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>name</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – the name of the package registry to be deleted.</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -250,6 +235,20 @@ expected behavior defined below.</p>
 </dl>
 </dd></dl>
 
+<dl class="method">
+<dt id="pacco.classes_interface.PackageManager.remove_package_registry">
+<code class="sig-name descname">remove_package_registry</code><span class="sig-paren">(</span><em class="sig-param">name</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.classes_interface.PackageManager.remove_package_registry" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete a package registry from the package manager.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>name</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – the name of the package registry to be deleted.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 <div class="section" id="file-based-implementations">
@@ -266,16 +265,14 @@ expected behavior defined below.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pm</span><span class="o">.</span><span class="n">list_package_registries</span><span class="p">()</span>
 <span class="go">[]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pm</span><span class="o">.</span><span class="n">add_package_registry</span><span class="p">(</span><span class="s1">&#39;openssl&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;os&#39;</span><span class="p">,</span> <span class="s1">&#39;compiler&#39;</span><span class="p">,</span> <span class="s1">&#39;version&#39;</span><span class="p">])</span>
-<span class="go">PR[openssl, compiler, os, version]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pm</span><span class="o">.</span><span class="n">add_package_registry</span><span class="p">(</span><span class="s1">&#39;boost&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;os&#39;</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">,</span> <span class="s1">&#39;type&#39;</span><span class="p">])</span>
-<span class="go">PR[boost, os, target, type]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pm</span><span class="o">.</span><span class="n">add_package_registry</span><span class="p">(</span><span class="s1">&#39;openssl&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;os&#39;</span><span class="p">,</span> <span class="s1">&#39;compiler&#39;</span><span class="p">,</span> <span class="s1">&#39;version&#39;</span><span class="p">])</span>
 <span class="gt">Traceback (most recent call last):</span>
     <span class="o">...</span>
 <span class="gr">FileExistsError</span>: <span class="n">The package registry openssl is already found</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pm</span><span class="o">.</span><span class="n">list_package_registries</span><span class="p">()</span>
 <span class="go">[&#39;boost&#39;, &#39;openssl&#39;]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pm</span><span class="o">.</span><span class="n">delete_package_registry</span><span class="p">(</span><span class="s1">&#39;openssl&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pm</span><span class="o">.</span><span class="n">remove_package_registry</span><span class="p">(</span><span class="s1">&#39;openssl&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pm</span><span class="o">.</span><span class="n">list_package_registries</span><span class="p">()</span>
 <span class="go">[&#39;boost&#39;]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pm</span><span class="o">.</span><span class="n">get_package_registry</span><span class="p">(</span><span class="s1">&#39;boost&#39;</span><span class="p">)</span>
@@ -293,29 +290,14 @@ expected behavior defined below.</p>
 <li><p><strong>settings_key</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – the list of keys for the configuration parameter, e.g. [‘os’, ‘compiler’, ‘version’]</p></li>
 </ul>
 </dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference internal" href="#pacco.classes_file_based.PackageRegistryFileBased" title="pacco.classes_file_based.PackageRegistryFileBased"><code class="xref py py-class docutils literal notranslate"><span class="pre">PackageRegistryFileBased</span></code></a></p>
-</dd>
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>The package registry object.</p>
-</dd>
 </dl>
 <dl class="simple">
 <dt>Exception:</dt><dd><p>FileExistsError: raised if the package with the same name is found</p>
 </dd>
 </dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="pacco.classes_file_based.PackageManagerFileBased.delete_package_registry">
-<code class="sig-name descname">delete_package_registry</code><span class="sig-paren">(</span><em class="sig-param">name</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.classes_file_based.PackageManagerFileBased.delete_package_registry" title="Permalink to this definition">¶</a></dt>
-<dd><p>Delete a package registry from the package manager.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>name</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – the name of the package registry to be deleted.</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -355,6 +337,20 @@ expected behavior defined below.</p>
 </dl>
 </dd></dl>
 
+<dl class="method">
+<dt id="pacco.classes_file_based.PackageManagerFileBased.remove_package_registry">
+<code class="sig-name descname">remove_package_registry</code><span class="sig-paren">(</span><em class="sig-param">name</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.classes_file_based.PackageManagerFileBased.remove_package_registry" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete a package registry from the package manager.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>name</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – the name of the package registry to be deleted.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 </div>
@@ -376,27 +372,15 @@ object itself.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>settings_value</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – the assignment of key value of the settings_key.</p>
 </dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference internal" href="#pacco.classes_interface.PackageBinary" title="pacco.classes_interface.PackageBinary"><code class="xref py py-class docutils literal notranslate"><span class="pre">PackageBinary</span></code></a></p>
-</dd>
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>The package binary object</p>
-</dd>
 </dl>
 <dl class="simple">
 <dt>Exceptions:</dt><dd><p>KeyError: raised if the set of keys in the passed <code class="docutils literal notranslate"><span class="pre">settings_value</span></code> is different with <code class="docutils literal notranslate"><span class="pre">settings_key</span></code>
 FileExistsError: raised if a package binary with the same configuration already exist.</p>
 </dd>
 </dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="pacco.classes_interface.PackageRegistry.delete_package_binary">
-<code class="sig-name descname">delete_package_binary</code><span class="sig-paren">(</span><em class="sig-param">settings_value</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.classes_interface.PackageRegistry.delete_package_binary" title="Permalink to this definition">¶</a></dt>
-<dd><p>Delete the package binary folder</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>settings_value</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – the configuration of the the package binary to be deleted</p>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -437,6 +421,17 @@ FileNotFoundError: when there is no binary with the configuration of settings va
 </dl>
 </dd></dl>
 
+<dl class="method">
+<dt id="pacco.classes_interface.PackageRegistry.remove_package_binary">
+<code class="sig-name descname">remove_package_binary</code><span class="sig-paren">(</span><em class="sig-param">settings_value</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.classes_interface.PackageRegistry.remove_package_binary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete the package binary folder</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>settings_value</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – the configuration of the the package binary to be deleted</p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 <div class="section" id="id1">
@@ -450,11 +445,11 @@ FileNotFoundError: when there is no binary with the configuration of settings va
 <span class="gp">&gt;&gt;&gt; </span><span class="n">client</span> <span class="o">=</span> <span class="n">LocalClient</span><span class="p">(</span><span class="n">clean</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">if</span> <span class="s1">&#39;NEXUS_URL&#39;</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">:</span> <span class="n">client</span> <span class="o">=</span> <span class="n">NexusFileClient</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;NEXUS_URL&#39;</span><span class="p">],</span> <span class="s1">&#39;admin&#39;</span><span class="p">,</span> <span class="s1">&#39;admin123&#39;</span><span class="p">,</span> <span class="n">clean</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pm</span> <span class="o">=</span> <span class="n">PackageManagerFileBased</span><span class="p">(</span><span class="n">client</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pr</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">add_package_registry</span><span class="p">(</span><span class="s1">&#39;openssl&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;os&#39;</span><span class="p">,</span> <span class="s1">&#39;compiler&#39;</span><span class="p">,</span> <span class="s1">&#39;version&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pm</span><span class="o">.</span><span class="n">add_package_registry</span><span class="p">(</span><span class="s1">&#39;openssl&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;os&#39;</span><span class="p">,</span> <span class="s1">&#39;compiler&#39;</span><span class="p">,</span> <span class="s1">&#39;version&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pr</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">get_package_registry</span><span class="p">(</span><span class="s1">&#39;openssl&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pr</span><span class="o">.</span><span class="n">list_package_binaries</span><span class="p">()</span>
 <span class="go">[]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pr</span><span class="o">.</span><span class="n">add_package_binary</span><span class="p">({</span><span class="s1">&#39;os&#39;</span><span class="p">:</span><span class="s1">&#39;osx&#39;</span><span class="p">,</span> <span class="s1">&#39;compiler&#39;</span><span class="p">:</span><span class="s1">&#39;clang&#39;</span><span class="p">,</span> <span class="s1">&#39;version&#39;</span><span class="p">:</span><span class="s1">&#39;1.0&#39;</span><span class="p">})</span>
-<span class="go">PackageBinaryObject</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pr</span><span class="o">.</span><span class="n">add_package_binary</span><span class="p">({</span><span class="s1">&#39;host_os&#39;</span><span class="p">:</span><span class="s1">&#39;osx&#39;</span><span class="p">,</span> <span class="s1">&#39;compiler&#39;</span><span class="p">:</span><span class="s1">&#39;clang&#39;</span><span class="p">,</span> <span class="s1">&#39;version&#39;</span><span class="p">:</span><span class="s1">&#39;1.0&#39;</span><span class="p">})</span>
 <span class="gt">Traceback (most recent call last):</span>
     <span class="o">...</span>
@@ -466,10 +461,9 @@ FileNotFoundError: when there is no binary with the configuration of settings va
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">pr</span><span class="o">.</span><span class="n">list_package_binaries</span><span class="p">())</span>
 <span class="go">1</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pr</span><span class="o">.</span><span class="n">add_package_binary</span><span class="p">({</span><span class="s1">&#39;os&#39;</span><span class="p">:</span><span class="s1">&#39;linux&#39;</span><span class="p">,</span> <span class="s1">&#39;compiler&#39;</span><span class="p">:</span><span class="s1">&#39;gcc&#39;</span><span class="p">,</span> <span class="s1">&#39;version&#39;</span><span class="p">:</span><span class="s1">&#39;1.0&#39;</span><span class="p">})</span>
-<span class="go">PackageBinaryObject</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">pr</span><span class="o">.</span><span class="n">list_package_binaries</span><span class="p">())</span>
 <span class="go">2</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pr</span><span class="o">.</span><span class="n">delete_package_binary</span><span class="p">({</span><span class="s1">&#39;os&#39;</span><span class="p">:</span><span class="s1">&#39;osx&#39;</span><span class="p">,</span> <span class="s1">&#39;compiler&#39;</span><span class="p">:</span><span class="s1">&#39;clang&#39;</span><span class="p">,</span> <span class="s1">&#39;version&#39;</span><span class="p">:</span><span class="s1">&#39;1.0&#39;</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pr</span><span class="o">.</span><span class="n">remove_package_binary</span><span class="p">({</span><span class="s1">&#39;os&#39;</span><span class="p">:</span><span class="s1">&#39;osx&#39;</span><span class="p">,</span> <span class="s1">&#39;compiler&#39;</span><span class="p">:</span><span class="s1">&#39;clang&#39;</span><span class="p">,</span> <span class="s1">&#39;version&#39;</span><span class="p">:</span><span class="s1">&#39;1.0&#39;</span><span class="p">})</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">pr</span><span class="o">.</span><span class="n">list_package_binaries</span><span class="p">())</span>
 <span class="go">1</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pr</span><span class="o">.</span><span class="n">get_package_binary</span><span class="p">({</span><span class="s1">&#39;os&#39;</span><span class="p">:</span><span class="s1">&#39;linux&#39;</span><span class="p">,</span> <span class="s1">&#39;compiler&#39;</span><span class="p">:</span><span class="s1">&#39;gcc&#39;</span><span class="p">,</span> <span class="s1">&#39;version&#39;</span><span class="p">:</span><span class="s1">&#39;1.0&#39;</span><span class="p">})</span>
@@ -486,27 +480,15 @@ object itself.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>settings_value</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – the assignment of key value of the settings_key.</p>
 </dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference internal" href="#pacco.classes_file_based.PackageBinaryFileBased" title="pacco.classes_file_based.PackageBinaryFileBased"><code class="xref py py-class docutils literal notranslate"><span class="pre">PackageBinaryFileBased</span></code></a></p>
-</dd>
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>The package binary object</p>
-</dd>
 </dl>
 <dl class="simple">
 <dt>Exceptions:</dt><dd><p>KeyError: raised if the set of keys in the passed <code class="docutils literal notranslate"><span class="pre">settings_value</span></code> is different with <code class="docutils literal notranslate"><span class="pre">settings_key</span></code>
 FileExistsError: raised if a package binary with the same configuration already exist.</p>
 </dd>
 </dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="pacco.classes_file_based.PackageRegistryFileBased.delete_package_binary">
-<code class="sig-name descname">delete_package_binary</code><span class="sig-paren">(</span><em class="sig-param">settings_value</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.classes_file_based.PackageRegistryFileBased.delete_package_binary" title="Permalink to this definition">¶</a></dt>
-<dd><p>Delete the package binary folder</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>settings_value</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – the configuration of the the package binary to be deleted</p>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -543,6 +525,17 @@ FileNotFoundError: when there is no binary with the configuration of settings va
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>list of the package binary settings_value dictionaries</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pacco.classes_file_based.PackageRegistryFileBased.remove_package_binary">
+<code class="sig-name descname">remove_package_binary</code><span class="sig-paren">(</span><em class="sig-param">settings_value</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.classes_file_based.PackageRegistryFileBased.remove_package_binary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete the package binary folder</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>settings_value</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – the configuration of the the package binary to be deleted</p>
 </dd>
 </dl>
 </dd></dl>
@@ -599,8 +592,10 @@ This class is the interface class with the expected behavior defined below.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">client</span> <span class="o">=</span> <span class="n">LocalClient</span><span class="p">(</span><span class="n">clean</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">if</span> <span class="s1">&#39;NEXUS_URL&#39;</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">:</span> <span class="n">client</span> <span class="o">=</span> <span class="n">NexusFileClient</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;NEXUS_URL&#39;</span><span class="p">],</span> <span class="s1">&#39;admin&#39;</span><span class="p">,</span> <span class="s1">&#39;admin123&#39;</span><span class="p">,</span> <span class="n">clean</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pm</span> <span class="o">=</span> <span class="n">PackageManagerFileBased</span><span class="p">(</span><span class="n">client</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pr</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">add_package_registry</span><span class="p">(</span><span class="s1">&#39;openssl&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;os&#39;</span><span class="p">,</span> <span class="s1">&#39;compiler&#39;</span><span class="p">,</span> <span class="s1">&#39;version&#39;</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pb</span> <span class="o">=</span> <span class="n">pr</span><span class="o">.</span><span class="n">add_package_binary</span><span class="p">({</span><span class="s1">&#39;os&#39;</span><span class="p">:</span><span class="s1">&#39;osx&#39;</span><span class="p">,</span> <span class="s1">&#39;compiler&#39;</span><span class="p">:</span><span class="s1">&#39;clang&#39;</span><span class="p">,</span> <span class="s1">&#39;version&#39;</span><span class="p">:</span><span class="s1">&#39;1.0&#39;</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pm</span><span class="o">.</span><span class="n">add_package_registry</span><span class="p">(</span><span class="s1">&#39;openssl&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;os&#39;</span><span class="p">,</span> <span class="s1">&#39;compiler&#39;</span><span class="p">,</span> <span class="s1">&#39;version&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pr</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">get_package_registry</span><span class="p">(</span><span class="s1">&#39;openssl&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pr</span><span class="o">.</span><span class="n">add_package_binary</span><span class="p">({</span><span class="s1">&#39;os&#39;</span><span class="p">:</span><span class="s1">&#39;osx&#39;</span><span class="p">,</span> <span class="s1">&#39;compiler&#39;</span><span class="p">:</span><span class="s1">&#39;clang&#39;</span><span class="p">,</span> <span class="s1">&#39;version&#39;</span><span class="p">:</span><span class="s1">&#39;1.0&#39;</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pb</span> <span class="o">=</span> <span class="n">pr</span><span class="o">.</span><span class="n">get_package_binary</span><span class="p">({</span><span class="s1">&#39;os&#39;</span><span class="p">:</span><span class="s1">&#39;osx&#39;</span><span class="p">,</span> <span class="s1">&#39;compiler&#39;</span><span class="p">:</span><span class="s1">&#39;clang&#39;</span><span class="p">,</span> <span class="s1">&#39;version&#39;</span><span class="p">:</span><span class="s1">&#39;1.0&#39;</span><span class="p">})</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">shutil</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="s1">&#39;testfolder&#39;</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">open</span><span class="p">(</span><span class="s1">&#39;testfolder/testfile&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
