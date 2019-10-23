@@ -220,17 +220,20 @@ class RemoteManager:
         """
         for remote_name in self.default_remotes:
             remote = self.get_remote(remote_name)
-            if package_name in remote.list_package_registries():
-                pr = remote.get_package_registry(package_name)
-                try:
-                    pb = pr.get_package_binary(assignment)
-                except (KeyError, FileNotFoundError):
-                    continue
-                else:
-                    pb.download_content(dir_path, fresh_download)
-                    return
+
         raise FileNotFoundError("Such binary does not exist in any remotes in the default remote list")
 
+    @staticmethod
+    def __try_download(remote, package_name, assignment, fresh_download) -> bool:
+        if package_name in remote.list_package_registries():
+            pr = remote.get_package_registry(package_name)
+            try:
+                pb = pr.get_package_binary(assignment)
+            except (KeyError, FileNotFoundError):
+                return
+            else:
+                pb.download_content(dir_path, fresh_download)
+                return
 
 class _RemoteFileBased:
     package_manager: PackageManagerFileBased = None
@@ -271,18 +274,21 @@ class _LocalRemote(_RemoteFileBased):
 
 
 class _NexusSiteRemote(_RemoteFileBased):
-    def __init__(self, name: str, remote_type: str, url: str, username: str, password: str,
-                 clean: Optional[bool] = False):
-        self.__url = url
-        self.__username = username
-        self.__password = password
-        client = NexusFileClient(url, username, password, clean)
+    url: str
+    username: str
+    password: str
+
+    def __init__(self, name: str, remote_type: str, client: NexusFileClient):
         super(_NexusSiteRemote, self).__init__(name, remote_type, client)
 
     @staticmethod
     def create(name: str, serialized: Dict[str, str]) -> _NexusSiteRemote:
-        return _NexusSiteRemote(name, serialized['remote_type'], serialized['url'],
-                                serialized['username'], serialized['password'])
+        client = NexusFileClient(serialized['url'], serialized['username'], serialized['password'])
+        remote_object = _NexusSiteRemote(name, serialized['remote_type'], client)
+        remote_object.url = serialized['url']
+        remote_object.username = serialized['username']
+        remote_object.password = serialized['password']
+        return remote_object
 
     def serialize(self) -> Dict[str, str]:
         return {'remote_type': 'nexus_site', 'url': self.__url,

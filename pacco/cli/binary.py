@@ -8,6 +8,7 @@ from pathlib import Path
 from typing import Dict, Callable
 
 from pacco.cache.cache import Cache
+from pacco.cli import utils
 from pacco.manager.remote_manager import RemoteManager
 
 
@@ -45,23 +46,7 @@ class Binary:
         return result
 
     def __show_help(self):
-        commands = self.__get_commands()
-        max_len = max((len("pacco binary {}".format(c)) for c in commands)) + 1
-        fmt = '  %-{}s'.format(max_len)
-        for name in commands:
-            appended_name = "pacco binary {}".format(name)
-            print(fmt % appended_name, end="")
-            if commands[name].__doc__:
-                docstring_lines = commands[name].__doc__.split('\n')
-                data = []
-                for line in docstring_lines:
-                    line = line.strip()
-                    data.append(line)
-                self.__out.writeln(' '.join(data))
-            else:
-                self.__out.writeln("")  # Empty docs
-        self.__out.writeln("")
-        self.__out.writeln("Pacco binary commands. Type 'pacco binary <command> -h' for help")
+        utils.show_help(self.__get_commands(), 'binary', self.__out)
 
     @staticmethod
     def __parse_settings_args(settings_args: str) -> Dict[str, str]:

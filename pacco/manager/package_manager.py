@@ -1,5 +1,7 @@
 from typing import List
 
+from pacco.manager.package_registry import PackageRegistry
+
 
 class PackageManager:
     """
