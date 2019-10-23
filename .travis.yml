@@ -17,7 +17,7 @@ before_script:
   - ./cc-test-reporter before-build
 
 script:
-  - coverage run --source=pacco pacco/tests.py
+  - coverage run pacco/tests.py
   - rm -rf ~/.pacco ~/.pacco_config
   - bats --tap tests/cli.bats
 
