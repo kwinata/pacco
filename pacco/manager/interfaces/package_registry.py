@@ -1,6 +1,6 @@
 from typing import Optional, List, Dict
 
-from pacco.manager.package_binary import PackageBinary
+from pacco.manager.interfaces.package_binary import PackageBinary
 
 
 class PackageRegistry:

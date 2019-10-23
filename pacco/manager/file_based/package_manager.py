@@ -2,7 +2,7 @@ from typing import List
 
 from pacco.client.clients import FileBasedClientAbstract
 from pacco.manager.file_based.package_registry import PackageRegistryFileBased
-from pacco.manager.package_manager import PackageManager
+from pacco.manager.interfaces.package_manager import PackageManager
 
 
 class PackageManagerFileBased(PackageManager):

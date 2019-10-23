@@ -1,6 +1,6 @@
 from typing import List
 
-from pacco.manager.package_registry import PackageRegistry
+from pacco.manager.interfaces.package_registry import PackageRegistry
 
 
 class PackageManager:
