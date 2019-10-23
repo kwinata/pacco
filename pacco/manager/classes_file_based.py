@@ -7,7 +7,7 @@ import re
 import string
 from typing import List, Optional, Dict, Callable
 
-from pacco.cache import Cache
+from pacco.cache.cache import Cache
 from pacco.manager.classes_interface import PackageManager, PackageRegistry, PackageBinary
 from pacco.client.clients import FileBasedClientAbstract
 

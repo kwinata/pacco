@@ -7,7 +7,7 @@ import shutil
 from pathlib import Path
 from typing import Dict, Callable
 
-from pacco.cache import Cache
+from pacco.cache.cache import Cache
 from pacco.manager.remote_manager import RemoteManager
 
 
