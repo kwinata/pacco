@@ -3,11 +3,11 @@ python:
   - "3.7"
 
 script:
-  - python -m doctest pacco/classes_file_based.py -f
-  - python -m doctest pacco/remote_manager.py -f
+  - python -m doctest pacco/manager/classes_file_based.py -f
+  - python -m doctest pacco/manager/remote_manager.py -f
   - rm -rf ~/.pacco ~/.pacco_config
   - git clone https://github.com/sstephenson/bats.git
-  - ./bats/install.sh bats_installation
+  - ./bats/install.sh bats_installationß
   - export PATH=$PWD/bats_installation/bin:$PATH
   - pip install .
   - bats --tap tests/cli.bats
