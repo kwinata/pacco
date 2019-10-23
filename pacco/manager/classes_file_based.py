@@ -8,8 +8,8 @@ import string
 from typing import List, Optional, Dict, Callable
 
 from pacco.cache import Cache
-from pacco.classes_interface import PackageManager, PackageRegistry, PackageBinary
-from pacco.clients import FileBasedClientAbstract
+from pacco.manager.classes_interface import PackageManager, PackageRegistry, PackageBinary
+from pacco.client.clients import FileBasedClientAbstract
 
 
 class PackageManagerFileBased(PackageManager):
@@ -17,7 +17,7 @@ class PackageManagerFileBased(PackageManager):
     An implementation of the PackageManager interface
 
     Examples:
-        >>> from pacco.clients import LocalClient, NexusFileClient
+        >>> from pacco.client.clients import LocalClient, NexusFileClient
         >>> client = LocalClient(clean=True)
         >>> if 'NEXUS_URL' in os.environ: client = NexusFileClient(os.environ['NEXUS_URL'], 'admin', 'admin123', clean=True)
         >>> pm = PackageManagerFileBased(client)
@@ -72,7 +72,7 @@ class PackageRegistryFileBased(PackageRegistry):
     An implementation of the PackageRegistry interface
 
     Examples:
-        >>> from pacco.clients import LocalClient, NexusFileClient
+        >>> from pacco.client.clients import LocalClient, NexusFileClient
         >>> client = LocalClient(clean=True)
         >>> if 'NEXUS_URL' in os.environ: client = NexusFileClient(os.environ['NEXUS_URL'], 'admin', 'admin123', clean=True)
         >>> pm = PackageManagerFileBased(client)
@@ -290,7 +290,7 @@ class PackageBinaryFileBased(PackageBinary):
     An implementation of the PackageBinary interface
 
     Examples:
-        >>> from pacco.clients import LocalClient, NexusFileClient
+        >>> from pacco.client.clients import LocalClient, NexusFileClient
         >>> client = LocalClient(clean=True)
         >>> if 'NEXUS_URL' in os.environ: client = NexusFileClient(os.environ['NEXUS_URL'], 'admin', 'admin123', clean=True)
         >>> pm = PackageManagerFileBased(client)

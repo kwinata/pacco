@@ -6,9 +6,9 @@ from typing import Dict, List, Optional
 
 import yaml
 
-from pacco.classes_interface import PackageManager
-from pacco.classes_file_based import PackageManagerFileBased
-from pacco.clients import LocalClient, NexusFileClient, FileBasedClientAbstract
+from pacco.manager.classes_interface import PackageManager
+from pacco.manager.classes_file_based import PackageManagerFileBased
+from pacco.client.clients import LocalClient, NexusFileClient, FileBasedClientAbstract
 
 
 ALLOWED_REMOTE_TYPES = [

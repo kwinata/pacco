@@ -1,8 +1,8 @@
 from __future__ import annotations
 
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Optional
 
-from pacco.clients import ClientAbstract
+from pacco.client.clients import ClientAbstract
 
 
 class PackageManager:
