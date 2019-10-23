@@ -22,6 +22,7 @@ script:
   - bats --tap tests/cli.bats
 
 after_script:
+  - coverage report -m
   - coverage xml
   - ./cc-test-reporter format-coverage -t coverage.py
   - ./cc-test-reporter upload-coverage
