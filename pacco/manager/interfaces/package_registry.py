@@ -1,9 +1,9 @@
 from typing import Optional, List, Dict
 
-from pacco.manager.interfaces.package_binary import PackageBinary
+from pacco.manager.interfaces.package_binary import PackageBinaryInterface
 
 
-class PackageRegistry:
+class PackageRegistryInterface:
     """
     Represent the existence of a package (e.g. openssl) in the package manager.
     This class is the interface class with the expected behavior defined below.
@@ -45,7 +45,7 @@ class PackageRegistry:
         """
         raise NotImplementedError()
 
-    def get_package_binary(self, assignment: Dict[str, str]) -> PackageBinary:
+    def get_package_binary(self, assignment: Dict[str, str]) -> PackageBinaryInterface:
         """
         Get a reference to the ``PackageBinary`` object based on the settings value
 

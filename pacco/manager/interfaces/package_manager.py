@@ -1,9 +1,9 @@
 from typing import List
 
-from pacco.manager.interfaces.package_registry import PackageRegistry
+from pacco.manager.interfaces.package_registry import PackageRegistryInterface
 
 
-class PackageManager:
+class PackageManagerInterface:
     """
     Represent the existence of the manager in a remote. This class is the interface class with the
     expected behavior defined below.
@@ -42,7 +42,7 @@ class PackageManager:
         """
         raise NotImplementedError()
 
-    def get_package_registry(self, name: str) -> PackageRegistry:
+    def get_package_registry(self, name: str) -> PackageRegistryInterface:
         """
         Get a reference to the ``PackageRegistry`` object based on the settings value
 

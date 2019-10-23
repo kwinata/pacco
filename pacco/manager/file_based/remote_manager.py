@@ -6,7 +6,7 @@ from typing import Dict, List, Optional
 
 import yaml
 
-from pacco.manager.interfaces.package_manager import PackageManager
+from pacco.manager.interfaces.package_manager import PackageManagerInterface
 from pacco.manager.file_based.package_manager import PackageManagerFileBased
 from pacco.client.clients import LocalClient, NexusFileClient, FileBasedClientAbstract
 
@@ -93,7 +93,7 @@ class RemoteManager:
                 serialized['remote_type'], ", ".join(['local', 'nexus_site'])
             ))
 
-    def get_remote(self, name: str) -> PackageManager:
+    def get_remote(self, name: str) -> PackageManagerInterface:
         """
         Get the ``PackageManager`` based on the remote name.
 

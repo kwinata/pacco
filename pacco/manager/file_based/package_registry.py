@@ -6,10 +6,10 @@ from typing import Optional, List, Dict, Callable
 
 from pacco.client.clients import FileBasedClientAbstract
 from pacco.manager.file_based.package_binary import PackageBinaryFileBased
-from pacco.manager.interfaces.package_registry import PackageRegistry
+from pacco.manager.interfaces.package_registry import PackageRegistryInterface
 
 
-class PackageRegistryFileBased(PackageRegistry):
+class PackageRegistryFileBased(PackageRegistryInterface):
     """
     An implementation of the PackageRegistry interface
 

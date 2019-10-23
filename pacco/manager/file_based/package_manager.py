@@ -2,10 +2,10 @@ from typing import List
 
 from pacco.client.clients import FileBasedClientAbstract
 from pacco.manager.file_based.package_registry import PackageRegistryFileBased
-from pacco.manager.interfaces.package_manager import PackageManager
+from pacco.manager.interfaces.package_manager import PackageManagerInterface
 
 
-class PackageManagerFileBased(PackageManager):
+class PackageManagerFileBased(PackageManagerInterface):
     """
     An implementation of the PackageManager interface
 

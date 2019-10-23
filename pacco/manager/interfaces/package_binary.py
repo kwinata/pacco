@@ -1,7 +1,7 @@
 from typing import Optional
 
 
-class PackageBinary:
+class PackageBinaryInterface:
     """
         Represent the existence of a package (e.g. openssl) in the package manager
         This class is the interface class with the expected behavior defined below.

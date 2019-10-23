@@ -4,10 +4,10 @@ from typing import Optional, Dict
 
 from pacco.cache.cache import Cache
 from pacco.client.clients import FileBasedClientAbstract
-from pacco.manager.interfaces.package_binary import PackageBinary
+from pacco.manager.interfaces.package_binary import PackageBinaryInterface
 
 
-class PackageBinaryFileBased(PackageBinary):
+class PackageBinaryFileBased(PackageBinaryInterface):
     """
     An implementation of the PackageBinary interface
 
