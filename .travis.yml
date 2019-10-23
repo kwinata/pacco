@@ -5,7 +5,7 @@ language: python
 python: "3.7.5"
 
 install:
-  - pip install coverage
+  - pip install pytest-cov
   - pip install .
   - git clone https://github.com/sstephenson/bats.git
   - ./bats/install.sh bats_installation
@@ -17,13 +17,11 @@ before_script:
   - ./cc-test-reporter before-build
 
 script:
-  - coverage run pacco/tests.py
+  - pytest --doctest-modules --cov=pacco --cov-config=.coveragerc --cov-report xml
   - rm -rf ~/.pacco ~/.pacco_config
   - bats --tap tests/cli.bats
 
 after_script:
-  - coverage report -m
-  - coverage xml
   - ./cc-test-reporter format-coverage -t coverage.py
   - ./cc-test-reporter upload-coverage
 
