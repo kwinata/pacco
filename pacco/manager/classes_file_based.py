@@ -41,7 +41,8 @@ class PackageManagerFileBased(PackageManager):
     def __init__(self, client: FileBasedClientAbstract):
         if not isinstance(client, FileBasedClientAbstract):
             raise TypeError("Must be using FileBasedClient")
-        super(PackageManagerFileBased, self).__init__(client)
+        self.client = client
+        super(PackageManagerFileBased, self).__init__()
 
     def list_package_registries(self) -> List[str]:
         return sorted(self.client.ls())
@@ -119,7 +120,8 @@ class PackageRegistryFileBased(PackageRegistry):
     def __init__(self, name: str, client: FileBasedClientAbstract, params: Optional[List[str]] = None):
         if not isinstance(client, FileBasedClientAbstract):
             raise TypeError("Must be using FileBasedClient")
-        super(PackageRegistryFileBased, self).__init__(name, client, params)
+        self.client = client
+        super(PackageRegistryFileBased, self).__init__(name, params)
 
         remote_params = self.__get_remote_params()
         if params is None and remote_params is None:
@@ -314,7 +316,8 @@ class PackageBinaryFileBased(PackageBinary):
                  assignment: Optional[Dict[str, str]] = None):
         if not isinstance(client, FileBasedClientAbstract):
             raise TypeError("Must be using FileBasedClient")
-        super(PackageBinaryFileBased, self).__init__(client)
+        self.client = client
+        super(PackageBinaryFileBased, self).__init__()
         self.__registry_name = registry_name
         self.__cache = Cache()
         self.__assignment = assignment

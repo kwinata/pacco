@@ -2,8 +2,6 @@ from __future__ import annotations
 
 from typing import Dict, List, Optional
 
-from pacco.client.clients import ClientAbstract
-
 
 class PackageManager:
     """
@@ -11,8 +9,8 @@ class PackageManager:
     expected behavior defined below.
     """
 
-    def __init__(self, client: ClientAbstract):
-        self.client = client
+    def __init__(self):
+        pass
 
     def list_package_registries(self) -> List[str]:
         """
@@ -64,9 +62,8 @@ class PackageRegistry:
     This class is the interface class with the expected behavior defined below.
     """
 
-    def __init__(self, name: str, client: ClientAbstract, params: Optional[List[str]] = None):
+    def __init__(self, name: str, params: Optional[List[str]] = None):
         self.name = name
-        self.client = client
         self.params = params
 
     def list_package_binaries(self) -> List[Dict[str, str]]:
@@ -167,8 +164,8 @@ class PackageBinary:
         This class is the interface class with the expected behavior defined below.
     """
 
-    def __init__(self, client: ClientAbstract):
-        self.client = client
+    def __init__(self):
+        pass
 
     def download_content(self, download_dir_path: str, fresh_download: Optional[bool] = False) -> None:
         """

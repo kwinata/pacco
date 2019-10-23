@@ -13,11 +13,7 @@ import requests
 from bs4 import BeautifulSoup
 
 
-class ClientAbstract:
-    pass
-
-
-class FileBasedClientAbstract(ClientAbstract):
+class FileBasedClientAbstract:
     """
     An interface for file-based client functionality.
     Each client shall have it's own context of current directory and it must not change throughout the lifetime.
