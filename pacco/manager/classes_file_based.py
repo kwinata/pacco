@@ -8,7 +8,9 @@ import string
 from typing import List, Optional, Dict, Callable
 
 from pacco.cache.cache import Cache
-from pacco.manager.classes_interface import PackageManager, PackageRegistry, PackageBinary
+from pacco.manager.package_manager import PackageManager
+from pacco.manager.package_registry import PackageRegistry
+from pacco.manager.package_binary import PackageBinary
 from pacco.client.clients import FileBasedClientAbstract
 
 

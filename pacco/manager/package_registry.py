@@ -1,59 +1,6 @@
-from __future__ import annotations
+from typing import Optional, List, Dict
 
-from typing import Dict, List, Optional
-
-
-class PackageManager:
-    """
-    Represent the existence of the manager in a remote. This class is the interface class with the
-    expected behavior defined below.
-    """
-
-    def __init__(self):
-        pass
-
-    def list_package_registries(self) -> List[str]:
-        """
-        List package registries in this package manager.
-
-        Returns:
-            The list of package registry name
-        """
-        raise NotImplementedError()
-
-    def remove_package_registry(self, name: str) -> None:
-        """
-        Delete a package registry from the package manager.
-
-        Args:
-            name: the name of the package registry to be deleted.
-        """
-        raise NotImplementedError()
-
-    def add_package_registry(self, name: str, params: List[str]) -> None:
-        """
-        Add a new package registry to this package manager.
-
-        Args:
-            name: the name of the package. For printing purposes only.
-            params: the list of keys for the configuration parameter, e.g. ['os', 'compiler', 'version']
-        Exception:
-            FileExistsError: raised if the package with the same name is found
-        """
-        raise NotImplementedError()
-
-    def get_package_registry(self, name: str) -> PackageRegistry:
-        """
-        Get a reference to the ``PackageRegistry`` object based on the settings value
-
-        Args:
-            name: the name of the package registry to get
-        Returns:
-            the object
-        Exceptions:
-            FileNotFoundError: when that package is not found or it is not set properly.
-        """
-        raise NotImplementedError()
+from pacco.manager.package_binary import PackageBinary
 
 
 class PackageRegistry:
@@ -154,33 +101,5 @@ class PackageRegistry:
             KeyError: if the key in the new assignment does not match with params
             ValueError: if there is no binary that match old_assignment
             NameError: there already exist binary with the same configuration as new_assignment
-        """
-        raise NotImplementedError()
-
-
-class PackageBinary:
-    """
-        Represent the existence of a package (e.g. openssl) in the package manager
-        This class is the interface class with the expected behavior defined below.
-    """
-
-    def __init__(self):
-        pass
-
-    def download_content(self, download_dir_path: str, fresh_download: Optional[bool] = False) -> None:
-        """
-        Download content of uploaded binary from the remote to the ``download_dir_path``
-
-        Args:
-            download_dir_path: the destination of download
-        """
-        raise NotImplementedError()
-
-    def upload_content(self, dir_path: str) -> None:
-        """
-        Remove the previous binary and upload the content of ``dir_path`` to the remote.
-
-        Args:
-            dir_path: the path to the directory to be uploaded
         """
         raise NotImplementedError()
