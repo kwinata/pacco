@@ -5,7 +5,7 @@ from typing import Callable, Dict
 
 from pacco.cli import utils
 from pacco.cli.output_stream import OutputStream
-from pacco.manager.file_based.remote_manager import RemoteManager
+from pacco.manager.remote_manager import RemoteManager
 
 
 class Registry:

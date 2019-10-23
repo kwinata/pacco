@@ -6,10 +6,8 @@ from typing import Dict, List, Optional
 
 import yaml
 
+from pacco.manager.file_based.remote import LocalRemote, NexusSiteRemote
 from pacco.manager.interfaces.package_manager import PackageManagerInterface
-from pacco.manager.file_based.package_manager import PackageManagerFileBased
-from pacco.client.clients import LocalClient, NexusFileClient, FileBasedClientAbstract
-
 
 ALLOWED_REMOTE_TYPES = [
     'local',
@@ -85,9 +83,9 @@ class RemoteManager:
     @staticmethod
     def __instantiate_remote(name: str, serialized):
         if serialized['remote_type'] == 'local':
-            return _LocalRemote.create(name, serialized)
+            return LocalRemote.create(name, serialized)
         elif serialized['remote_type'] == 'nexus_site':
-            return _NexusSiteRemote.create(name, serialized)
+            return NexusSiteRemote.create(name, serialized)
         else:
             raise ValueError("The remote_type {} is not supported, currently only supports [{}]".format(
                 serialized['remote_type'], ", ".join(['local', 'nexus_site'])
@@ -235,63 +233,3 @@ class RemoteManager:
             else:
                 pb.download_content(dir_path, fresh_download)
                 return True
-
-
-class _RemoteFileBased:
-    package_manager: PackageManagerFileBased = None
-
-    def __init__(self, name: str, remote_type: str, client: FileBasedClientAbstract):
-        self.name = name
-        self.remote_type = remote_type
-        self.package_manager = PackageManagerFileBased(client)
-
-    def __str__(self):
-        return "[{}, {}]".format(self.name, self.remote_type)
-
-    @staticmethod
-    def create(name: str, serialized: Dict[str, str]) -> _RemoteFileBased:
-        raise NotImplementedError()
-
-    def serialize(self) -> Dict[str, str]:
-        raise NotImplementedError()
-
-
-class _LocalRemote(_RemoteFileBased):
-    def __init__(self, name: str, remote_type: str, path: Optional[str] = "", clean: Optional[bool] = False):
-        if path:
-            self.__path = os.path.abspath(path)
-        else:
-            self.__path = ""
-        client = LocalClient(self.__path, clean)
-        super(_LocalRemote, self).__init__(name, remote_type, client)
-
-    @staticmethod
-    def create(name: str, serialized: Dict[str, str]) -> _LocalRemote:
-        if 'path' not in serialized:
-            serialized['path'] = ""
-        return _LocalRemote(name, serialized['remote_type'], serialized['path'])
-
-    def serialize(self) -> Dict[str, str]:
-        return {'remote_type': 'local', 'path': self.__path}
-
-
-class _NexusSiteRemote(_RemoteFileBased):
-    url: str
-    username: str
-    password: str
-
-    def __init__(self, name: str, remote_type: str, client: NexusFileClient):
-        super(_NexusSiteRemote, self).__init__(name, remote_type, client)
-
-    @staticmethod
-    def create(name: str, serialized: Dict[str, str]) -> _NexusSiteRemote:
-        client = NexusFileClient(serialized['url'], serialized['username'], serialized['password'])
-        remote_object = _NexusSiteRemote(name, serialized['remote_type'], client)
-        remote_object.url = serialized['url']
-        remote_object.username = serialized['username']
-        remote_object.password = serialized['password']
-        return remote_object
-
-    def serialize(self) -> Dict[str, str]:
-        return {'remote_type': 'nexus_site', 'url': self.__url,
-                'username': self.__username, 'password': self.__password}
