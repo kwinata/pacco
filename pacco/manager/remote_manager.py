@@ -6,10 +6,8 @@ from typing import Dict, List, Optional
 
 import yaml
 
-from pacco.classes_interface import PackageManager
-from pacco.classes_file_based import PackageManagerFileBased
-from pacco.clients import LocalClient, NexusFileClient, FileBasedClientAbstract
-
+from pacco.manager.file_based.remote import LocalRemote, NexusSiteRemote
+from pacco.manager.interfaces.package_manager import PackageManagerInterface
 
 ALLOWED_REMOTE_TYPES = [
     'local',
@@ -85,15 +83,15 @@ class RemoteManager:
     @staticmethod
     def __instantiate_remote(name: str, serialized):
         if serialized['remote_type'] == 'local':
-            return _LocalRemote.create(name, serialized)
+            return LocalRemote.create(name, serialized)
         elif serialized['remote_type'] == 'nexus_site':
-            return _NexusSiteRemote.create(name, serialized)
+            return NexusSiteRemote.create(name, serialized)
         else:
             raise ValueError("The remote_type {} is not supported, currently only supports [{}]".format(
                 serialized['remote_type'], ", ".join(['local', 'nexus_site'])
             ))
 
-    def get_remote(self, name: str) -> PackageManager:
+    def get_remote(self, name: str) -> PackageManagerInterface:
         """
         Get the ``PackageManager`` based on the remote name.
 
@@ -220,70 +218,18 @@ class RemoteManager:
         """
         for remote_name in self.default_remotes:
             remote = self.get_remote(remote_name)
-            if package_name in remote.list_package_registries():
-                pr = remote.get_package_registry(package_name)
-                try:
-                    pb = pr.get_package_binary(assignment)
-                except (KeyError, FileNotFoundError):
-                    continue
-                else:
-                    pb.download_content(dir_path, fresh_download)
-                    return
+            if RemoteManager.__try_download(remote, package_name, assignment, fresh_download, dir_path):
+                return
         raise FileNotFoundError("Such binary does not exist in any remotes in the default remote list")
 
-
-class _RemoteFileBased:
-    package_manager: PackageManagerFileBased = None
-
-    def __init__(self, name: str, remote_type: str, client: FileBasedClientAbstract):
-        self.name = name
-        self.remote_type = remote_type
-        self.package_manager = PackageManagerFileBased(client)
-
-    def __str__(self):
-        return "[{}, {}]".format(self.name, self.remote_type)
-
     @staticmethod
-    def create(name: str, serialized: Dict[str, str]) -> _RemoteFileBased:
-        raise NotImplementedError()
-
-    def serialize(self) -> Dict[str, str]:
-        raise NotImplementedError()
-
-
-class _LocalRemote(_RemoteFileBased):
-    def __init__(self, name: str, remote_type: str, path: Optional[str] = "", clean: Optional[bool] = False):
-        if path:
-            self.__path = os.path.abspath(path)
-        else:
-            self.__path = ""
-        client = LocalClient(self.__path, clean)
-        super(_LocalRemote, self).__init__(name, remote_type, client)
-
-    @staticmethod
-    def create(name: str, serialized: Dict[str, str]) -> _LocalRemote:
-        if 'path' not in serialized:
-            serialized['path'] = ""
-        return _LocalRemote(name, serialized['remote_type'], serialized['path'])
-
-    def serialize(self) -> Dict[str, str]:
-        return {'remote_type': 'local', 'path': self.__path}
-
-
-class _NexusSiteRemote(_RemoteFileBased):
-    def __init__(self, name: str, remote_type: str, url: str, username: str, password: str,
-                 clean: Optional[bool] = False):
-        self.__url = url
-        self.__username = username
-        self.__password = password
-        client = NexusFileClient(url, username, password, clean)
-        super(_NexusSiteRemote, self).__init__(name, remote_type, client)
-
-    @staticmethod
-    def create(name: str, serialized: Dict[str, str]) -> _NexusSiteRemote:
-        return _NexusSiteRemote(name, serialized['remote_type'], serialized['url'],
-                                serialized['username'], serialized['password'])
-
-    def serialize(self) -> Dict[str, str]:
-        return {'remote_type': 'nexus_site', 'url': self.__url,
-                'username': self.__username, 'password': self.__password}
+    def __try_download(remote, package_name, assignment, fresh_download, dir_path) -> bool:
+        if package_name in remote.list_package_registries():
+            pr = remote.get_package_registry(package_name)
+            try:
+                pb = pr.get_package_binary(assignment)
+            except (KeyError, FileNotFoundError):
+                return False
+            else:
+                pb.download_content(dir_path, fresh_download)
+                return True

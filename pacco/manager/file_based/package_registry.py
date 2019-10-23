@@ -1,80 +1,24 @@
-from __future__ import annotations
-
-import logging
-import os
 import random
 import re
 import string
-from typing import List, Optional, Dict, Callable
 
-from pacco.cache import Cache
-from pacco.classes_interface import PackageManager, PackageRegistry, PackageBinary
-from pacco.clients import FileBasedClientAbstract
+from typing import Optional, List, Dict, Callable
 
-
-class PackageManagerFileBased(PackageManager):
-    """
-    An implementation of the PackageManager interface
-
-    Examples:
-        >>> from pacco.clients import LocalClient, NexusFileClient
-        >>> client = LocalClient(clean=True)
-        >>> if 'NEXUS_URL' in os.environ: client = NexusFileClient(os.environ['NEXUS_URL'], 'admin', 'admin123', clean=True)
-        >>> pm = PackageManagerFileBased(client)
-        >>> pm.list_package_registries()
-        []
-        >>> pm.add_package_registry('openssl', ['os', 'compiler', 'version'])
-        >>> pm.add_package_registry('boost', ['os', 'target', 'type'])
-        >>> pm.add_package_registry('openssl', ['os', 'compiler', 'version'])
-        Traceback (most recent call last):
-            ...
-        FileExistsError: The package registry openssl is already found
-        >>> pm.list_package_registries()
-        ['boost', 'openssl']
-        >>> pm.remove_package_registry('openssl')
-        >>> pm.list_package_registries()
-        ['boost']
-        >>> pm.get_package_registry('boost')
-        PR[boost, os, target, type]
-    """
-
-    def __init__(self, client: FileBasedClientAbstract):
-        if not isinstance(client, FileBasedClientAbstract):
-            raise TypeError("Must be using FileBasedClient")
-        super(PackageManagerFileBased, self).__init__(client)
-
-    def list_package_registries(self) -> List[str]:
-        return sorted(self.client.ls())
-
-    def remove_package_registry(self, name: str) -> None:
-        self.client.rmdir(name)
-
-    def add_package_registry(self, name: str, params: List[str]) -> None:
-        dirs = self.client.ls()
-        if name in dirs:
-            raise FileExistsError("The package registry {} is already found".format(name))
-        self.client.mkdir(name)
-        PackageRegistryFileBased(name, self.client.dispatch_subdir(name), params)
-        return
-
-    def get_package_registry(self, name: str) -> PackageRegistryFileBased:
-        dirs = self.client.ls()
-        if name not in dirs:
-            raise FileNotFoundError("The package registry {} is not found".format(name))
-        return PackageRegistryFileBased(name, self.client.dispatch_subdir(name))
-
-    def __repr__(self):
-        return "PackageManagerObject"
+from pacco.client.clients import FileBasedClientAbstract
+from pacco.manager.file_based.package_binary import PackageBinaryFileBased
+from pacco.manager.interfaces.package_registry import PackageRegistryInterface
 
 
-class PackageRegistryFileBased(PackageRegistry):
+class PackageRegistryFileBased(PackageRegistryInterface):
     """
     An implementation of the PackageRegistry interface
 
     Examples:
-        >>> from pacco.clients import LocalClient, NexusFileClient
+        >>> from pacco.client.clients import LocalClient, NexusFileClient
         >>> client = LocalClient(clean=True)
+        >>> import os
         >>> if 'NEXUS_URL' in os.environ: client = NexusFileClient(os.environ['NEXUS_URL'], 'admin', 'admin123', clean=True)
+        >>> from pacco.manager.file_based.package_manager import PackageManagerFileBased
         >>> pm = PackageManagerFileBased(client)
         >>> pm.add_package_registry('openssl', ['os', 'compiler', 'version'])
         >>> pr = pm.get_package_registry('openssl')
@@ -119,7 +63,8 @@ class PackageRegistryFileBased(PackageRegistry):
     def __init__(self, name: str, client: FileBasedClientAbstract, params: Optional[List[str]] = None):
         if not isinstance(client, FileBasedClientAbstract):
             raise TypeError("Must be using FileBasedClient")
-        super(PackageRegistryFileBased, self).__init__(name, client, params)
+        self.client = client
+        super(PackageRegistryFileBased, self).__init__(name, params)
 
         remote_params = self.__get_remote_params()
         if params is None and remote_params is None:
@@ -283,58 +228,3 @@ class PackageRegistryFileBased(PackageRegistry):
         sub_client = self.client.dispatch_subdir(mapping[serialized_old_assignment])
         sub_client.rmdir(serialized_old_assignment)
         sub_client.mkdir(serialized_new_assignment)
-
-
-class PackageBinaryFileBased(PackageBinary):
-    """
-    An implementation of the PackageBinary interface
-
-    Examples:
-        >>> from pacco.clients import LocalClient, NexusFileClient
-        >>> client = LocalClient(clean=True)
-        >>> if 'NEXUS_URL' in os.environ: client = NexusFileClient(os.environ['NEXUS_URL'], 'admin', 'admin123', clean=True)
-        >>> pm = PackageManagerFileBased(client)
-        >>> pm.add_package_registry('openssl', ['os', 'compiler', 'version'])
-        >>> pr = pm.get_package_registry('openssl')
-        >>> pr.add_package_binary({'os':'osx', 'compiler':'clang', 'version':'1.0'})
-        >>> pb = pr.get_package_binary({'os':'osx', 'compiler':'clang', 'version':'1.0'})
-        >>> import os, shutil
-        >>> os.makedirs('testfolder', exist_ok=True)
-        >>> open('testfolder/testfile', 'w').close()
-        >>> pb.upload_content('testfolder')
-        >>> __ = shutil.move('testfolder/testfile', 'testfolder/testfile2')
-        >>> pb_get = pr.get_package_binary({'os':'osx', 'compiler':'clang', 'version':'1.0'})  # use a new reference
-        >>> pb_get.download_content('testfolder')
-        >>> sorted(os.listdir('testfolder'))
-        ['testfile', 'testfile2']
-        >>> shutil.rmtree('testfolder')
-    """
-
-    def __init__(self, client: FileBasedClientAbstract, registry_name: Optional[str] = None,
-                 assignment: Optional[Dict[str, str]] = None):
-        if not isinstance(client, FileBasedClientAbstract):
-            raise TypeError("Must be using FileBasedClient")
-        super(PackageBinaryFileBased, self).__init__(client)
-        self.__registry_name = registry_name
-        self.__cache = Cache()
-        self.__assignment = assignment
-        self.__cache_enabled = bool(self.__registry_name) and bool(self.__assignment)
-
-    def __repr__(self):
-        return "PackageBinaryObject"
-
-    def download_content(self, download_dir_path: str, fresh_download: Optional[bool] = False) -> None:
-        if self.__cache_enabled and (not fresh_download) and \
-                self.__cache.download_from_cache(self.__registry_name, self.__assignment, download_dir_path):
-            logging.info("use cache")
-            return
-        logging.info("fresh download")
-        self.client.download_dir(download_dir_path)
-        if self.__cache_enabled:
-            logging.info("save cache")
-            self.__cache.upload_to_cache(self.__registry_name, self.__assignment, download_dir_path)
-
-    def upload_content(self, dir_path: str) -> None:
-        self.client.upload_dir(dir_path)
-        if self.__cache_enabled:
-            self.__cache.upload_to_cache(self.__registry_name, self.__assignment, dir_path)

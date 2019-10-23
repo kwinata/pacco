@@ -1,16 +1,30 @@
-language: python
-python:
-  - "3.7"
+# Disable sudo to speed up the build
+sudo: false
 
-script:
-  - python -m doctest pacco/classes_file_based.py -f
-  - python -m doctest pacco/remote_manager.py -f
-  - rm -rf ~/.pacco ~/.pacco_config
+language: python
+python: "3.7"
+
+install:
+  - pip install coverage
+  - pip install .
   - git clone https://github.com/sstephenson/bats.git
   - ./bats/install.sh bats_installation
   - export PATH=$PWD/bats_installation/bin:$PATH
-  - pip install .
+
+before_script:
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build
+
+script:
+  - coverage run --source=pacco pacco/tests.py
+  - rm -rf ~/.pacco ~/.pacco_config
   - bats --tap tests/cli.bats
+
+after_script:
+  - coverage xml
+  - ./cc-test-reporter format-coverage -t coverage.py
+  - ./cc-test-reporter upload-coverage
 
 deploy:
   provider: script

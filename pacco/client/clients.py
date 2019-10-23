@@ -13,11 +13,7 @@ import requests
 from bs4 import BeautifulSoup
 
 
-class ClientAbstract:
-    pass
-
-
-class FileBasedClientAbstract(ClientAbstract):
+class FileBasedClientAbstract:
     """
     An interface for file-based client functionality.
     Each client shall have it's own context of current directory and it must not change throughout the lifetime.
@@ -203,9 +199,7 @@ class NexusFileClient(FileBasedClientAbstract):
         if dir_path[:-1] != '/':
             dir_path += '/'
 
-        if 'bin' in self.__ls_unformatted():
-            self.rmdir('bin')
-        self.mkdir('bin')
+        self.__reset_bin_folder()
 
         prev_path = os.getcwd()
         os.chdir(dir_path)
@@ -221,3 +215,8 @@ class NexusFileClient(FileBasedClientAbstract):
             raise e
         finally:
             os.chdir(prev_path)
+
+    def __reset_bin_folder(self):
+        if 'bin' in self.__ls_unformatted():
+            self.rmdir('bin')
+        self.mkdir('bin')
