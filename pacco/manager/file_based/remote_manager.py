@@ -7,7 +7,7 @@ from typing import Dict, List, Optional
 import yaml
 
 from pacco.manager.package_manager import PackageManager
-from pacco.manager.classes_file_based import PackageManagerFileBased
+from pacco.manager.file_based.package_manager import PackageManagerFileBased
 from pacco.client.clients import LocalClient, NexusFileClient, FileBasedClientAbstract
 
 

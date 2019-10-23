@@ -4,7 +4,7 @@ from typing import Dict, Callable
 
 from pacco.cli import utils
 from pacco.cli.output_stream import OutputStream
-from pacco.manager.remote_manager import RemoteManager, ALLOWED_REMOTE_TYPES
+from pacco.manager.file_based.remote_manager import RemoteManager, ALLOWED_REMOTE_TYPES
 
 
 class Remote:

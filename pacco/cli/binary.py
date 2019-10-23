@@ -9,7 +9,7 @@ from typing import Dict, Callable
 
 from pacco.cache.cache import Cache
 from pacco.cli import utils
-from pacco.manager.remote_manager import RemoteManager
+from pacco.manager.file_based.remote_manager import RemoteManager
 
 
 class Binary:

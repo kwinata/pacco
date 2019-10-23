@@ -4,7 +4,7 @@ from typing import Callable, Dict
 from pacco import __version__ as client_version
 from pacco.cli import remote, registry, binary
 from pacco.cli.output_stream import OutputStream
-from pacco.manager.remote_manager import RemoteManager
+from pacco.manager.file_based.remote_manager import RemoteManager
 
 
 class CommandManager:
