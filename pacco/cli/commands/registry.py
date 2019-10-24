@@ -1,4 +1,3 @@
-import argparse
 import re
 
 from pacco.cli.commands.utils.command_abstract import CommandAbstract
@@ -9,7 +8,7 @@ class Registry(CommandAbstract):
         """
         List registries of a remote.
         """
-        parser = argparse.ArgumentParser(prog="pacco registry list")
+        parser = self.init_parser('list')
         parser.add_argument("remote", help="remote name")
         parsed_args = parser.parse_args(args)
         pm = self.__rm.get_remote(parsed_args.remote)
@@ -19,7 +18,7 @@ class Registry(CommandAbstract):
         """
         Add registry to remote.
         """
-        parser = argparse.ArgumentParser(prog="pacco registry add")
+        parser = self.init_parser('add')
         parser.add_argument("remote", help="remote name")
         parser.add_argument("name", help="registry name")
         parser.add_argument("settings", help="settings key (e.g. os,version,obfuscation)")
@@ -33,7 +32,7 @@ class Registry(CommandAbstract):
         """
         Remove a registry from a specific remote.
         """
-        parser = argparse.ArgumentParser(prog="pacco registry remove")
+        parser = self.init_parser('remove')
         parser.add_argument("remote", help="remote name")
         parser.add_argument("name", help="registry name")
         parsed_args = parser.parse_args(args)
@@ -44,7 +43,7 @@ class Registry(CommandAbstract):
         """
         List binaries of a registry from a specific remote.
         """
-        parser = argparse.ArgumentParser(prog="pacco registry binaries")
+        parser = self.init_parser('binaries')
         parser.add_argument("remote", help="remote name")
         parser.add_argument("name", help="registry name")
         parsed_args = parser.parse_args(args)
@@ -56,7 +55,7 @@ class Registry(CommandAbstract):
         """
         List params of a registry.
         """
-        parser = argparse.ArgumentParser(prog="pacco registry param_list")
+        parser = self.init_parser('param_list')
         parser.add_argument("remote", help="remote name")
         parser.add_argument("name", help="registry name")
 
@@ -69,7 +68,7 @@ class Registry(CommandAbstract):
         """
         Add new parameter with default value to the binaries.
         """
-        parser = argparse.ArgumentParser(prog="pacco registry param_add")
+        parser = self.init_parser('param_add')
         parser.add_argument("remote", help="remote name")
         parser.add_argument("name", help="registry name")
         parser.add_argument("param_name", help="the new param name to be added")
@@ -84,7 +83,7 @@ class Registry(CommandAbstract):
         """
         Remove an existing parameter from all binaries.
         """
-        parser = argparse.ArgumentParser(prog="pacco registry remove_param")
+        parser = self.init_parser('param_remove')
         parser.add_argument("remote", help="remote name")
         parser.add_argument("name", help="registry name")
         parser.add_argument("param_name", help="the param name to be removed")

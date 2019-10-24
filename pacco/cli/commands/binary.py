@@ -1,4 +1,3 @@
-import argparse
 import logging
 import os
 import re
@@ -18,7 +17,7 @@ class Binary(CommandAbstract):
         return {token.split('=')[0]: token.split('=')[1] for token in settings_args.split(',')}
 
     def download(self, *args):
-        parser = argparse.ArgumentParser(prog="pacco binary download")
+        parser = self.init_parser('download')
         parser.add_argument("remote_name", help="remote name")
         parser.add_argument("registry_name", help="registry name")
         parser.add_argument("dir_path", help="download path")
@@ -35,7 +34,7 @@ class Binary(CommandAbstract):
         pb.download_content(parsed_args.dir_path)
 
     def upload(self, *args):
-        parser = argparse.ArgumentParser(prog="pacco binary upload")
+        parser = self.init_parser('upload')
         parser.add_argument("remote_name", help="remote name")
         parser.add_argument("registry_name", help="registry name")
         parser.add_argument("dir_path", help="directory to be uploaded")
@@ -57,7 +56,7 @@ class Binary(CommandAbstract):
             pb.upload_content(parsed_args.dir_path)
 
     def remove(self, *args):
-        parser = argparse.ArgumentParser(prog="pacco binary remove")
+        parser = self.init_parser('remove')
         parser.add_argument("remote_name", help="remote name")
         parser.add_argument("registry_name", help="registry name")
         parser.add_argument("settings", help="settings for the specified registry "
@@ -73,7 +72,7 @@ class Binary(CommandAbstract):
         """
         Change the assignment of a binary to a new one
         """
-        parser = argparse.ArgumentParser(prog="pacco binary reassign")
+        parser = self.init_parser('reassign')
         parser.add_argument("remote_name", help="remote name")
         parser.add_argument("registry_name", help="registry name")
         parser.add_argument("old_settings", help="old settings (e.g. os=linux,version=2.1.0,type=debug")
@@ -86,7 +85,7 @@ class Binary(CommandAbstract):
         pr.reassign_binary(old_assignment, new_assignment)
 
     def get_location(self, *args):
-        parser = argparse.ArgumentParser(prog="pacco binary get_location")
+        parser = self.init_parser('get_location')
         parser.add_argument("registry_name", help="registry name")
         parser.add_argument("settings", help="settings for the specified registry "
                                              "(e.g. os=linux,version=2.1.0,type=debug")

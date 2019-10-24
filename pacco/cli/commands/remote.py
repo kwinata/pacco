@@ -1,5 +1,3 @@
-import argparse
-
 from pacco.cli.commands.utils.command_abstract import CommandAbstract
 from pacco.manager.remote_manager import ALLOWED_REMOTE_TYPES
 
@@ -9,7 +7,7 @@ class Remote(CommandAbstract):
         """
         List existing remotes.
         """
-        parser = argparse.ArgumentParser(prog="pacco remote list")
+        parser = self.init_parser('list')
         parser.parse_args(args)
         remotes = self.__rm.list_remote()
         self.__out.writeln(remotes)
@@ -18,7 +16,7 @@ class Remote(CommandAbstract):
         """
         Add a remote.
         """
-        parser = argparse.ArgumentParser(prog="pacco remote add")
+        parser = self.init_parser('add')
         parser.add_argument("name", help="remote name")
         parser.add_argument("type", help="remote type", choices=ALLOWED_REMOTE_TYPES)
         parsed_args = parser.parse_args(args)
@@ -44,7 +42,7 @@ class Remote(CommandAbstract):
         """
         Remove a remote.
         """
-        parser = argparse.ArgumentParser(prog="pacco remote remove")
+        parser = self.init_parser('remove')
         parser.add_argument("name", help="remote name")
         parsed_args = parser.parse_args(args)
         self.__rm.remove_remote(parsed_args.name)
@@ -53,7 +51,7 @@ class Remote(CommandAbstract):
         """
         Set default remote(s).
         """
-        parser = argparse.ArgumentParser(prog="pacco remote set_default")
+        parser = self.init_parser('set_default')
         parser.add_argument("name", nargs="*", help="remote name")
         parsed_args = parser.parse_args(args)
         self.__rm.set_default(parsed_args.name)
@@ -62,7 +60,7 @@ class Remote(CommandAbstract):
         """
         List default remote(s).
         """
-        parser = argparse.ArgumentParser(prog="pacco remote list_default")
+        parser = self.init_parser('list_default')
         parser.parse_args(args)
         default_remotes = self.__rm.get_default()
         self.__out.writeln(default_remotes)

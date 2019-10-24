@@ -1,3 +1,4 @@
+import argparse
 import inspect
 from typing import Dict, Callable
 
@@ -71,3 +72,6 @@ class CommandAbstract:
             line = line.strip()
             data.append(line)
         return ' '.join(data)
+
+    def init_parser(self, method_name: str):
+        return argparse.ArgumentParser(prog="pacco {NAME}{COMMAND}".format(NAME=self.__name, COMMAND=method_name))
