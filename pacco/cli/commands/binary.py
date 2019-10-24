@@ -27,8 +27,8 @@ class Binary(CommandAbstract):
 
         settings_dict = Binary.__parse_settings_args(parsed_args.settings)
         if parsed_args.remote_name == 'default':
-            self.__rm.default_download(parsed_args.registry_name, settings_dict, parsed_args.dir_path)
-        pm = self.__rm.get_remote(parsed_args.remote_name)
+            self.rm.default_download(parsed_args.registry_name, settings_dict, parsed_args.dir_path)
+        pm = self.rm.get_remote(parsed_args.remote_name)
         pr = pm.get_package_registry(parsed_args.registry_name)
         pb = pr.get_package_binary(settings_dict)
         pb.download_content(parsed_args.dir_path)
@@ -43,14 +43,14 @@ class Binary(CommandAbstract):
         parsed_args = parser.parse_args(args)
 
         assignment = Binary.__parse_settings_args(parsed_args.settings)
-        pm = self.__rm.get_remote(parsed_args.remote_name)
+        pm = self.rm.get_remote(parsed_args.remote_name)
         pr = pm.get_package_registry(parsed_args.registry_name)
         try:
             pr.get_package_binary(assignment)
         except FileNotFoundError:
             pr.add_package_binary(assignment)
         else:
-            self.__out.writeln("WARNING: Existing binary found, overwriting")
+            self.out.writeln("WARNING: Existing binary found, overwriting")
         finally:
             pb = pr.get_package_binary(assignment)
             pb.upload_content(parsed_args.dir_path)
@@ -64,7 +64,7 @@ class Binary(CommandAbstract):
         parsed_args = parser.parse_args(args)
 
         assignment = Binary.__parse_settings_args(parsed_args.settings)
-        pm = self.__rm.get_remote(parsed_args.remote_name)
+        pm = self.rm.get_remote(parsed_args.remote_name)
         pr = pm.get_package_registry(parsed_args.registry_name)
         pr.remove_package_binary(assignment)
 
@@ -80,7 +80,7 @@ class Binary(CommandAbstract):
         parsed_args = parser.parse_args(args)
         old_assignment = Binary.__parse_settings_args(parsed_args.old_settings)
         new_assignment = Binary.__parse_settings_args(parsed_args.new_settings)
-        pm = self.__rm.get_remote(parsed_args.remote_name)
+        pm = self.rm.get_remote(parsed_args.remote_name)
         pr = pm.get_package_registry(parsed_args.registry_name)
         pr.reassign_binary(old_assignment, new_assignment)
 
@@ -95,12 +95,12 @@ class Binary(CommandAbstract):
         assignment = Binary.__parse_settings_args(parsed_args.settings)
         if not parsed_args.fresh_download:
             try:
-                self.__out.write(Cache().get_path(parsed_args.registry_name, assignment))
+                self.out.write(Cache().get_path(parsed_args.registry_name, assignment))
                 return
             except ValueError:
                 logging.warning("The binary is not found in cache, will attemp fresh download")
         download_path = os.path.join(str(Path.home()), '.pacco_tmp')
-        self.__rm.default_download(parsed_args.registry_name, assignment,
-                                   download_path, fresh_download=parsed_args.fresh_download)
+        self.rm.default_download(parsed_args.registry_name, assignment,
+                                 download_path, fresh_download=parsed_args.fresh_download)
         shutil.rmtree(download_path)
-        self.__out.write(Cache().get_path(parsed_args.registry_name, assignment))
+        self.out.write(Cache().get_path(parsed_args.registry_name, assignment))

@@ -9,8 +9,8 @@ class Remote(CommandAbstract):
         """
         parser = self.init_parser('list')
         parser.parse_args(args)
-        remotes = self.__rm.list_remote()
-        self.__out.writeln(remotes)
+        remotes = self.rm.list_remote()
+        self.out.writeln(remotes)
 
     def add(self, *args):
         """
@@ -22,7 +22,7 @@ class Remote(CommandAbstract):
         parsed_args = parser.parse_args(args)
         if parsed_args.type == "local":
             path = input("Path (if empty, ~/.pacco/ will be used): ")
-            self.__rm.add_remote(parsed_args.name, {
+            self.rm.add_remote(parsed_args.name, {
                 "remote_type": "local",
                 "path": path
             })
@@ -31,7 +31,7 @@ class Remote(CommandAbstract):
             username = input("Username: ")
             from getpass import getpass
             password = getpass()
-            self.__rm.add_remote(parsed_args.name, {
+            self.rm.add_remote(parsed_args.name, {
                 "remote_type": "nexus_site",
                 "url": url,
                 "username": username,
@@ -45,7 +45,7 @@ class Remote(CommandAbstract):
         parser = self.init_parser('remove')
         parser.add_argument("name", help="remote name")
         parsed_args = parser.parse_args(args)
-        self.__rm.remove_remote(parsed_args.name)
+        self.rm.remove_remote(parsed_args.name)
 
     def set_default(self, *args):
         """
@@ -54,7 +54,7 @@ class Remote(CommandAbstract):
         parser = self.init_parser('set_default')
         parser.add_argument("name", nargs="*", help="remote name")
         parsed_args = parser.parse_args(args)
-        self.__rm.set_default(parsed_args.name)
+        self.rm.set_default(parsed_args.name)
 
     def list_default(self, *args):
         """
@@ -62,5 +62,5 @@ class Remote(CommandAbstract):
         """
         parser = self.init_parser('list_default')
         parser.parse_args(args)
-        default_remotes = self.__rm.get_default()
-        self.__out.writeln(default_remotes)
+        default_remotes = self.rm.get_default()
+        self.out.writeln(default_remotes)

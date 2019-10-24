@@ -6,13 +6,13 @@ from pacco.manager.remote_manager import RemoteManager
 
 class Pacco(CommandAbstract):
     def remote(self, *args: str):
-        remote.Remote('remote', self.__out, self.__rm).run(*args)
+        remote.Remote('remote', self.out, self.rm).run(*args)
 
     def registry(self, *args: str):
-        registry.Registry('registry', self.__out, self.__rm).run(*args)
+        registry.Registry('registry', self.out, self.rm).run(*args)
 
     def binary(self, *args: str):
-        binary.Binary('binary', self.__out, self.__rm).run(*args)
+        binary.Binary('binary', self.out, self.rm).run(*args)
 
 
 def main(args):

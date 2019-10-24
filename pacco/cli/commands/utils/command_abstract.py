@@ -9,9 +9,9 @@ class CommandAbstract:
     def __init__(self, name, output, remote_manager):
         if name:
             name += " "  # see show help below, we don't want double space for empty `name`
-        self.__name = name
-        self.__out = output
-        self.__rm = remote_manager
+        self.name = name
+        self.out = output
+        self.rm = remote_manager
 
     def run(self, *args):
         """
@@ -28,11 +28,11 @@ class CommandAbstract:
                 self.__show_help()
                 return
             elif command in ["-v", "--version"]:
-                self.__out.writeln("Pacco version {}".format(client_version))
+                self.out.writeln("Pacco version {}".format(client_version))
                 return
-            self.__out.writeln(
+            self.out.writeln(
                 "'pacco {NAME} {COMMAND}' is an invalid command. See 'pacco {NAME} --help'.".format(
-                    NAME=self.__name,
+                    NAME=self.name,
                     COMMAND=command),
                 error=True
             )
@@ -51,16 +51,16 @@ class CommandAbstract:
         commands = self.__get_commands()
         max_len = max(
             (
-                len("pacco {NAME}{COMMAND}".format(NAME=self.__name, COMMAND=command))
+                len("pacco {NAME}{COMMAND}".format(NAME=self.name, COMMAND=command))
                 for command in commands
             )) + 1
         fmt = '  %-{}s'.format(max_len)
         for command in commands:
-            appended_name = "pacco {NAME}{COMMAND}".format(NAME=self.__name, COMMAND=command)
+            appended_name = "pacco {NAME}{COMMAND}".format(NAME=self.name, COMMAND=command)
             print(fmt % appended_name, end="")
-            self.__out.writeln(CommandAbstract.__format_docstring(commands[command].__doc__))
-        self.__out.writeln("")
-        self.__out.writeln("Pacco {NAME}commands. Type 'pacco {NAME}<command> -h' for help".format(NAME=self.__name))
+            self.out.writeln(CommandAbstract.__format_docstring(commands[command].__doc__))
+        self.out.writeln("")
+        self.out.writeln("Pacco {NAME}commands. Type 'pacco {NAME}<command> -h' for help".format(NAME=self.name))
 
     @staticmethod
     def __format_docstring(docstring: str) -> str:
@@ -74,4 +74,4 @@ class CommandAbstract:
         return ' '.join(data)
 
     def init_parser(self, method_name: str):
-        return argparse.ArgumentParser(prog="pacco {NAME}{COMMAND}".format(NAME=self.__name, COMMAND=method_name))
+        return argparse.ArgumentParser(prog="pacco {NAME}{COMMAND}".format(NAME=self.name, COMMAND=method_name))

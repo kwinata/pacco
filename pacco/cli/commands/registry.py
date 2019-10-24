@@ -11,8 +11,8 @@ class Registry(CommandAbstract):
         parser = self.init_parser('list')
         parser.add_argument("remote", help="remote name")
         parsed_args = parser.parse_args(args)
-        pm = self.__rm.get_remote(parsed_args.remote)
-        self.__out.writeln(pm.list_package_registries())
+        pm = self.rm.get_remote(parsed_args.remote)
+        self.out.writeln(pm.list_package_registries())
 
     def add(self, *args):
         """
@@ -25,7 +25,7 @@ class Registry(CommandAbstract):
         parsed_args = parser.parse_args(args)
         if not re.match(r"([(\w)-.]+,)*([(\w)-.]+),?", parsed_args.settings):
             raise ValueError("Settings must be in the form of ([(\\w)-.]+,)*([(\\w)-.]+),?")
-        pm = self.__rm.get_remote(parsed_args.remote)
+        pm = self.rm.get_remote(parsed_args.remote)
         pm.add_package_registry(parsed_args.name, parsed_args.settings.split(","))
 
     def remove(self, *args):
@@ -36,7 +36,7 @@ class Registry(CommandAbstract):
         parser.add_argument("remote", help="remote name")
         parser.add_argument("name", help="registry name")
         parsed_args = parser.parse_args(args)
-        pm = self.__rm.get_remote(parsed_args.remote)
+        pm = self.rm.get_remote(parsed_args.remote)
         pm.remove_package_registry(parsed_args.name)
 
     def binaries(self, *args):
@@ -47,9 +47,9 @@ class Registry(CommandAbstract):
         parser.add_argument("remote", help="remote name")
         parser.add_argument("name", help="registry name")
         parsed_args = parser.parse_args(args)
-        pm = self.__rm.get_remote(parsed_args.remote)
+        pm = self.rm.get_remote(parsed_args.remote)
         pr = pm.get_package_registry(parsed_args.name)
-        self.__out.writeln(pr.list_package_binaries())
+        self.out.writeln(pr.list_package_binaries())
 
     def param_list(self, *args):
         """
@@ -60,9 +60,9 @@ class Registry(CommandAbstract):
         parser.add_argument("name", help="registry name")
 
         parsed_args = parser.parse_args(args)
-        pm = self.__rm.get_remote(parsed_args.remote)
+        pm = self.rm.get_remote(parsed_args.remote)
         pr = pm.get_package_registry(parsed_args.name)
-        self.__out.writeln(pr.param_list())
+        self.out.writeln(pr.param_list())
 
     def param_add(self, *args):
         """
@@ -75,7 +75,7 @@ class Registry(CommandAbstract):
         parser.add_argument("default_value", help="the default_value assigned to the new param")
 
         parsed_args = parser.parse_args(args)
-        pm = self.__rm.get_remote(parsed_args.remote)
+        pm = self.rm.get_remote(parsed_args.remote)
         pr = pm.get_package_registry(parsed_args.name)
         pr.param_add(parsed_args.param_name, parsed_args.default_value)
 
@@ -89,6 +89,6 @@ class Registry(CommandAbstract):
         parser.add_argument("param_name", help="the param name to be removed")
 
         parsed_args = parser.parse_args(args)
-        pm = self.__rm.get_remote(parsed_args.remote)
+        pm = self.rm.get_remote(parsed_args.remote)
         pr = pm.get_package_registry(parsed_args.name)
         pr.param_remove(parsed_args.param_name)
