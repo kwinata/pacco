@@ -6,6 +6,8 @@ from pacco import __version__ as client_version
 
 class CommandAbstract:
     def __init__(self, name, output, remote_manager):
+        if name:
+            name += " "  # see show help below, we don't want double space for empty `name`
         self.__name = name
         self.__out = output
         self.__rm = remote_manager
@@ -46,16 +48,18 @@ class CommandAbstract:
 
     def __show_help(self):
         commands = self.__get_commands()
-        namespace = self.__name
-        stream = self.__out
-        max_len = max((len("pacco {} {}".format(namespace, c)) for c in commands)) + 1
+        max_len = max(
+            (
+                len("pacco {NAME}{COMMAND}".format(NAME=self.__name, COMMAND=command))
+                for command in commands
+            )) + 1
         fmt = '  %-{}s'.format(max_len)
-        for name in commands:
-            appended_name = "pacco {} {}".format(namespace, name)
+        for command in commands:
+            appended_name = "pacco {NAME}{COMMAND}".format(NAME=self.__name, COMMAND=command)
             print(fmt % appended_name, end="")
-            stream.writeln(CommandAbstract.__format_docstring(commands[name].__doc__))
-        stream.writeln("")
-        stream.writeln("Pacco {} commands. Type 'pacco {} <command> -h' for help".format(namespace, namespace))
+            self.__out.writeln(CommandAbstract.__format_docstring(commands[command].__doc__))
+        self.__out.writeln("")
+        self.__out.writeln("Pacco {NAME}commands. Type 'pacco {NAME}<command> -h' for help".format(NAME=self.__name))
 
     @staticmethod
     def __format_docstring(docstring: str) -> str:
