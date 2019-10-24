@@ -2,8 +2,8 @@ import logging
 
 from typing import Optional, Dict
 
-from pacco.cache.cache import Cache
-from pacco.client.clients import FileBasedClientAbstract
+from pacco.manager.utils.cache import Cache
+from pacco.manager.utils.clients import FileBasedClientAbstract
 from pacco.manager.interfaces.package_binary import PackageBinaryInterface
 
 

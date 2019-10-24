@@ -1,6 +1,6 @@
 from typing import List
 
-from pacco.client.clients import FileBasedClientAbstract
+from pacco.manager.utils.clients import FileBasedClientAbstract
 from pacco.manager.file_based.package_registry import PackageRegistryFileBased
 from pacco.manager.interfaces.package_manager import PackageManagerInterface
 

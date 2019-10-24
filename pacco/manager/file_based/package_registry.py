@@ -4,7 +4,7 @@ import string
 
 from typing import Optional, List, Dict, Callable
 
-from pacco.client.clients import FileBasedClientAbstract
+from pacco.manager.utils.clients import FileBasedClientAbstract
 from pacco.manager.file_based.package_binary import PackageBinaryFileBased
 from pacco.manager.interfaces.package_registry import PackageRegistryInterface
 
