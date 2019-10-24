@@ -2,5 +2,5 @@
 Clients
 *******
 
-.. automodule:: pacco.clients
+.. automodule:: pacco.manager.utils.clients
    :members:

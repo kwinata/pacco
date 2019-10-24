@@ -4,30 +4,30 @@ Classes
 
 PackageManager
 ==============
-.. autoclass:: pacco.classes_interface.PackageManager
+.. automodule:: pacco.manager.interfaces.package_manager
    :members:
 
 File-based implementations
 --------------------------
-.. autoclass:: pacco.classes_file_based.PackageManagerFileBased
+.. automodule:: pacco.manager.file_based.package_manager
    :members:
 
 PackageRegistry
 ===============
-.. autoclass:: pacco.classes_interface.PackageRegistry
+.. automodule:: pacco.manager.interfaces.package_registry
    :members:
 
 File-based implementations
 --------------------------
-.. autoclass:: pacco.classes_file_based.PackageRegistryFileBased
+.. automodule:: pacco.manager.file_based.package_registry
    :members:
 
 PackageBinary
 =============
-.. autoclass:: pacco.classes_interface.PackageBinary
+.. automodule:: pacco.manager.interfaces.package_binary
    :members:
 
 File-based implementations
 --------------------------
-.. autoclass:: pacco.classes_file_based.PackageBinaryFileBased
+.. automodule:: pacco.manager.file_based.package_binary
    :members:
