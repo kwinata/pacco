@@ -1,0 +1,19 @@
+from pacco.cli.command_abstract import CommandAbstract
+from pacco.cli.commands import remote, registry, binary
+from pacco.cli.output_stream import OutputStream
+from pacco.manager.remote_manager import RemoteManager
+
+
+class Pacco(CommandAbstract):
+    def remote(self, *args: str):
+        remote.Remote('remote', self.__out, self.__rm).run(*args)
+
+    def registry(self, *args: str):
+        registry.Registry('registry', self.__out, self.__rm).run(*args)
+
+    def binary(self, *args: str):
+        binary.Binary('binary', self.__out, self.__rm).run(*args)
+
+
+def main(args):
+    Pacco('', OutputStream(), RemoteManager()).run(*args)
