@@ -9,6 +9,7 @@ Pacco Documentation
 
    api_docs/index
    diagram
+   tutorial/index
 
 Pacco is intended to be used a simple tool for storing binaries. Most of the existing tools found available
 handles to much detail, usually because it is manifested as package manager for certain language.

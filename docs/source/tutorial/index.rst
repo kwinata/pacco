@@ -72,3 +72,11 @@ you shall not store the value directly in your project build script, but rather 
     export OPENSSL_DIR=$(pacco binary get_location openssl version=1.1.1,type=d)
 
 Now you can use the variable ``OPENSSL_DIR`` in your build script as you need.
+
+
+Next step
+=========
+.. toctree::
+   :maxdepth: 1
+
+   advanced_tutorial
