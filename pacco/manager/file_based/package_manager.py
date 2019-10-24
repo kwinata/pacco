@@ -10,7 +10,7 @@ class PackageManagerFileBased(PackageManagerInterface):
     An implementation of the PackageManager interface
 
     Examples:
-        >>> from pacco.client.clients import LocalClient, NexusFileClient
+        >>> from pacco.manager.utils.clients import LocalClient, NexusFileClient
         >>> client = LocalClient(clean=True)
         >>> import os
         >>> if 'NEXUS_URL' in os.environ: client = NexusFileClient(os.environ['NEXUS_URL'], 'admin', 'admin123', clean=True)

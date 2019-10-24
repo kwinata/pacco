@@ -3,8 +3,9 @@ from typing import Dict
 
 
 class RemoteAbstract:
-    name: str
-    remote_type: str
+    def __init__(self, name: str, remote_type: str):
+        self.name = name
+        self.remote_type = remote_type
 
     def __str__(self):
         return "[{}, {}]".format(self.name, self.remote_type)
