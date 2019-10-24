@@ -154,11 +154,11 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="module-pacco.remote_manager">
-<span id="remote-manager"></span><h1>Remote Manager<a class="headerlink" href="#module-pacco.remote_manager" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-pacco.manager.remote_manager">
+<span id="remote-manager"></span><h1>Remote Manager<a class="headerlink" href="#module-pacco.manager.remote_manager" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
-<dt id="pacco.remote_manager.RemoteManager">
-<em class="property">class </em><code class="sig-prename descclassname">pacco.remote_manager.</code><code class="sig-name descname">RemoteManager</code><a class="headerlink" href="#pacco.remote_manager.RemoteManager" title="Permalink to this definition">¶</a></dt>
+<dt id="pacco.manager.remote_manager.RemoteManager">
+<em class="property">class </em><code class="sig-prename descclassname">pacco.manager.remote_manager.</code><code class="sig-name descname">RemoteManager</code><a class="headerlink" href="#pacco.manager.remote_manager.RemoteManager" title="Permalink to this definition">¶</a></dt>
 <dd><p>Function to manage <code class="docutils literal notranslate"><span class="pre">.pacco_config</span></code> file as the storage for remote lists
 With <code class="docutils literal notranslate"><span class="pre">RemoteManager</span></code>, you can manage multiple <code class="docutils literal notranslate"><span class="pre">PackageManager</span></code> s</p>
 <p class="rubric">Examples</p>
@@ -189,8 +189,8 @@ With <code class="docutils literal notranslate"><span class="pre">RemoteManager<
 </pre></div>
 </div>
 <dl class="method">
-<dt id="pacco.remote_manager.RemoteManager.add_remote">
-<code class="sig-name descname">add_remote</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">configuration</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.remote_manager.RemoteManager.add_remote" title="Permalink to this definition">¶</a></dt>
+<dt id="pacco.manager.remote_manager.RemoteManager.add_remote">
+<code class="sig-name descname">add_remote</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">configuration</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.manager.remote_manager.RemoteManager.add_remote" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add/register a new remote. Currently there is two possible configuration:</p>
 <p>Local client:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
@@ -222,8 +222,8 @@ With <code class="docutils literal notranslate"><span class="pre">RemoteManager<
 </dd></dl>
 
 <dl class="method">
-<dt id="pacco.remote_manager.RemoteManager.default_download">
-<code class="sig-name descname">default_download</code><span class="sig-paren">(</span><em class="sig-param">package_name</em>, <em class="sig-param">assignment</em>, <em class="sig-param">dir_path</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.remote_manager.RemoteManager.default_download" title="Permalink to this definition">¶</a></dt>
+<dt id="pacco.manager.remote_manager.RemoteManager.default_download">
+<code class="sig-name descname">default_download</code><span class="sig-paren">(</span><em class="sig-param">package_name</em>, <em class="sig-param">assignment</em>, <em class="sig-param">dir_path</em>, <em class="sig-param">fresh_download=False</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.manager.remote_manager.RemoteManager.default_download" title="Permalink to this definition">¶</a></dt>
 <dd><p>Try to download a package binary from the remotes in the default remote list.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -231,6 +231,7 @@ With <code class="docutils literal notranslate"><span class="pre">RemoteManager<
 <li><p><strong>package_name</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – package registry name of the binary</p></li>
 <li><p><strong>assignment</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – the dictionary of the binary configuration</p></li>
 <li><p><strong>dir_path</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – the download destination</p></li>
+<li><p><strong>fresh_download</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>]) – will not use cache if True</p></li>
 </ul>
 </dd>
 </dl>
@@ -276,8 +277,8 @@ With <code class="docutils literal notranslate"><span class="pre">RemoteManager<
 </dd></dl>
 
 <dl class="method">
-<dt id="pacco.remote_manager.RemoteManager.get_default">
-<code class="sig-name descname">get_default</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pacco.remote_manager.RemoteManager.get_default" title="Permalink to this definition">¶</a></dt>
+<dt id="pacco.manager.remote_manager.RemoteManager.get_default">
+<code class="sig-name descname">get_default</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pacco.manager.remote_manager.RemoteManager.get_default" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the list of the default remotes to be used in the default download</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -290,15 +291,15 @@ With <code class="docutils literal notranslate"><span class="pre">RemoteManager<
 </dd></dl>
 
 <dl class="method">
-<dt id="pacco.remote_manager.RemoteManager.get_remote">
-<code class="sig-name descname">get_remote</code><span class="sig-paren">(</span><em class="sig-param">name</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.remote_manager.RemoteManager.get_remote" title="Permalink to this definition">¶</a></dt>
+<dt id="pacco.manager.remote_manager.RemoteManager.get_remote">
+<code class="sig-name descname">get_remote</code><span class="sig-paren">(</span><em class="sig-param">name</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.manager.remote_manager.RemoteManager.get_remote" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the <code class="docutils literal notranslate"><span class="pre">PackageManager</span></code> based on the remote name.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>name</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – the name of the remote</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference internal" href="classes.html#pacco.classes_interface.PackageManager" title="pacco.classes_interface.PackageManager"><code class="xref py py-class docutils literal notranslate"><span class="pre">PackageManager</span></code></a></p>
+<dd class="field-even"><p><a class="reference internal" href="classes.html#pacco.manager.interfaces.package_manager.PackageManagerInterface" title="pacco.manager.interfaces.package_manager.PackageManagerInterface"><code class="xref py py-class docutils literal notranslate"><span class="pre">PackageManagerInterface</span></code></a></p>
 </dd>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the package manager object</p>
@@ -307,8 +308,8 @@ With <code class="docutils literal notranslate"><span class="pre">RemoteManager<
 </dd></dl>
 
 <dl class="method">
-<dt id="pacco.remote_manager.RemoteManager.list_remote">
-<code class="sig-name descname">list_remote</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pacco.remote_manager.RemoteManager.list_remote" title="Permalink to this definition">¶</a></dt>
+<dt id="pacco.manager.remote_manager.RemoteManager.list_remote">
+<code class="sig-name descname">list_remote</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pacco.manager.remote_manager.RemoteManager.list_remote" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the list of the remote names</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -318,8 +319,8 @@ With <code class="docutils literal notranslate"><span class="pre">RemoteManager<
 </dd></dl>
 
 <dl class="method">
-<dt id="pacco.remote_manager.RemoteManager.remove_remote">
-<code class="sig-name descname">remove_remote</code><span class="sig-paren">(</span><em class="sig-param">name</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.remote_manager.RemoteManager.remove_remote" title="Permalink to this definition">¶</a></dt>
+<dt id="pacco.manager.remote_manager.RemoteManager.remove_remote">
+<code class="sig-name descname">remove_remote</code><span class="sig-paren">(</span><em class="sig-param">name</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.manager.remote_manager.RemoteManager.remove_remote" title="Permalink to this definition">¶</a></dt>
 <dd><p>De-register a remote from this remote manager.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -332,8 +333,8 @@ With <code class="docutils literal notranslate"><span class="pre">RemoteManager<
 </dd></dl>
 
 <dl class="method">
-<dt id="pacco.remote_manager.RemoteManager.save">
-<code class="sig-name descname">save</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pacco.remote_manager.RemoteManager.save" title="Permalink to this definition">¶</a></dt>
+<dt id="pacco.manager.remote_manager.RemoteManager.save">
+<code class="sig-name descname">save</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pacco.manager.remote_manager.RemoteManager.save" title="Permalink to this definition">¶</a></dt>
 <dd><p>Save the current state to “.pacco_config”, this will also be done in the <code class="docutils literal notranslate"><span class="pre">__del__</span></code>
 method, such that even if you forget to save, it will be auto saved when the program closes.</p>
 <dl class="field-list simple">
@@ -344,8 +345,8 @@ method, such that even if you forget to save, it will be auto saved when the pro
 </dd></dl>
 
 <dl class="method">
-<dt id="pacco.remote_manager.RemoteManager.set_default">
-<code class="sig-name descname">set_default</code><span class="sig-paren">(</span><em class="sig-param">remotes</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.remote_manager.RemoteManager.set_default" title="Permalink to this definition">¶</a></dt>
+<dt id="pacco.manager.remote_manager.RemoteManager.set_default">
+<code class="sig-name descname">set_default</code><span class="sig-paren">(</span><em class="sig-param">remotes</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.manager.remote_manager.RemoteManager.set_default" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the default remote list as the “try list” for the default download</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>

@@ -154,23 +154,23 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="module-pacco.clients">
-<span id="clients"></span><h1>Clients<a class="headerlink" href="#module-pacco.clients" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-pacco.manager.utils.clients">
+<span id="clients"></span><h1>Clients<a class="headerlink" href="#module-pacco.manager.utils.clients" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
-<dt id="pacco.clients.FileBasedClientAbstract">
-<em class="property">class </em><code class="sig-prename descclassname">pacco.clients.</code><code class="sig-name descname">FileBasedClientAbstract</code><a class="headerlink" href="#pacco.clients.FileBasedClientAbstract" title="Permalink to this definition">¶</a></dt>
+<dt id="pacco.manager.utils.clients.FileBasedClientAbstract">
+<em class="property">class </em><code class="sig-prename descclassname">pacco.manager.utils.clients.</code><code class="sig-name descname">FileBasedClientAbstract</code><a class="headerlink" href="#pacco.manager.utils.clients.FileBasedClientAbstract" title="Permalink to this definition">¶</a></dt>
 <dd><p>An interface for file-based client functionality.
 Each client shall have it’s own context of current directory and it must not change throughout the lifetime.</p>
 <dl class="method">
-<dt id="pacco.clients.FileBasedClientAbstract.dispatch_subdir">
-<code class="sig-name descname">dispatch_subdir</code><span class="sig-paren">(</span><em class="sig-param">name</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.clients.FileBasedClientAbstract.dispatch_subdir" title="Permalink to this definition">¶</a></dt>
+<dt id="pacco.manager.utils.clients.FileBasedClientAbstract.dispatch_subdir">
+<code class="sig-name descname">dispatch_subdir</code><span class="sig-paren">(</span><em class="sig-param">name</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.manager.utils.clients.FileBasedClientAbstract.dispatch_subdir" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create and return new instance whose context is the join of this current directory with <code class="docutils literal notranslate"><span class="pre">name</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>name</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – the directory name as namespace to the new client</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference internal" href="#pacco.clients.FileBasedClientAbstract" title="pacco.clients.FileBasedClientAbstract"><code class="xref py py-class docutils literal notranslate"><span class="pre">FileBasedClientAbstract</span></code></a></p>
+<dd class="field-even"><p><a class="reference internal" href="#pacco.manager.utils.clients.FileBasedClientAbstract" title="pacco.manager.utils.clients.FileBasedClientAbstract"><code class="xref py py-class docutils literal notranslate"><span class="pre">FileBasedClientAbstract</span></code></a></p>
 </dd>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the newly instantiated client</p>
@@ -179,8 +179,8 @@ Each client shall have it’s own context of current directory and it must not c
 </dd></dl>
 
 <dl class="method">
-<dt id="pacco.clients.FileBasedClientAbstract.download_dir">
-<code class="sig-name descname">download_dir</code><span class="sig-paren">(</span><em class="sig-param">download_path</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.clients.FileBasedClientAbstract.download_dir" title="Permalink to this definition">¶</a></dt>
+<dt id="pacco.manager.utils.clients.FileBasedClientAbstract.download_dir">
+<code class="sig-name descname">download_dir</code><span class="sig-paren">(</span><em class="sig-param">download_path</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.manager.utils.clients.FileBasedClientAbstract.download_dir" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fetch the file content of this current directory (shall be used only by package binary), and put it
 into the <code class="docutils literal notranslate"><span class="pre">download_path</span></code>.</p>
 <dl class="field-list simple">
@@ -194,8 +194,8 @@ into the <code class="docutils literal notranslate"><span class="pre">download_p
 </dd></dl>
 
 <dl class="method">
-<dt id="pacco.clients.FileBasedClientAbstract.ls">
-<code class="sig-name descname">ls</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pacco.clients.FileBasedClientAbstract.ls" title="Permalink to this definition">¶</a></dt>
+<dt id="pacco.manager.utils.clients.FileBasedClientAbstract.ls">
+<code class="sig-name descname">ls</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pacco.manager.utils.clients.FileBasedClientAbstract.ls" title="Permalink to this definition">¶</a></dt>
 <dd><p>List down the list of files and directories in it’s directory</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -208,8 +208,8 @@ into the <code class="docutils literal notranslate"><span class="pre">download_p
 </dd></dl>
 
 <dl class="method">
-<dt id="pacco.clients.FileBasedClientAbstract.mkdir">
-<code class="sig-name descname">mkdir</code><span class="sig-paren">(</span><em class="sig-param">name</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.clients.FileBasedClientAbstract.mkdir" title="Permalink to this definition">¶</a></dt>
+<dt id="pacco.manager.utils.clients.FileBasedClientAbstract.mkdir">
+<code class="sig-name descname">mkdir</code><span class="sig-paren">(</span><em class="sig-param">name</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.manager.utils.clients.FileBasedClientAbstract.mkdir" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a new directory under the current directory</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -222,8 +222,8 @@ into the <code class="docutils literal notranslate"><span class="pre">download_p
 </dd></dl>
 
 <dl class="method">
-<dt id="pacco.clients.FileBasedClientAbstract.rmdir">
-<code class="sig-name descname">rmdir</code><span class="sig-paren">(</span><em class="sig-param">name</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.clients.FileBasedClientAbstract.rmdir" title="Permalink to this definition">¶</a></dt>
+<dt id="pacco.manager.utils.clients.FileBasedClientAbstract.rmdir">
+<code class="sig-name descname">rmdir</code><span class="sig-paren">(</span><em class="sig-param">name</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.manager.utils.clients.FileBasedClientAbstract.rmdir" title="Permalink to this definition">¶</a></dt>
 <dd><p>Remove a directory recursively. The <code class="docutils literal notranslate"><span class="pre">name</span></code> directory must be inside
 this current directory.</p>
 <dl class="field-list simple">
@@ -237,8 +237,8 @@ this current directory.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="pacco.clients.FileBasedClientAbstract.upload_dir">
-<code class="sig-name descname">upload_dir</code><span class="sig-paren">(</span><em class="sig-param">dir_path</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.clients.FileBasedClientAbstract.upload_dir" title="Permalink to this definition">¶</a></dt>
+<dt id="pacco.manager.utils.clients.FileBasedClientAbstract.upload_dir">
+<code class="sig-name descname">upload_dir</code><span class="sig-paren">(</span><em class="sig-param">dir_path</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.manager.utils.clients.FileBasedClientAbstract.upload_dir" title="Permalink to this definition">¶</a></dt>
 <dd><p>Upload the <code class="docutils literal notranslate"><span class="pre">dir_path</span></code> to this current directory by first removing all the content then placing the uploaded
 file.</p>
 <dl class="field-list simple">
@@ -254,19 +254,19 @@ file.</p>
 </dd></dl>
 
 <dl class="class">
-<dt id="pacco.clients.LocalClient">
-<em class="property">class </em><code class="sig-prename descclassname">pacco.clients.</code><code class="sig-name descname">LocalClient</code><span class="sig-paren">(</span><em class="sig-param">path=''</em>, <em class="sig-param">clean=False</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.clients.LocalClient" title="Permalink to this definition">¶</a></dt>
+<dt id="pacco.manager.utils.clients.LocalClient">
+<em class="property">class </em><code class="sig-prename descclassname">pacco.manager.utils.clients.</code><code class="sig-name descname">LocalClient</code><span class="sig-paren">(</span><em class="sig-param">path=''</em>, <em class="sig-param">clean=False</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.manager.utils.clients.LocalClient" title="Permalink to this definition">¶</a></dt>
 <dd><p>An implementation of <code class="docutils literal notranslate"><span class="pre">FileBasedClientAbstract</span></code>, using <code class="docutils literal notranslate"><span class="pre">homepath/.pacco</span></code> as the file storage.</p>
 <dl class="method">
-<dt id="pacco.clients.LocalClient.dispatch_subdir">
-<code class="sig-name descname">dispatch_subdir</code><span class="sig-paren">(</span><em class="sig-param">name</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.clients.LocalClient.dispatch_subdir" title="Permalink to this definition">¶</a></dt>
+<dt id="pacco.manager.utils.clients.LocalClient.dispatch_subdir">
+<code class="sig-name descname">dispatch_subdir</code><span class="sig-paren">(</span><em class="sig-param">name</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.manager.utils.clients.LocalClient.dispatch_subdir" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create and return new instance whose context is the join of this current directory with <code class="docutils literal notranslate"><span class="pre">name</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>name</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – the directory name as namespace to the new client</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference internal" href="#pacco.clients.LocalClient" title="pacco.clients.LocalClient"><code class="xref py py-class docutils literal notranslate"><span class="pre">LocalClient</span></code></a></p>
+<dd class="field-even"><p><a class="reference internal" href="#pacco.manager.utils.clients.LocalClient" title="pacco.manager.utils.clients.LocalClient"><code class="xref py py-class docutils literal notranslate"><span class="pre">LocalClient</span></code></a></p>
 </dd>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the newly instantiated client</p>
@@ -275,8 +275,8 @@ file.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="pacco.clients.LocalClient.download_dir">
-<code class="sig-name descname">download_dir</code><span class="sig-paren">(</span><em class="sig-param">download_path</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.clients.LocalClient.download_dir" title="Permalink to this definition">¶</a></dt>
+<dt id="pacco.manager.utils.clients.LocalClient.download_dir">
+<code class="sig-name descname">download_dir</code><span class="sig-paren">(</span><em class="sig-param">download_path</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.manager.utils.clients.LocalClient.download_dir" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fetch the file content of this current directory (shall be used only by package binary), and put it
 into the <code class="docutils literal notranslate"><span class="pre">download_path</span></code>.</p>
 <dl class="field-list simple">
@@ -290,8 +290,8 @@ into the <code class="docutils literal notranslate"><span class="pre">download_p
 </dd></dl>
 
 <dl class="method">
-<dt id="pacco.clients.LocalClient.ls">
-<code class="sig-name descname">ls</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pacco.clients.LocalClient.ls" title="Permalink to this definition">¶</a></dt>
+<dt id="pacco.manager.utils.clients.LocalClient.ls">
+<code class="sig-name descname">ls</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pacco.manager.utils.clients.LocalClient.ls" title="Permalink to this definition">¶</a></dt>
 <dd><p>List down the list of files and directories in it’s directory</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -304,8 +304,8 @@ into the <code class="docutils literal notranslate"><span class="pre">download_p
 </dd></dl>
 
 <dl class="method">
-<dt id="pacco.clients.LocalClient.mkdir">
-<code class="sig-name descname">mkdir</code><span class="sig-paren">(</span><em class="sig-param">name</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.clients.LocalClient.mkdir" title="Permalink to this definition">¶</a></dt>
+<dt id="pacco.manager.utils.clients.LocalClient.mkdir">
+<code class="sig-name descname">mkdir</code><span class="sig-paren">(</span><em class="sig-param">name</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.manager.utils.clients.LocalClient.mkdir" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a new directory under the current directory</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -318,8 +318,8 @@ into the <code class="docutils literal notranslate"><span class="pre">download_p
 </dd></dl>
 
 <dl class="method">
-<dt id="pacco.clients.LocalClient.rmdir">
-<code class="sig-name descname">rmdir</code><span class="sig-paren">(</span><em class="sig-param">name</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.clients.LocalClient.rmdir" title="Permalink to this definition">¶</a></dt>
+<dt id="pacco.manager.utils.clients.LocalClient.rmdir">
+<code class="sig-name descname">rmdir</code><span class="sig-paren">(</span><em class="sig-param">name</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.manager.utils.clients.LocalClient.rmdir" title="Permalink to this definition">¶</a></dt>
 <dd><p>Remove a directory recursively. The <code class="docutils literal notranslate"><span class="pre">name</span></code> directory must be inside
 this current directory.</p>
 <dl class="field-list simple">
@@ -333,8 +333,8 @@ this current directory.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="pacco.clients.LocalClient.upload_dir">
-<code class="sig-name descname">upload_dir</code><span class="sig-paren">(</span><em class="sig-param">dir_path</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.clients.LocalClient.upload_dir" title="Permalink to this definition">¶</a></dt>
+<dt id="pacco.manager.utils.clients.LocalClient.upload_dir">
+<code class="sig-name descname">upload_dir</code><span class="sig-paren">(</span><em class="sig-param">dir_path</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.manager.utils.clients.LocalClient.upload_dir" title="Permalink to this definition">¶</a></dt>
 <dd><p>Upload the <code class="docutils literal notranslate"><span class="pre">dir_path</span></code> to this current directory by first removing all the content then placing the uploaded
 file.</p>
 <dl class="field-list simple">
@@ -350,19 +350,19 @@ file.</p>
 </dd></dl>
 
 <dl class="class">
-<dt id="pacco.clients.NexusFileClient">
-<em class="property">class </em><code class="sig-prename descclassname">pacco.clients.</code><code class="sig-name descname">NexusFileClient</code><span class="sig-paren">(</span><em class="sig-param">url</em>, <em class="sig-param">username</em>, <em class="sig-param">password</em>, <em class="sig-param">clean=False</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.clients.NexusFileClient" title="Permalink to this definition">¶</a></dt>
+<dt id="pacco.manager.utils.clients.NexusFileClient">
+<em class="property">class </em><code class="sig-prename descclassname">pacco.manager.utils.clients.</code><code class="sig-name descname">NexusFileClient</code><span class="sig-paren">(</span><em class="sig-param">url</em>, <em class="sig-param">username</em>, <em class="sig-param">password</em>, <em class="sig-param">clean=False</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.manager.utils.clients.NexusFileClient" title="Permalink to this definition">¶</a></dt>
 <dd><p>An implementation of <code class="docutils literal notranslate"><span class="pre">FileBasedClientAbstract</span></code>, using Nexus site repository as the file storage.</p>
 <dl class="method">
-<dt id="pacco.clients.NexusFileClient.dispatch_subdir">
-<code class="sig-name descname">dispatch_subdir</code><span class="sig-paren">(</span><em class="sig-param">name</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.clients.NexusFileClient.dispatch_subdir" title="Permalink to this definition">¶</a></dt>
+<dt id="pacco.manager.utils.clients.NexusFileClient.dispatch_subdir">
+<code class="sig-name descname">dispatch_subdir</code><span class="sig-paren">(</span><em class="sig-param">name</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.manager.utils.clients.NexusFileClient.dispatch_subdir" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create and return new instance whose context is the join of this current directory with <code class="docutils literal notranslate"><span class="pre">name</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>name</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – the directory name as namespace to the new client</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference internal" href="#pacco.clients.NexusFileClient" title="pacco.clients.NexusFileClient"><code class="xref py py-class docutils literal notranslate"><span class="pre">NexusFileClient</span></code></a></p>
+<dd class="field-even"><p><a class="reference internal" href="#pacco.manager.utils.clients.NexusFileClient" title="pacco.manager.utils.clients.NexusFileClient"><code class="xref py py-class docutils literal notranslate"><span class="pre">NexusFileClient</span></code></a></p>
 </dd>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the newly instantiated client</p>
@@ -371,8 +371,8 @@ file.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="pacco.clients.NexusFileClient.download_dir">
-<code class="sig-name descname">download_dir</code><span class="sig-paren">(</span><em class="sig-param">download_path</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.clients.NexusFileClient.download_dir" title="Permalink to this definition">¶</a></dt>
+<dt id="pacco.manager.utils.clients.NexusFileClient.download_dir">
+<code class="sig-name descname">download_dir</code><span class="sig-paren">(</span><em class="sig-param">download_path</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.manager.utils.clients.NexusFileClient.download_dir" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fetch the file content of this current directory (shall be used only by package binary), and put it
 into the <code class="docutils literal notranslate"><span class="pre">download_path</span></code>.</p>
 <dl class="field-list simple">
@@ -386,8 +386,8 @@ into the <code class="docutils literal notranslate"><span class="pre">download_p
 </dd></dl>
 
 <dl class="method">
-<dt id="pacco.clients.NexusFileClient.ls">
-<code class="sig-name descname">ls</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pacco.clients.NexusFileClient.ls" title="Permalink to this definition">¶</a></dt>
+<dt id="pacco.manager.utils.clients.NexusFileClient.ls">
+<code class="sig-name descname">ls</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pacco.manager.utils.clients.NexusFileClient.ls" title="Permalink to this definition">¶</a></dt>
 <dd><p>List down the list of files and directories in it’s directory</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -400,8 +400,8 @@ into the <code class="docutils literal notranslate"><span class="pre">download_p
 </dd></dl>
 
 <dl class="method">
-<dt id="pacco.clients.NexusFileClient.mkdir">
-<code class="sig-name descname">mkdir</code><span class="sig-paren">(</span><em class="sig-param">name</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.clients.NexusFileClient.mkdir" title="Permalink to this definition">¶</a></dt>
+<dt id="pacco.manager.utils.clients.NexusFileClient.mkdir">
+<code class="sig-name descname">mkdir</code><span class="sig-paren">(</span><em class="sig-param">name</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.manager.utils.clients.NexusFileClient.mkdir" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a new directory under the current directory</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -414,8 +414,8 @@ into the <code class="docutils literal notranslate"><span class="pre">download_p
 </dd></dl>
 
 <dl class="method">
-<dt id="pacco.clients.NexusFileClient.rmdir">
-<code class="sig-name descname">rmdir</code><span class="sig-paren">(</span><em class="sig-param">name</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.clients.NexusFileClient.rmdir" title="Permalink to this definition">¶</a></dt>
+<dt id="pacco.manager.utils.clients.NexusFileClient.rmdir">
+<code class="sig-name descname">rmdir</code><span class="sig-paren">(</span><em class="sig-param">name</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.manager.utils.clients.NexusFileClient.rmdir" title="Permalink to this definition">¶</a></dt>
 <dd><p>Remove a directory recursively. The <code class="docutils literal notranslate"><span class="pre">name</span></code> directory must be inside
 this current directory.</p>
 <dl class="field-list simple">
@@ -429,8 +429,8 @@ this current directory.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="pacco.clients.NexusFileClient.upload_dir">
-<code class="sig-name descname">upload_dir</code><span class="sig-paren">(</span><em class="sig-param">dir_path</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.clients.NexusFileClient.upload_dir" title="Permalink to this definition">¶</a></dt>
+<dt id="pacco.manager.utils.clients.NexusFileClient.upload_dir">
+<code class="sig-name descname">upload_dir</code><span class="sig-paren">(</span><em class="sig-param">dir_path</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.manager.utils.clients.NexusFileClient.upload_dir" title="Permalink to this definition">¶</a></dt>
 <dd><p>Upload the <code class="docutils literal notranslate"><span class="pre">dir_path</span></code> to this current directory by first removing all the content then placing the uploaded
 file.</p>
 <dl class="field-list simple">
