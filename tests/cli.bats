@@ -74,6 +74,38 @@
   rm -rf local_remote_path
 }
 
+@test "pacco registry param_list" {
+  echo 'local_remote_path' | pacco remote add local_remote local
+  pacco registry add local_remote openssl os,version,obfuscation
+  result="$(pacco registry param_list local_remote openssl)"
+  [ "${result}" == "['obfuscation', 'os', 'version']" ]
+  pacco registry remove local_remote openssl
+  pacco remote remove local_remote
+  rm -rf local_remote_path
+}
+
+@test "pacco registry param_add" {
+  echo 'local_remote_path' | pacco remote add local_remote local
+  pacco registry add local_remote openssl os,version,obfuscation
+  pacco registry param_add local_remote openssl stdlib c++11
+  result="$(pacco registry param_list local_remote openssl)"
+  [ "${result}" == "['obfuscation', 'os', 'stdlib', 'version']" ]
+  pacco registry remove local_remote openssl
+  pacco remote remove local_remote
+  rm -rf local_remote_path
+}
+
+@test "pacco registry param_remove" {
+  echo 'local_remote_path' | pacco remote add local_remote local
+  pacco registry add local_remote openssl os,version,obfuscation
+  pacco registry param_remove local_remote openssl os
+  result="$(pacco registry param_list local_remote openssl)"
+  [ "${result}" == "['obfuscation', 'version']" ]
+  pacco registry remove local_remote openssl
+  pacco remote remove local_remote
+  rm -rf local_remote_path
+}
+
 @test "pacco binary upload" {
   echo 'local_remote_path' | pacco remote add local_remote local
   pacco registry add local_remote openssl os,version,obfuscation

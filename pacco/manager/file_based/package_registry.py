@@ -1,77 +1,24 @@
-from __future__ import annotations
-
-import os
 import random
 import re
 import string
-from typing import List, Optional, Dict, Callable
 
-from pacco.classes_interface import PackageManager, PackageRegistry, PackageBinary
-from pacco.clients import FileBasedClientAbstract
+from typing import Optional, List, Dict, Callable
 
-
-class PackageManagerFileBased(PackageManager):
-    """
-    An implementation of the PackageManager interface
-
-    Examples:
-        >>> from pacco.clients import LocalClient, NexusFileClient
-        >>> client = LocalClient(clean=True)
-        >>> if 'NEXUS_URL' in os.environ: client = NexusFileClient(os.environ['NEXUS_URL'], 'admin', 'admin123', clean=True)
-        >>> pm = PackageManagerFileBased(client)
-        >>> pm.list_package_registries()
-        []
-        >>> pm.add_package_registry('openssl', ['os', 'compiler', 'version'])
-        >>> pm.add_package_registry('boost', ['os', 'target', 'type'])
-        >>> pm.add_package_registry('openssl', ['os', 'compiler', 'version'])
-        Traceback (most recent call last):
-            ...
-        FileExistsError: The package registry openssl is already found
-        >>> pm.list_package_registries()
-        ['boost', 'openssl']
-        >>> pm.remove_package_registry('openssl')
-        >>> pm.list_package_registries()
-        ['boost']
-        >>> pm.get_package_registry('boost')
-        PR[boost, os, target, type]
-    """
-    def __init__(self, client: FileBasedClientAbstract):
-        if not isinstance(client, FileBasedClientAbstract):
-            raise TypeError("Must be using FileBasedClient")
-        super(PackageManagerFileBased, self).__init__(client)
-
-    def list_package_registries(self) -> List[str]:
-        return sorted(self.client.ls())
-
-    def remove_package_registry(self, name: str) -> None:
-        self.client.rmdir(name)
-
-    def add_package_registry(self, name: str, params: List[str]) -> None:
-        dirs = self.client.ls()
-        if name in dirs:
-            raise FileExistsError("The package registry {} is already found".format(name))
-        self.client.mkdir(name)
-        PackageRegistryFileBased(name, self.client.dispatch_subdir(name), params)
-        return
-
-    def get_package_registry(self, name: str) -> PackageRegistryFileBased:
-        dirs = self.client.ls()
-        if name not in dirs:
-            raise FileNotFoundError("The package registry {} is not found".format(name))
-        return PackageRegistryFileBased(name, self.client.dispatch_subdir(name))
-
-    def __repr__(self):
-        return "PackageManagerObject"
+from pacco.manager.utils.clients import FileBasedClientAbstract
+from pacco.manager.file_based.package_binary import PackageBinaryFileBased
+from pacco.manager.interfaces.package_registry import PackageRegistryInterface
 
 
-class PackageRegistryFileBased(PackageRegistry):
+class PackageRegistryFileBased(PackageRegistryInterface):
     """
     An implementation of the PackageRegistry interface
 
     Examples:
-        >>> from pacco.clients import LocalClient, NexusFileClient
+        >>> from pacco.manager.utils.clients import LocalClient, NexusFileClient
         >>> client = LocalClient(clean=True)
+        >>> import os
         >>> if 'NEXUS_URL' in os.environ: client = NexusFileClient(os.environ['NEXUS_URL'], 'admin', 'admin123', clean=True)
+        >>> from pacco.manager.file_based.package_manager import PackageManagerFileBased
         >>> pm = PackageManagerFileBased(client)
         >>> pm.add_package_registry('openssl', ['os', 'compiler', 'version'])
         >>> pr = pm.get_package_registry('openssl')
@@ -97,17 +44,17 @@ class PackageRegistryFileBased(PackageRegistry):
         >>> pr.get_package_binary({'os':'linux', 'compiler':'gcc', 'version':'1.0'})
         PackageBinaryObject
         >>> pr.add_package_binary({'os':'linux', 'compiler':'g++', 'version':'1.0'})
-        >>> pr.delete_param('compiler')
+        >>> pr.param_remove('compiler')
         Traceback (most recent call last):
         ...
         NameError: Cannot remove parameter compiler since it will cause two binary to have the same value
-        >>> pr.append_param('stdlib', default_value='c++11')
+        >>> pr.param_add('stdlib', default_value='c++11')
         >>> pr
         PR[openssl, compiler, os, stdlib, version]
         >>> old_assignment = {'os':'linux', 'compiler':'g++', 'version':'1.0', 'stdlib': 'c++11'}
         >>> new_assignment = {'os':'linux', 'compiler':'g++', 'version':'1.0', 'stdlib': 'static_c++'}
         >>> pr.reassign_binary(old_assignment, new_assignment)
-        >>> pr.delete_param('compiler')
+        >>> pr.param_remove('compiler')
         >>> pr
         PR[openssl, os, stdlib, version]
     """
@@ -116,12 +63,13 @@ class PackageRegistryFileBased(PackageRegistry):
     def __init__(self, name: str, client: FileBasedClientAbstract, params: Optional[List[str]] = None):
         if not isinstance(client, FileBasedClientAbstract):
             raise TypeError("Must be using FileBasedClient")
-        super(PackageRegistryFileBased, self).__init__(name, client, params)
+        self.client = client
+        super(PackageRegistryFileBased, self).__init__(name, params)
 
         remote_params = self.__get_remote_params()
         if params is None and remote_params is None:
-            raise FileNotFoundError("you need to declare params if you are adding, if you are getting, this"
-                                    "means that the package registry is not properly set, you need to delete and"
+            raise FileNotFoundError("you need to declare params if you are adding. if you are getting, this "
+                                    "means that the package registry is not properly set, you need to delete and "
                                     "add again")
         elif remote_params is not None:  # ignore the passed params and use the remote one
             self.params = remote_params
@@ -215,7 +163,9 @@ class PackageRegistryFileBased(PackageRegistry):
         return PackageBinaryFileBased(
             self.client.dispatch_subdir(
                 self.__get_serialized_assignment_to_wrapper_mapping()[serialized_assignment]
-            )
+            ),
+            registry_name=self.name,
+            assignment=assignment,
         )
 
     def __rename_serialized_assignment(self, action: Callable[[Dict[str, str]], None]):
@@ -228,7 +178,10 @@ class PackageRegistryFileBased(PackageRegistry):
             sub_client.mkdir(new_serialized_assignment)
             sub_client.rmdir(serialized_assignment)
 
-    def append_param(self, name: str, default_value: Optional[str] = "default") -> None:
+    def param_list(self) -> List[str]:
+        return self.params
+
+    def param_add(self, name: str, default_value: Optional[str] = "default") -> None:
         if name in self.params:
             raise ValueError("{} already in params".format(name))
 
@@ -238,7 +191,7 @@ class PackageRegistryFileBased(PackageRegistry):
 
         self.__rename_serialized_assignment(lambda x: x.update({name: default_value}))
 
-    def delete_param(self, name: str) -> None:
+    def param_remove(self, name: str) -> None:
         if name not in self.params:
             raise ValueError("{} not in params".format(name))
 
@@ -249,7 +202,7 @@ class PackageRegistryFileBased(PackageRegistry):
             new_serialized_assignment = PackageRegistryFileBased.__serialize_assignment(assignment)
             if new_serialized_assignment in new_set_of_serialized_assignment:
                 raise NameError("Cannot remove parameter {} since it will cause "
-                                 "two binary to have the same value".format(name))
+                                "two binary to have the same value".format(name))
             else:
                 new_set_of_serialized_assignment.add(new_serialized_assignment)
 
@@ -275,43 +228,3 @@ class PackageRegistryFileBased(PackageRegistry):
         sub_client = self.client.dispatch_subdir(mapping[serialized_old_assignment])
         sub_client.rmdir(serialized_old_assignment)
         sub_client.mkdir(serialized_new_assignment)
-
-
-class PackageBinaryFileBased(PackageBinary):
-    """
-    An implementation of the PackageBinary interface
-
-    Examples:
-        >>> from pacco.clients import LocalClient, NexusFileClient
-        >>> client = LocalClient(clean=True)
-        >>> if 'NEXUS_URL' in os.environ: client = NexusFileClient(os.environ['NEXUS_URL'], 'admin', 'admin123', clean=True)
-        >>> pm = PackageManagerFileBased(client)
-        >>> pm.add_package_registry('openssl', ['os', 'compiler', 'version'])
-        >>> pr = pm.get_package_registry('openssl')
-        >>> pr.add_package_binary({'os':'osx', 'compiler':'clang', 'version':'1.0'})
-        >>> pb = pr.get_package_binary({'os':'osx', 'compiler':'clang', 'version':'1.0'})
-        >>> import os, shutil
-        >>> os.makedirs('testfolder', exist_ok=True)
-        >>> open('testfolder/testfile', 'w').close()
-        >>> pb.upload_content('testfolder')
-        >>> __ = shutil.move('testfolder/testfile', 'testfolder/testfile2')
-        >>> pb_get = pr.get_package_binary({'os':'osx', 'compiler':'clang', 'version':'1.0'})  # use a new reference
-        >>> pb_get.download_content('testfolder')
-        >>> sorted(os.listdir('testfolder'))
-        ['testfile', 'testfile2']
-        >>> shutil.rmtree('testfolder')
-    """
-
-    def __init__(self, client: FileBasedClientAbstract):
-        if not isinstance(client, FileBasedClientAbstract):
-            raise TypeError("Must be using FileBasedClient")
-        super(PackageBinaryFileBased, self).__init__(client)
-
-    def __repr__(self):
-        return "PackageBinaryObject"
-
-    def download_content(self, download_dir_path: str) -> None:
-        self.client.download_dir(download_dir_path)
-
-    def upload_content(self, dir_path: str) -> None:
-        self.client.upload_dir(dir_path)

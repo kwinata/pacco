@@ -2,5 +2,5 @@
 Remote Manager
 **************
 
-.. automodule:: pacco.remote_manager
+.. automodule:: pacco.manager.remote_manager
    :members:
