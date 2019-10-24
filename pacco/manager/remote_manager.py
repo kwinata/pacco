@@ -6,8 +6,8 @@ from typing import Dict, List, Optional
 
 import yaml
 
-from pacco.manager.file_based.remote import LocalRemote, NexusSiteRemote
 from pacco.manager.interfaces.package_manager import PackageManagerInterface
+from pacco.manager.remote_factory import instantiate_remote
 
 ALLOWED_REMOTE_TYPES = [
     'local',
@@ -62,7 +62,7 @@ class RemoteManager:
             remotes_serialized = pacco_config['remotes']
             default_remotes = pacco_config['default']
 
-            remotes = {name: RemoteManager.__instantiate_remote(name, remotes_serialized[name])
+            remotes = {name: instantiate_remote(name, remotes_serialized[name])
                        for name in remotes_serialized}
 
             self.remotes = remotes
@@ -79,17 +79,6 @@ class RemoteManager:
         serialized_remotes = {name: self.remotes[name].serialize() for name in self.remotes}
         with open(self.__pacco_config, "w") as f:
             yaml.dump({'remotes': serialized_remotes, 'default': self.default_remotes}, stream=f)
-
-    @staticmethod
-    def __instantiate_remote(name: str, serialized):
-        if serialized['remote_type'] == 'local':
-            return LocalRemote.create(name, serialized)
-        elif serialized['remote_type'] == 'nexus_site':
-            return NexusSiteRemote.create(name, serialized)
-        else:
-            raise ValueError("The remote_type {} is not supported, currently only supports [{}]".format(
-                serialized['remote_type'], ", ".join(['local', 'nexus_site'])
-            ))
 
     def get_remote(self, name: str) -> PackageManagerInterface:
         """
@@ -136,7 +125,7 @@ class RemoteManager:
         """
         if name in self.list_remote():
             raise NameError("The remote with name {} already exists".format(name))
-        self.remotes[name] = RemoteManager.__instantiate_remote(name, configuration)
+        self.remotes[name] = instantiate_remote(name, configuration)
 
     def remove_remote(self, name: str) -> None:
         """
@@ -183,6 +172,7 @@ class RemoteManager:
             package_name: package registry name of the binary
             assignment: the dictionary of the binary configuration
             dir_path: the download destination
+            fresh_download: will not use cache if True
         Examples:
             >>> import os
             >>> __ = os.system("rm -f ~/.pacco_config")

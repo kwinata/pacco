@@ -1,122 +1,81 @@
-import argparse
-import inspect
 import re
-from typing import Callable, Dict
 
-from pacco.cli import utils
-from pacco.cli.output_stream import OutputStream
-from pacco.manager.remote_manager import RemoteManager
+from pacco.cli.commands.utils.command_abstract import CommandAbstract
 
 
-class Registry:
-    def __init__(self, output: OutputStream, remote_manager: RemoteManager):
-        self.__out = output
-        self.__rm = remote_manager
-
-    def run(self, *args):
-        """
-        Entry point for executing commands, dispatcher to class methods.
-        """
-        if not args:
-            self.__show_help()
-            return
-        command = args[0]
-        remaining_args = args[1:]
-        commands = self.__get_commands()
-        if command not in commands:
-            if command in ["-h", "--help"]:
-                self.__show_help()
-                return
-            self.__out.writeln(
-                "'pacco registry {}' is an invalid command. See 'pacco registry --help'.".format(command),
-                error=True)
-            return
-        method = commands[command]
-        method(*remaining_args)
-
-    def __get_commands(self) -> Dict[str, Callable]:
-        result = {}
-        for method_name, method in inspect.getmembers(self, predicate=inspect.ismethod):
-            if not method_name.startswith('_') and method_name not in ["run"]:
-                result[method_name] = method
-        return result
-
-    def __show_help(self):
-        commands = self.__get_commands()
-        utils.show_help(self.__get_commands(), 'registry', self.__out)
-
+class Registry(CommandAbstract):
     def list(self, *args):
         """
         List registries of a remote.
         """
-        parser = argparse.ArgumentParser(prog="pacco registry list")
+        parser = self.init_parser('list')
         parser.add_argument("remote", help="remote name")
         parsed_args = parser.parse_args(args)
-        pm = self.__rm.get_remote(parsed_args.remote)
-        self.__out.writeln(pm.list_package_registries())
+        pm = self.rm.get_remote(parsed_args.remote)
+        self.out.writeln(pm.list_package_registries())
 
     def add(self, *args):
         """
         Add registry to remote.
         """
-        parser = argparse.ArgumentParser(prog="pacco registry add")
+        parser = self.init_parser('add')
         parser.add_argument("remote", help="remote name")
         parser.add_argument("name", help="registry name")
         parser.add_argument("settings", help="settings key (e.g. os,version,obfuscation)")
         parsed_args = parser.parse_args(args)
         if not re.match(r"([(\w)-.]+,)*([(\w)-.]+),?", parsed_args.settings):
             raise ValueError("Settings must be in the form of ([(\\w)-.]+,)*([(\\w)-.]+),?")
-        pm = self.__rm.get_remote(parsed_args.remote)
+        pm = self.rm.get_remote(parsed_args.remote)
         pm.add_package_registry(parsed_args.name, parsed_args.settings.split(","))
 
     def remove(self, *args):
         """
         Remove a registry from a specific remote.
         """
-        parser = argparse.ArgumentParser(prog="pacco registry remove")
+        parser = self.init_parser('remove')
         parser.add_argument("remote", help="remote name")
         parser.add_argument("name", help="registry name")
         parsed_args = parser.parse_args(args)
-        pm = self.__rm.get_remote(parsed_args.remote)
+        pm = self.rm.get_remote(parsed_args.remote)
         pm.remove_package_registry(parsed_args.name)
 
     def binaries(self, *args):
         """
         List binaries of a registry from a specific remote.
         """
-        parser = argparse.ArgumentParser(prog="pacco registry binaries")
+        parser = self.init_parser('binaries')
         parser.add_argument("remote", help="remote name")
         parser.add_argument("name", help="registry name")
         parsed_args = parser.parse_args(args)
-        pm = self.__rm.get_remote(parsed_args.remote)
+        pm = self.rm.get_remote(parsed_args.remote)
         pr = pm.get_package_registry(parsed_args.name)
-        self.__out.writeln(pr.list_package_binaries())
+        self.out.writeln(pr.list_package_binaries())
 
     def param_list(self, *args):
         """
         List params of a registry.
         """
-        parser = argparse.ArgumentParser(prog="pacco registry param_list")
+        parser = self.init_parser('param_list')
         parser.add_argument("remote", help="remote name")
         parser.add_argument("name", help="registry name")
 
         parsed_args = parser.parse_args(args)
-        pm = self.__rm.get_remote(parsed_args.remote)
+        pm = self.rm.get_remote(parsed_args.remote)
         pr = pm.get_package_registry(parsed_args.name)
-        self.__out.writeln(pr.param_list())
+        self.out.writeln(pr.param_list())
 
     def param_add(self, *args):
         """
         Add new parameter with default value to the binaries.
         """
-        parser = argparse.ArgumentParser(prog="pacco registry param_add")
+        parser = self.init_parser('param_add')
         parser.add_argument("remote", help="remote name")
         parser.add_argument("name", help="registry name")
         parser.add_argument("param_name", help="the new param name to be added")
         parser.add_argument("default_value", help="the default_value assigned to the new param")
 
         parsed_args = parser.parse_args(args)
-        pm = self.__rm.get_remote(parsed_args.remote)
+        pm = self.rm.get_remote(parsed_args.remote)
         pr = pm.get_package_registry(parsed_args.name)
         pr.param_add(parsed_args.param_name, parsed_args.default_value)
 
@@ -124,12 +83,12 @@ class Registry:
         """
         Remove an existing parameter from all binaries.
         """
-        parser = argparse.ArgumentParser(prog="pacco registry remove_param")
+        parser = self.init_parser('param_remove')
         parser.add_argument("remote", help="remote name")
         parser.add_argument("name", help="registry name")
         parser.add_argument("param_name", help="the param name to be removed")
 
         parsed_args = parser.parse_args(args)
-        pm = self.__rm.get_remote(parsed_args.remote)
+        pm = self.rm.get_remote(parsed_args.remote)
         pr = pm.get_package_registry(parsed_args.name)
         pr.param_remove(parsed_args.param_name)

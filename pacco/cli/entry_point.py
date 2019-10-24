@@ -1,6 +1,6 @@
 import sys
 
-from pacco.cli.command_manager import main
+from pacco.cli.commands.pacco import main
 
 
 def run():

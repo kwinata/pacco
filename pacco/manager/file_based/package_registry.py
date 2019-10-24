@@ -4,7 +4,7 @@ import string
 
 from typing import Optional, List, Dict, Callable
 
-from pacco.client.clients import FileBasedClientAbstract
+from pacco.manager.utils.clients import FileBasedClientAbstract
 from pacco.manager.file_based.package_binary import PackageBinaryFileBased
 from pacco.manager.interfaces.package_registry import PackageRegistryInterface
 
@@ -14,7 +14,7 @@ class PackageRegistryFileBased(PackageRegistryInterface):
     An implementation of the PackageRegistry interface
 
     Examples:
-        >>> from pacco.client.clients import LocalClient, NexusFileClient
+        >>> from pacco.manager.utils.clients import LocalClient, NexusFileClient
         >>> client = LocalClient(clean=True)
         >>> import os
         >>> if 'NEXUS_URL' in os.environ: client = NexusFileClient(os.environ['NEXUS_URL'], 'admin', 'admin123', clean=True)

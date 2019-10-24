@@ -9,18 +9,16 @@ class OutputStream:
     def writeln(self, data, error=False):
         self.write(data, newline=True, error=error)
 
-    def _write(self, data, newline=False):
+    def write(self, data, newline=False, error=False):
         if newline:
             data = "%s\n" % data
+        if error:
+            self._write_err(data)
+        else:
+            self._write(data)
+
+    def _write(self, data):
         self._stream.write(data)
 
-    def _write_err(self, data, newline=False):
-        if newline:
-            data = "%s\n" % data
+    def _write_err(self, data):
         self._stream_err.write(data)
-
-    def write(self, data, newline=False, error=False):
-        if error:
-            self._write_err(data, newline)
-        else:
-            self._write(data, newline)
