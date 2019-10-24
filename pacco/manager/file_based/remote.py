@@ -3,18 +3,17 @@ import os
 from typing import Dict, Optional
 
 from pacco.manager.file_based.package_manager import PackageManagerFileBased
-from pacco.manager.interfaces.remote import RemoteAbstract
+from pacco.manager.interfaces.remote import RemoteInterface
 from pacco.manager.utils.clients import LocalClient, NexusFileClient, FileBasedClientAbstract
 
 
-class RemoteFileBased(RemoteAbstract):
+class RemoteFileBased(RemoteInterface):
     def __init__(self, name: str, remote_type: str, client: FileBasedClientAbstract):
         self.client = client
-        self.package_manager = PackageManagerFileBased(client)
-        super(RemoteFileBased, self).__init__(name, remote_type)
+        super(RemoteFileBased, self).__init__(name, remote_type, PackageManagerFileBased(client))
 
     @staticmethod
-    def create(name: str, serialized: Dict[str, str]) -> RemoteAbstract:
+    def create(name: str, serialized: Dict[str, str]) -> RemoteInterface:
         raise NotImplementedError()
 
     def serialize(self) -> Dict[str, str]:
