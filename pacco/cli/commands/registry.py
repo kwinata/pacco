@@ -1,7 +1,7 @@
 import argparse
 import re
 
-from pacco.cli.command_abstract import CommandAbstract
+from pacco.cli.commands.utils.command_abstract import CommandAbstract
 
 
 class Registry(CommandAbstract):

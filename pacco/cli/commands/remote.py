@@ -1,6 +1,6 @@
 import argparse
 
-from pacco.cli.command_abstract import CommandAbstract
+from pacco.cli.commands.utils.command_abstract import CommandAbstract
 from pacco.manager.remote_manager import ALLOWED_REMOTE_TYPES
 
 
