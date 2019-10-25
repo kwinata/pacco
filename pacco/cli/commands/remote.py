@@ -30,7 +30,7 @@ class Remote(CommandAbstract):
             url = input("URL: ")
             username = input("Username: ")
             from getpass import getpass
-            password = getpass()
+            password = input("Password: ")
             self.rm.add_remote(parsed_args.name, {
                 "remote_type": "nexus_site",
                 "url": url,

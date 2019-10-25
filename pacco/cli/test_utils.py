@@ -1,0 +1,112 @@
+import os
+import shlex
+import subprocess
+from pathlib import Path
+
+
+class API:
+    @staticmethod
+    def __exec(command, input=None):
+        result = subprocess.run(
+            shlex.split(command),
+            input=input,
+            capture_output=True
+        )
+        if result.stderr:
+            raise ChildProcessError(result.stderr.decode())
+        return result.stdout.decode()
+
+    @staticmethod
+    def remote_list():
+        return API.__exec("pacco remote list")
+
+    @staticmethod
+    def remote_add(remote):
+        return API.__exec(
+            "pacco remote add {} {}".format(remote['name'], remote['type']),
+            input=remote['input'],
+        )
+
+    @staticmethod
+    def remote_remove(remote):
+        return API.__exec("pacco remote remove {}".format(remote['name']))
+
+    @staticmethod
+    def remote_list_default():
+        return API.__exec("pacco remote list_default")
+
+    @staticmethod
+    def remote_set_default(remote_names):
+        return API.__exec("pacco remote set_default" + "".join([" "+remote_name for remote_name in remote_names]))
+
+    @staticmethod
+    def registry_list(remote_name):
+        return API.__exec("pacco registry list {}".format(remote_name))
+
+    @staticmethod
+    def registry_add(remote, registry, params):
+        return API.__exec("pacco registry add {} {} {}".format(remote, registry, params))
+
+    @staticmethod
+    def registry_remove(remote, registry):
+        return API.__exec("pacco registry remove {} {}".format(remote, registry))
+
+    @staticmethod
+    def registry_binaries(remote, registry):
+        return API.__exec("pacco registry binaries {} {}".format(remote, registry))
+
+    @staticmethod
+    def registry_param_list(remote, registry):
+        return API.__exec("pacco registry param_list {} {}".format(remote, registry))
+
+    @staticmethod
+    def registry_param_add(remote, registry, new_param, default_value):
+        return API.__exec("pacco registry param_add {}".format(" ".join([remote, registry, new_param, default_value])))
+
+    @staticmethod
+    def registry_param_remove(remote, registry, obsolete_param):
+        return API.__exec("pacco registry param_remove {}".format(" ".join([remote, registry, obsolete_param])))
+
+
+class Settings:
+    __home_path = str(Path.home())
+    config_path = os.path.join(__home_path, ".pacco_config")
+    local_pacco_path = os.path.join(__home_path, ".pacco")
+
+    __nexus_url = os.getenv('NEXUS_URL', None)
+    if not __nexus_url:
+        raise EnvironmentError("Please set NEXUS_URL environment variable")
+    __nexus_username = os.getenv('NEXUS_USERNAME', 'admin')
+    __nexus_password = os.getenv('NEXUS_PASSWORD', 'admin123')  # default in nexus2
+
+    remotes = [
+        {
+            'name': 'local',
+            'type': 'local',
+            'input': b'\n',
+
+            # used by remote_factory
+            'remote_type': 'local',
+            'path': '',
+        },
+        {
+            'name': 'local-with-path',
+            'type': 'local',
+            'input': b'__test_path\n',
+
+            # used by remote_factory
+            'remote_type': 'local',
+            'path': '__test_path',
+        },
+        {
+            'name': 'nexus-remote',
+            'type': 'nexus_site',
+            'input': str.encode('{}\n{}\n{}\n'.format(__nexus_url, __nexus_username, __nexus_password)),
+
+            # used by remote_factory
+            'remote_type': 'nexus_site',
+            'url': __nexus_url,
+            'username': __nexus_username,
+            'password': __nexus_password,
+        },
+    ]
