@@ -74,8 +74,8 @@ class Settings:
     local_pacco_path = os.path.join(__home_path, ".pacco")
 
     __nexus_url = os.getenv('NEXUS_URL', None)
-    if not __nexus_url:
-        raise EnvironmentError("Please set NEXUS_URL environment variable")
+    # if not __nexus_url:
+    #     raise EnvironmentError("Please set NEXUS_URL environment variable")
     __nexus_username = os.getenv('NEXUS_USERNAME', 'admin')
     __nexus_password = os.getenv('NEXUS_PASSWORD', 'admin123')  # default in nexus2
 
@@ -98,15 +98,15 @@ class Settings:
             'remote_type': 'local',
             'path': '__test_path',
         },
-        {
-            'name': 'nexus-remote',
-            'type': 'nexus_site',
-            'input': str.encode('{}\n{}\n{}\n'.format(__nexus_url, __nexus_username, __nexus_password)),
-
-            # used by remote_factory
-            'remote_type': 'nexus_site',
-            'url': __nexus_url,
-            'username': __nexus_username,
-            'password': __nexus_password,
-        },
+        # {
+        #     'name': 'nexus-remote',
+        #     'type': 'nexus_site',
+        #     'input': str.encode('{}\n{}\n{}\n'.format(__nexus_url, __nexus_username, __nexus_password)),
+        #
+        #     # used by remote_factory
+        #     'remote_type': 'nexus_site',
+        #     'url': __nexus_url,
+        #     'username': __nexus_username,
+        #     'password': __nexus_password,
+        # },
     ]
