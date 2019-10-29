@@ -67,6 +67,24 @@ class API:
     def registry_param_remove(remote, registry, obsolete_param):
         return API.__exec("pacco registry param_remove {}".format(" ".join([remote, registry, obsolete_param])))
 
+    @staticmethod
+    def binary_upload(remote, registry, path, assignment):
+        return API.__exec("pacco binary upload {} {} {} {}".format(
+            remote, registry, path, assignment
+        ))
+
+    @staticmethod
+    def binary_download(remote, registry, path, assignment):
+        return API.__exec("pacco binary download {} {} {} {}".format(
+            remote, registry, path, assignment
+        ))
+
+    @staticmethod
+    def binary_remove(remote, registry, assignment):
+        return API.__exec("pacco binary remove {} {} {}".format(
+            remote, registry, assignment
+        ))
+
 
 class Settings:
     __home_path = str(Path.home())

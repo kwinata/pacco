@@ -75,17 +75,6 @@ class TestRegistry(PaccoTest):
         API.registry_remove(remote['name'], registry)
         self.check_registry_list(remote['name'], [])
 
-    @pytest.mark.parametrize("params,assignment",
-                             [('version,os,compiler', 'version=v1.2.3,os=ubuntu_16.04,compiler=g++'),
-                              pytest.param('version,os,compiler', 'version=v1,compiler=g++', marks=pytest.mark.xfail),
-                              pytest.param('version,os', 'version=v1,os=osx,compiler=g++', marks=pytest.mark.xfail),
-                              ('version,os', 'os=ubuntu_16.04,version=v1.2.3'),
-                              ('version,os', 'os=ubuntu_16.04,version=v1.2.3,'),
-                              ])
-    @pytest.mark.skip(reason="must wait for binary API")
-    def test_registry_binaries(self, remote, registry, params, assignment):
-        pass
-
     def test_registry_param_list(self, remote, registry):
         params = 'version,os,compiler'
         API.registry_add(remote['name'], registry, params)
@@ -114,3 +103,62 @@ class TestRegistry(PaccoTest):
         params = params.split(',')
         params.remove(obsolete_param)
         assert API.registry_param_list(remote['name'], registry) == self.format_list(sorted(params))
+
+
+@pytest.fixture(scope="function")
+def binary(remote, registry):
+    API.registry_add(remote['name'], "openssl", "os,version")
+    os.makedirs('openssl_upload_dir', exist_ok=True)
+    open("openssl_upload_dir/sample.a", "w").close()
+    params = 'os,version'.split(',')
+    yield {
+        'remote': remote['name'],
+        'registry': 'openssl',
+        'params': params,
+        'path': 'openssl_upload_dir',
+        'assignment_example': ",".join(["{}=test_value".format(param) for param in params]),
+    }
+    shutil.rmtree('openssl_upload_dir')
+
+
+class TestBinary(PaccoTest):
+    def check_binaries(self, remote_name, registry_name, expected_binaries):
+        assert API.registry_binaries(remote_name, registry_name) == self.format_list(sorted(expected_binaries))
+
+    def test_binary_upload(self, binary):
+        API.binary_upload(
+            binary['remote'],
+            binary['registry'],
+            binary['path'],
+            binary['assignment_example'],
+        )
+        self.check_binaries(binary['remote'], binary['registry'], [binary['assignment_example']])
+
+    def test_binary_download(self, binary):
+        API.binary_upload(
+            binary['remote'],
+            binary['registry'],
+            binary['path'],
+            binary['assignment_example'],
+        )
+        API.binary_download(
+            binary['remote'],
+            binary['registry'],
+            'openssl_download_path',
+            binary['assignment_example'],
+        )
+        assert os.path.isfile('openssl_download_path/sample.a')
+
+    def test_binary_remove(self, binary):
+        API.binary_upload(
+            binary['remote'],
+            binary['registry'],
+            binary['path'],
+            binary['assignment_example'],
+        )
+        API.binary_remove(
+            binary['remote'],
+            binary['registry'],
+            binary['assignment_example'],
+        )
+        self.check_binaries(binary['remote'], binary['registry'], [])
