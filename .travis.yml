@@ -15,7 +15,6 @@ before_script:
 
 script:
   - pytest pacco/cli/tests.py --cov=pacco --cov-config=.coveragerc
-  - coverage report -m
   - pytest --doctest-modules --cov=pacco --cov-append --cov-config=.coveragerc --cov-report xml
   - coverage report -m
 
