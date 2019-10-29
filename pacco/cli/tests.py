@@ -127,22 +127,21 @@ class TestBinary(PaccoTest):
     def check_binaries(self, remote_name, registry_name, expected_binaries):
         assert API.registry_binaries(remote_name, registry_name) == self.format_list(sorted(expected_binaries))
 
-    def test_binary_upload(self, binary):
+    @staticmethod
+    def __upload_binary(binary):
         API.binary_upload(
             binary['remote'],
             binary['registry'],
             binary['path'],
             binary['assignment_example'],
         )
+
+    def test_binary_upload(self, binary):
+        TestBinary.__upload_binary(binary)
         self.check_binaries(binary['remote'], binary['registry'], [binary['assignment_example']])
 
     def test_binary_download(self, binary):
-        API.binary_upload(
-            binary['remote'],
-            binary['registry'],
-            binary['path'],
-            binary['assignment_example'],
-        )
+        TestBinary.__upload_binary(binary)
         API.binary_download(
             binary['remote'],
             binary['registry'],
@@ -152,12 +151,7 @@ class TestBinary(PaccoTest):
         assert os.path.isfile('openssl_download_path/sample.a')
 
     def test_binary_remove(self, binary):
-        API.binary_upload(
-            binary['remote'],
-            binary['registry'],
-            binary['path'],
-            binary['assignment_example'],
-        )
+        TestBinary.__upload_binary(binary)
         API.binary_remove(
             binary['remote'],
             binary['registry'],
@@ -168,12 +162,7 @@ class TestBinary(PaccoTest):
     def test_binary_reassign(self, binary):
         old_assignment = binary['assignment_example']
         new_assignment = binary['assignment_example'].replace('test_value', 'new_value')
-        API.binary_upload(
-            binary['remote'],
-            binary['registry'],
-            binary['path'],
-            old_assignment,
-        )
+        TestBinary.__upload_binary(binary)
         API.binary_reassign(
             binary['remote'],
             binary['registry'],
@@ -187,12 +176,7 @@ class TestBinary(PaccoTest):
         )
 
     def test_binary_get_location(self, binary):
-        API.binary_upload(
-            binary['remote'],
-            binary['registry'],
-            binary['path'],
-            binary['assignment_example'],
-        )
+        TestBinary.__upload_binary(binary)
         path = API.binary_get_location(
             binary['registry'],
             binary['assignment_example']
