@@ -35,7 +35,7 @@ If you run ``pacco remote -h`` you shall get something like::
   pacco remote set_default   Set default remote(s).
 
 We will use ``pacco remote add`` to set up a remote. Use ``pacco remote add -h`` to see the arguments needed.
-For now we will do ``pacco remote add docker-remote nexus_site``. It will ask you for further information needed.
+For now we will do ``pacco remote add docker-remote nexus_site http://localhost:8081/nexus/content/sites/pacco-remote/,admin,admin123``
 
 After you successfully added the remote, check it with ``pacco remote list``.
 
