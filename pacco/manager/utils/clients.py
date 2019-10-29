@@ -10,6 +10,7 @@ from pathlib import Path
 from typing import List, Optional
 
 import requests
+import urllib3
 from bs4 import BeautifulSoup
 
 
@@ -134,16 +135,31 @@ class NexusFileClient(FileBasedClientAbstract):
         self.__username = username
         self.__password = password
         self.__dummy_stream = io.StringIO(".pacco")
+        self.__connected = False
+        self.__bin_dir = self.__url + 'bin/'
 
-        resp = requests.post(url+".pacco", auth=(self.__username, self.__password), data=self.__dummy_stream)
-        if resp.status_code not in [200, 201, 204]:
-            raise ConnectionError("Connection seems failed, HTTP status code {}".format(resp.status_code))
-        self.__bin_dir = url + 'bin/'
+        self.__try_connect_nexus()
+        self.__clean()
 
-        if clean:
-            files_and_dirs = self.__ls_unformatted()
-            for name in files_and_dirs:
-                self.__rm(name)
+    def __clean(self):
+        if not self.__connected:
+            raise ConnectionError("Cannot clean if not connected")
+        files_and_dirs = self.__ls_unformatted()
+        for name in files_and_dirs:
+            self.__rm(name)
+
+    def __try_connect_nexus(self):
+        resp = None
+        try:
+            resp = requests.post(self.__url + ".pacco", auth=(self.__username, self.__password), data=self.__dummy_stream)
+        except requests.exceptions.ConnectionError:
+            pass
+        else:
+            self.__connected = True
+        finally:
+            if not self.__connected or resp.status_code not in [200, 201, 204]:
+                logging.warning("Connection to remote {} seems failed. "
+                                "But you can still use Pacco's cache".format(self.__url))
 
     @staticmethod
     def __validate_status_code(received: int, expected: List[int]) -> None:
