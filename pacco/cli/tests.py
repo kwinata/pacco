@@ -189,7 +189,7 @@ class TestBinary(PaccoTest):
                 binary['registry'],
                 binary['assignment_example']
             )
-        except ChildProcessError:
+        except FileNotFoundError:
             pass
         else:
             assert False

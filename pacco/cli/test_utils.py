@@ -1,20 +1,25 @@
+import io
 import os
 import shlex
 import subprocess
 from pathlib import Path
 
+from pacco.cli.commands.pacco import Pacco as PaccoMain
+from pacco.cli.commands.utils.output_stream import OutputStream
+from pacco.manager.remote_manager import RemoteManager
+
 
 class API:
     @staticmethod
-    def __exec(command, input=None):
-        result = subprocess.run(
-            shlex.split(command),
-            input=input,
-            capture_output=True
+    def __exec(command):
+        stream = io.StringIO()
+        stream_err = io.StringIO()
+        PaccoMain('', OutputStream(stream=stream, stream_err=stream_err), RemoteManager()).run(
+            *(shlex.split(command)[1:])
         )
-        if result.stderr:
-            raise ChildProcessError(result.stderr.decode())
-        return result.stdout.decode()
+        if stream_err.getvalue():
+            raise ChildProcessError(stream_err.getvalue())
+        return stream.getvalue()
 
     @staticmethod
     def remote_list():
@@ -23,8 +28,7 @@ class API:
     @staticmethod
     def remote_add(remote):
         return API.__exec(
-            "pacco remote add {} {}".format(remote['name'], remote['type']),
-            input=remote['input'],
+            "pacco remote add {} {} {}".format(remote['name'], remote['type'], ",".join(remote['args'])),
         )
 
     @staticmethod
@@ -114,7 +118,7 @@ class Settings:
         {
             'name': 'local',
             'type': 'local',
-            'input': b'\n',
+            'args': ['default'],
 
             # used by remote_factory
             'remote_type': 'local',
@@ -123,7 +127,7 @@ class Settings:
         {
             'name': 'local-with-path',
             'type': 'local',
-            'input': b'__test_path\n',
+            'args': ['__test_path'],
 
             # used by remote_factory
             'remote_type': 'local',
