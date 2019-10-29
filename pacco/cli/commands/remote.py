@@ -19,23 +19,24 @@ class Remote(CommandAbstract):
         parser = self.init_parser('add')
         parser.add_argument("name", help="remote name")
         parser.add_argument("type", help="remote type", choices=ALLOWED_REMOTE_TYPES)
+        parser.add_argument("args", help="remote args, for local, it's the path (can be empty), for"
+                                         "nexus_site, it's the url, username, and password as comma separated value")
         parsed_args = parser.parse_args(args)
         if parsed_args.type == "local":
-            path = input("Path (if empty, ~/.pacco/ will be used): ")
+            path = parsed_args.args
+            if path == 'default':
+                path = ''
             self.rm.add_remote(parsed_args.name, {
                 "remote_type": "local",
                 "path": path
             })
         elif parsed_args.type == "nexus_site":
-            url = input("URL: ")
-            username = input("Username: ")
-            from getpass import getpass
-            password = getpass()
+            nexus_args = parsed_args.args.split(',')
             self.rm.add_remote(parsed_args.name, {
                 "remote_type": "nexus_site",
-                "url": url,
-                "username": username,
-                "password": password
+                "url": nexus_args[0],
+                "username": nexus_args[1],
+                "password": nexus_args[2]
             })
 
     def remove(self, *args):

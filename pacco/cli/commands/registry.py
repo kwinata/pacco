@@ -49,7 +49,18 @@ class Registry(CommandAbstract):
         parsed_args = parser.parse_args(args)
         pm = self.rm.get_remote(parsed_args.remote)
         pr = pm.get_package_registry(parsed_args.name)
-        self.out.writeln(pr.list_package_binaries())
+        binaries = pr.list_package_binaries()
+        serialized_binaries = []
+        for binary in binaries:
+            serialized_binaries.append(
+                ",".join(sorted(
+                    [
+                        "{}={}".format(key, value)
+                        for key, value in binary.items()
+                    ]
+                ))
+            )
+        self.out.writeln(sorted(serialized_binaries))
 
     def param_list(self, *args):
         """

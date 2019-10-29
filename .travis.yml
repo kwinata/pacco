@@ -1,15 +1,12 @@
-# Disable sudo to speed up the build
-sudo: false
 
 language: python
 python: "3.7.5"
 
+
+
 install:
   - pip install pytest-cov
   - pip install .
-  - git clone https://github.com/sstephenson/bats.git
-  - ./bats/install.sh bats_installation
-  - export PATH=$PWD/bats_installation/bin:$PATH
 
 before_script:
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
@@ -17,9 +14,9 @@ before_script:
   - ./cc-test-reporter before-build
 
 script:
-  - pytest --doctest-modules --cov=pacco --cov-config=.coveragerc --cov-report xml
-  - rm -rf ~/.pacco ~/.pacco_config
-  - bats --tap tests/cli.bats
+  - pytest pacco/cli/tests.py --cov=pacco --cov-config=.coveragerc
+  - pytest --doctest-modules --cov=pacco --cov-append --cov-config=.coveragerc --cov-report xml
+  - coverage report -m
 
 after_script:
   - ./cc-test-reporter format-coverage -t coverage.py
