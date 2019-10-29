@@ -139,13 +139,14 @@ class NexusFileClient(FileBasedClientAbstract):
         self.__bin_dir = self.__url + 'bin/'
 
         self.__try_connect_nexus()
+        self.__clean()
 
-        if clean:
-            if not self.__connected:
-                raise ConnectionError("Cannot clean if not connected")
-            files_and_dirs = self.__ls_unformatted()
-            for name in files_and_dirs:
-                self.__rm(name)
+    def __clean(self):
+        if not self.__connected:
+            raise ConnectionError("Cannot clean if not connected")
+        files_and_dirs = self.__ls_unformatted()
+        for name in files_and_dirs:
+            self.__rm(name)
 
     def __try_connect_nexus(self):
         resp = None
