@@ -85,11 +85,24 @@ class API:
             remote, registry, assignment
         ))
 
+    @staticmethod
+    def binary_reassign(remote, registry, old_assignment, new_assignment):
+        return API.__exec("pacco binary reassign {} {} {} {}".format(
+            remote, registry, old_assignment, new_assignment,
+        ))
+
+    @staticmethod
+    def binary_get_location(registry, assignment):
+        return API.__exec("pacco binary get_location {} {}".format(
+            registry, assignment
+        ))
+
 
 class Settings:
     __home_path = str(Path.home())
     config_path = os.path.join(__home_path, ".pacco_config")
     local_pacco_path = os.path.join(__home_path, ".pacco")
+    cache_path = os.path.join(__home_path, ".pacco_cache")
 
     __nexus_url = os.getenv('NEXUS_URL', None)
     # if not __nexus_url:

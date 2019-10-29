@@ -98,7 +98,8 @@ class Binary(CommandAbstract):
                 self.out.write(Cache().get_path(parsed_args.registry_name, assignment))
                 return
             except ValueError:
-                logging.warning("The binary is not found in cache, will attemp fresh download")
+                logging.info("The binary is not found in cache, will attemp fresh download")
+        del assignment['__pacco_registry_name']
         download_path = os.path.join(str(Path.home()), '.pacco_tmp')
         self.rm.default_download(parsed_args.registry_name, assignment,
                                  download_path, fresh_download=parsed_args.fresh_download)

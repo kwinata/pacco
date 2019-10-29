@@ -13,6 +13,8 @@ class PaccoTest:
             os.remove(Settings.config_path)
         if os.path.exists(Settings.local_pacco_path):
             shutil.rmtree(Settings.local_pacco_path)
+        if os.path.exists(Settings.cache_path):
+            shutil.rmtree(Settings.cache_path)
 
     def teardown_method(self, method):
         self.setup_method(method)
@@ -162,3 +164,55 @@ class TestBinary(PaccoTest):
             binary['assignment_example'],
         )
         self.check_binaries(binary['remote'], binary['registry'], [])
+
+    def test_binary_reassign(self, binary):
+        old_assignment = binary['assignment_example']
+        new_assignment = binary['assignment_example'].replace('test_value', 'new_value')
+        API.binary_upload(
+            binary['remote'],
+            binary['registry'],
+            binary['path'],
+            old_assignment,
+        )
+        API.binary_reassign(
+            binary['remote'],
+            binary['registry'],
+            old_assignment,
+            new_assignment,
+        )
+        self.check_binaries(
+            binary['remote'],
+            binary['registry'],
+            [new_assignment]
+        )
+
+    def test_binary_get_location(self, binary):
+        API.binary_upload(
+            binary['remote'],
+            binary['registry'],
+            binary['path'],
+            binary['assignment_example'],
+        )
+        path = API.binary_get_location(
+            binary['registry'],
+            binary['assignment_example']
+        )
+        assert ".pacco_cache" in path
+        shutil.rmtree(Settings.cache_path)
+        API.remote_set_default([])
+        try:
+            API.binary_get_location(
+                binary['registry'],
+                binary['assignment_example']
+            )
+        except ChildProcessError:
+            pass
+        else:
+            assert False
+        API.remote_set_default([binary['remote']])
+        path = API.binary_get_location(
+            binary['registry'],
+            binary['assignment_example']
+        )
+        API.remote_set_default([])
+        assert ".pacco_cache" in path
