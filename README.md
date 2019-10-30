@@ -8,18 +8,18 @@
 
 Pacco is a simple package manager (used for prebuilt binary) that is interoperable with Nexus repository manager.
 
-## Usage
+## Documentation
 
-To download a registry, run `pacco download <registry> <path> <param=value> (<param=value> ...)`.
+Check out our documentation [here!](https://kwinata.github.io/pacco)
 
 ## Install
+For the latest stable release, install by
 ```
 pip install pacco
 ```
-
-## CLI Test
-
-You need to have [bats](https://github.com/sstephenson/bats) installed in order to run tests for CLI.
+For the dev release, install by
 ```
-bats tests/cli.bats
+git clone --single-branch --branch dev https://github.com/kwinata/pacco
+cd pacco
+pip install .
 ```
