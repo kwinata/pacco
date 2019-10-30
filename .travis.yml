@@ -24,6 +24,6 @@ after_script:
 
 deploy:
   provider: script
-  script: bash scripts/pypi_publish.sh
+  script: bash pypi_publish.sh
   on:
     branch: master
