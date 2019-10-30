@@ -139,7 +139,8 @@ class NexusFileClient(FileBasedClientAbstract):
         self.__bin_dir = self.__url + 'bin/'
 
         self.__try_connect_nexus()
-        self.__clean()
+        if clean:
+            self.__clean()
 
     def __clean(self):
         if not self.__connected:
