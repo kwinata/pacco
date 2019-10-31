@@ -8,7 +8,7 @@ from pacco.manager.utils.clients.webdav import WebDavClient
 
 clients = [
     LocalClient(clean=True),
-    NexusFileClient('http://localhost:8081/nexus/content/sites/pacco/', 'admin', 'admin123', clean=True),
+    # NexusFileClient('http://localhost:8081/nexus/content/sites/pacco/', 'admin', 'admin123', clean=True),
     WebDavClient('http://localhost/', 'pacco/', 'webdav', 'webdav', clean=True),
 ]
 @pytest.fixture(scope="function", params=clients)
