@@ -168,7 +168,7 @@ class TestBinary(PaccoTest):
     def test_binary_download(self, binary):
         TestBinary.__upload_binary(binary)
         if os.path.isdir('openssl_download_path'):
-            os.rmdir('openssl_download_path')
+            shutil.rmtree('openssl_download_path')
         API.binary_download(
             binary['remote'],
             binary['registry'],
