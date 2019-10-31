@@ -3,7 +3,7 @@ import logging
 from typing import Optional, Dict
 
 from pacco.manager.utils.cache import Cache
-from pacco.manager.utils.clients import FileBasedClientAbstract
+from pacco.manager.utils.clients.abstract import FileBasedClientAbstract
 from pacco.manager.interfaces.package_binary import PackageBinaryInterface
 
 
@@ -12,7 +12,8 @@ class PackageBinaryFileBased(PackageBinaryInterface):
     An implementation of the PackageBinary interface
 
     Examples:
-        >>> from pacco.manager.utils.clients import LocalClient, NexusFileClient
+        >>> from pacco.manager.utils.clients.local import LocalClient
+        >>> from pacco.manager.utils.clients.nexus import NexusFileClient
         >>> client = LocalClient(clean=True)
         >>> import os
         >>> if 'NEXUS_URL' in os.environ: client = NexusFileClient(os.environ['NEXUS_URL'], 'admin', 'admin123', clean=True)

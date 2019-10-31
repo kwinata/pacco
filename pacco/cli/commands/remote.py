@@ -38,6 +38,15 @@ class Remote(CommandAbstract):
                 "username": nexus_args[1],
                 "password": nexus_args[2]
             })
+        elif parsed_args.type == "webdav":
+            webdav_args = parsed_args.args.split(',')
+            self.rm.add_remote(parsed_args.name, {
+                "remote_type": "webdav",
+                "url": webdav_args[0],
+                "abspath": webdav_args[1],
+                "username": webdav_args[2],
+                "password": webdav_args[3]
+            })
 
     def remove(self, *args):
         """

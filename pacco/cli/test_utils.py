@@ -144,4 +144,16 @@ class Settings:
         #     'username': __nexus_username,
         #     'password': __nexus_password,
         # },
+        {
+            'name': 'webdav',
+            'type': 'webdav',
+            'args': ['http://localhost/', 'pacco/', 'webdav', 'webdav'],
+
+            # used by remote_factory
+            'remote_type': 'webdav',
+            'url': 'http://localhost/',
+            'abspath': 'pacco/',
+            'username': 'webdav',
+            'password': 'webdav'
+        },
     ]
