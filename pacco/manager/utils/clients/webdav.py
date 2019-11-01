@@ -10,11 +10,9 @@ import os
 import requests
 from numbers import Number
 import xml.etree.cElementTree as xmlTree
-from collections import namedtuple
 
 
 from http.client import responses as http_codes
-from urllib.parse import urlparse
 
 from pacco.manager.utils.clients.abstract import FileBasedClientAbstract
 
@@ -29,11 +27,8 @@ class ConnectionFailed(WebdavException):
     pass
 
 
-def codestr(code):
+def translate_http_code(code: int) -> str:
     return http_codes.get(code, 'UNKNOWN')
-
-
-File = namedtuple('File', ['name', 'size', 'mtime', 'ctime', 'contenttype'])
 
 
 def prop(elem, name, default=None):
@@ -41,14 +36,8 @@ def prop(elem, name, default=None):
     return default if child is None else child.text
 
 
-def elem2file(elem):
-    return File(
-        prop(elem, 'href'),
-        int(prop(elem, 'getcontentlength', 0)),
-        prop(elem, 'getlastmodified', ''),
-        prop(elem, 'creationdate', ''),
-        prop(elem, 'getcontenttype', ''),
-    )
+def elem_to_path(elem):
+    return prop(elem, 'href')
 
 
 class OperationFailed(WebdavException):
@@ -69,8 +58,8 @@ class OperationFailed(WebdavException):
         operation_name = self._OPERATIONS[method]
         self.reason = 'Failed to {operation_name} "{path}"'.format(**locals())
         expected_codes = (expected_code,) if isinstance(expected_code, Number) else expected_code
-        expected_codes_str = ", ".join('{0} {1}'.format(code, codestr(code)) for code in expected_codes)
-        actual_code_str = codestr(actual_code)
+        expected_codes_str = ", ".join('{0} {1}'.format(code, translate_http_code(code)) for code in expected_codes)
+        actual_code_str = translate_http_code(actual_code)
         msg = '''\
 {self.reason}.
   Operation     :  {method} {path}
@@ -116,7 +105,7 @@ class WebDavClient(FileBasedClientAbstract):
         response = self.__send('PROPFIND', '', 207, headers=headers)
         tree = xmlTree.fromstring(response.content)
         elems = tree.findall('{DAV:}response')
-        results = [elem2file(elem)[0] for elem in elems]
+        results = [elem_to_path(elem) for elem in elems]
         purged_result = []
         for result in results:
             if result.startswith('/'+self.__abspath):
@@ -135,8 +124,13 @@ class WebDavClient(FileBasedClientAbstract):
 
     def dispatch_subdir(self, name: str) -> WebDavClient:
         name = str(name).rstrip('/') + '/'
-        return WebDavClient(host=self.__host, abspath=self.__abspath+name, username=self.__username, password=self.__password,
-                            verify_ssl=self.session.verify, cert=self.session.cert)
+        return WebDavClient(host=self.__host,
+                            abspath=self.__abspath+name,
+                            username=self.__username,
+                            password=self.__password,
+                            verify_ssl=self.session.verify,
+                            cert=self.session.cert
+                            )
 
     def download_dir(self, download_path):
         self.dispatch_subdir('bin').__download_dir(download_path)
@@ -145,11 +139,11 @@ class WebDavClient(FileBasedClientAbstract):
         dirs_and_files = self.ls()
         os.makedirs(download_path, exist_ok=True)
         for file_name in dirs_and_files:
-            self.download(file_name, os.path.join(download_path, file_name), (200, 301))
+            self.__download_file(file_name, os.path.join(download_path, file_name), (200, 301))
 
     def upload_dir(self, upload_path):
         if 'bin' in self.ls():
-            self.delete('bin')
+            self.__delete('bin')
 
         prev_path = os.getcwd()
         os.chdir(upload_path)
@@ -159,37 +153,27 @@ class WebDavClient(FileBasedClientAbstract):
                     continue
                 logging.info("Uploading file {}".format(file_name))
                 with open(file_name, 'rb') as f:
-                    self.upload(file_name, 'bin/'+file_name)
+                    self.__upload(f, 'bin/' + file_name)
         except Exception as e:
             raise e
         finally:
             os.chdir(prev_path)
 
-    def delete(self, path):
+    def __delete(self, path):
         self.__send('DELETE', path, 204)
 
-    def upload(self, local_path_or_fileobj, remote_path):
-        if isinstance(local_path_or_fileobj, str):
-            with open(local_path_or_fileobj, 'rb') as f:
-                self._upload(f, remote_path)
-        else:
-            self._upload(local_path_or_fileobj, remote_path)
+    def __upload(self, file_obj, remote_path):
+        self.__send('PUT', remote_path, (200, 201, 204), data=file_obj)
 
-    def _upload(self, fileobj, remote_path):
-        self.__send('PUT', remote_path, (200, 201, 204), data=fileobj)
-
-    def download(self, remote_path, local_path_or_fileobj, expected_code=200):
+    def __download_file(self, remote_path, local_path_or_file_obj, expected_code):
         response = self.__send('GET', remote_path, expected_code, stream=True)
-        if isinstance(local_path_or_fileobj, str):
-            with open(local_path_or_fileobj, 'wb') as f:
-                self._download(f, response)
+        if isinstance(local_path_or_file_obj, str):
+            with open(local_path_or_file_obj, 'wb') as f:
+                WebDavClient.__write_download(f, response)
         else:
-            self._download(local_path_or_fileobj, response)
+            WebDavClient.__write_download(local_path_or_file_obj, response)
 
-    def _download(self, fileobj, response):
+    @staticmethod
+    def __write_download(file_obj, response):
         for chunk in response.iter_content(DOWNLOAD_CHUNK_SIZE_BYTES):
-            fileobj.write(chunk)
-
-    def exists(self, remote_path):
-        response = self.__send('HEAD', remote_path, (200, 301, 404))
-        return True if response.status_code != 404 else False
+            file_obj.write(chunk)
