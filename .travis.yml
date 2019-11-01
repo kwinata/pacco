@@ -23,7 +23,7 @@ before_install:
   - docker run -d -p 8081:8081 --name nexus -v $HOME/nexus-travis:/sonatype-work sonatype/nexus
   - docker pull sashgorokhov/webdav
   - docker run --name webdav -p 80:80 -v /media:/media -d sashgorokhov/webdav
-  - sleep 30
+  - sleep 60
   - docker logs webdav
   - docker logs nexus
   - docker logs nexus3
