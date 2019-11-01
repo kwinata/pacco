@@ -115,35 +115,6 @@ class Settings:
     __nexus_password = os.getenv('NEXUS_PASSWORD', 'admin123')  # default in nexus2
 
     remotes = [
-        # {
-        #     'name': 'local',
-        #     'type': 'local',
-        #     'args': ['default'],
-        #
-        #     # used by remote_factory
-        #     'remote_type': 'local',
-        #     'path': '',
-        # },
-        # {
-        #     'name': 'local-with-path',
-        #     'type': 'local',
-        #     'args': ['__test_path'],
-        #
-        #     # used by remote_factory
-        #     'remote_type': 'local',
-        #     'path': '__test_path',
-        # },
-        # {
-        #     'name': 'nexus-remote',
-        #     'type': 'nexus_site',
-        #     'input': str.encode('{}\n{}\n{}\n'.format(__nexus_url, __nexus_username, __nexus_password)),
-        #
-        #     # used by remote_factory
-        #     'remote_type': 'nexus_site',
-        #     'url': __nexus_url,
-        #     'username': __nexus_username,
-        #     'password': __nexus_password,
-        # },
         {
             'name': 'webdav',
             'type': 'webdav',
@@ -155,5 +126,34 @@ class Settings:
             'abspath': 'pacco/',
             'username': 'webdav',
             'password': 'webdav'
+        },
+        {
+            'name': 'local',
+            'type': 'local',
+            'args': ['default'],
+
+            # used by remote_factory
+            'remote_type': 'local',
+            'path': '',
+        },
+        {
+            'name': 'local-with-path',
+            'type': 'local',
+            'args': ['__test_path'],
+
+            # used by remote_factory
+            'remote_type': 'local',
+            'path': '__test_path',
+        },
+        {
+            'name': 'nexus-remote',
+            'type': 'nexus_site',
+            'args': [__nexus_url, __nexus_username, __nexus_password],
+
+            # used by remote_factory
+            'remote_type': 'nexus_site',
+            'url': __nexus_url,
+            'username': __nexus_username,
+            'password': __nexus_password,
         },
     ]
