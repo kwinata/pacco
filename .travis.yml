@@ -11,20 +11,25 @@ env:
 
 
 before_install:
+  - tar -xvf pacco-nexus.tar.gz
+  - tar -xvf pacco-nexus3.tar.gz
+  - mv nexus-travis ~/nexus-travis
+  - mv nexus3-travis ~/nexus3-travis
+  - sudo chown -R 200 ~/nexus-travis
+  - sudo chown -R 200 ~/nexus3-travis
+  - docker pull sonatype/nexus3
+  - docker run -d -p 8082:8081 --name nexus3 -v $HOME/nexus3-travis:/nexus-data sonatype/nexus
+  - docker pull sonatype/nexus
+  - docker run -d -p 8081:8081 --name nexus -v $HOME/nexus-travis:/sonatype-work sonatype/nexus
   - docker pull sashgorokhov/webdav
   - docker run --name webdav -p 80:80 -v /media:/media -d sashgorokhov/webdav
-  - sleep 5
-  - docker pull sonatype/nexus
-  - tar -xvf pacco-nexus.tar.gz
-  - mv nexus-travis ~/nexus-travis
-  - sudo chown -R 200 ~/nexus-travis
-  - docker run -d -p 8081:8081 --name nexus -v $HOME/nexus-travis:/sonatype-work sonatype/nexus
-  - sleep 60
+  - sleep 30
+  - docker logs webdav
   - docker logs nexus
+  - docker logs nexus3
+  - curl localhost --user webdav:webdav
   - curl http://localhost:8081/nexus/content/sites/pacco/
-
-
-
+  - curl http://localhost:8082/service/rest/repository/browse/pacco/
 
 
 install:
