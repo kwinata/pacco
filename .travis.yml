@@ -33,4 +33,4 @@ deploy:
   provider: script
   script: bash scripts/pypi_publish.sh
   on:
-    branch: master
+    branch: release
