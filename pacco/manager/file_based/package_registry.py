@@ -4,7 +4,7 @@ import string
 
 from typing import Optional, List, Dict, Callable
 
-from pacco.manager.utils.clients import FileBasedClientAbstract
+from pacco.manager.utils.clients.abstract import FileBasedClientAbstract
 from pacco.manager.file_based.package_binary import PackageBinaryFileBased
 from pacco.manager.interfaces.package_registry import PackageRegistryInterface
 
@@ -14,10 +14,13 @@ class PackageRegistryFileBased(PackageRegistryInterface):
     An implementation of the PackageRegistry interface
 
     Examples:
-        >>> from pacco.manager.utils.clients import LocalClient, NexusFileClient
+        >>> from pacco.manager.utils.clients.local import LocalClient
+        >>> from pacco.manager.utils.clients.nexus import NexusFileClient
         >>> client = LocalClient(clean=True)
         >>> import os
-        >>> if 'NEXUS_URL' in os.environ: client = NexusFileClient(os.environ['NEXUS_URL'], 'admin', 'admin123', clean=True)
+        >>> if 'NEXUS_URL' in os.environ:
+        ...     client = NexusFileClient(os.environ['NEXUS_URL'], 'admin', 'admin123', clean=True)
+        ...
         >>> from pacco.manager.file_based.package_manager import PackageManagerFileBased
         >>> pm = PackageManagerFileBased(client)
         >>> pm.add_package_registry('openssl', ['os', 'compiler', 'version'])

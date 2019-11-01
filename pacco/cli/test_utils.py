@@ -115,24 +115,24 @@ class Settings:
     __nexus_password = os.getenv('NEXUS_PASSWORD', 'admin123')  # default in nexus2
 
     remotes = [
-        {
-            'name': 'local',
-            'type': 'local',
-            'args': ['default'],
-
-            # used by remote_factory
-            'remote_type': 'local',
-            'path': '',
-        },
-        {
-            'name': 'local-with-path',
-            'type': 'local',
-            'args': ['__test_path'],
-
-            # used by remote_factory
-            'remote_type': 'local',
-            'path': '__test_path',
-        },
+        # {
+        #     'name': 'local',
+        #     'type': 'local',
+        #     'args': ['default'],
+        #
+        #     # used by remote_factory
+        #     'remote_type': 'local',
+        #     'path': '',
+        # },
+        # {
+        #     'name': 'local-with-path',
+        #     'type': 'local',
+        #     'args': ['__test_path'],
+        #
+        #     # used by remote_factory
+        #     'remote_type': 'local',
+        #     'path': '__test_path',
+        # },
         # {
         #     'name': 'nexus-remote',
         #     'type': 'nexus_site',
@@ -144,4 +144,16 @@ class Settings:
         #     'username': __nexus_username,
         #     'password': __nexus_password,
         # },
+        {
+            'name': 'webdav',
+            'type': 'webdav',
+            'args': ['http://localhost/', 'pacco/', 'webdav', 'webdav'],
+
+            # used by remote_factory
+            'remote_type': 'webdav',
+            'url': 'http://localhost/',
+            'abspath': 'pacco/',
+            'username': 'webdav',
+            'password': 'webdav'
+        },
     ]

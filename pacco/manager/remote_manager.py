@@ -12,6 +12,7 @@ from pacco.manager.remote_factory import instantiate_remote
 ALLOWED_REMOTE_TYPES = [
     'local',
     'nexus_site',
+    'webdav',
 ]
 
 DEFAULT_REMOTE_NAME = 'default'

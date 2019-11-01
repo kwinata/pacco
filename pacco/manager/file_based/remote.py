@@ -4,7 +4,10 @@ from typing import Dict, Optional
 
 from pacco.manager.file_based.package_manager import PackageManagerFileBased
 from pacco.manager.interfaces.remote import RemoteInterface
-from pacco.manager.utils.clients import LocalClient, NexusFileClient, FileBasedClientAbstract
+from pacco.manager.utils.clients.local import LocalClient
+from pacco.manager.utils.clients.nexus import NexusFileClient
+from pacco.manager.utils.clients.abstract import FileBasedClientAbstract
+from pacco.manager.utils.clients.webdav import WebDavClient
 
 
 class RemoteFileBased(RemoteInterface):
@@ -58,4 +61,32 @@ class NexusSiteRemote(RemoteFileBased):
 
     def serialize(self) -> Dict[str, str]:
         return {'remote_type': 'nexus_site', 'url': self.url,
+                'username': self.username, 'password': self.password}
+
+
+class WebDavRemote(RemoteFileBased):
+    url: str
+    abspath: str
+    username: str
+    password: str
+
+    def __init__(self, name: str, remote_type: str, client: WebDavClient):
+        super(WebDavRemote, self).__init__(name, remote_type, client)
+
+    @staticmethod
+    def create(name: str, serialized: Dict[str, str], clean=False) -> WebDavRemote:
+        client = WebDavClient(
+            host_path=(serialized['url'], serialized['abspath']),
+            credential=(serialized['username'], serialized['password']),
+            clean=clean
+        )
+        remote_object = WebDavRemote(name, serialized['remote_type'], client)
+        remote_object.url = serialized['url']
+        remote_object.abspath = serialized['abspath']
+        remote_object.username = serialized['username']
+        remote_object.password = serialized['password']
+        return remote_object
+
+    def serialize(self) -> Dict[str, str]:
+        return {'remote_type': 'webdav', 'url': self.url, 'abspath': self.abspath,
                 'username': self.username, 'password': self.password}
