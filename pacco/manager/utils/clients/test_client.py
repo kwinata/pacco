@@ -6,17 +6,24 @@ from pacco.manager.utils.clients.local import LocalClient
 from pacco.manager.utils.clients.nexus import NexusFileClient
 from pacco.manager.utils.clients.webdav import WebDavClient
 
+
 clients = [
-    LocalClient(clean=True),
-    # NexusFileClient('http://localhost:8081/nexus/content/sites/pacco/', 'admin', 'admin123', clean=True),
-    WebDavClient('http://localhost/', 'pacco/', 'webdav', 'webdav', clean=True),
+    (LocalClient, []),
+    # (NexusFileClient, ['http://localhost:8081/nexus/content/sites/pacco/', 'admin', 'admin123']),
+    (WebDavClient, ['http://localhost/', 'pacco/', 'webdav', 'webdav']),
 ]
-@pytest.fixture(scope="function", params=clients)
-def client(request):
+@pytest.fixture(scope="module", params=clients)
+def client_class(request):
     return request.param
 
 
-@pytest.mark.skip(reason="not urgent, but localclient got problem with existing openssl directory in travis build")
+@pytest.fixture(scope="function")
+def client(client_class):
+    client_obj = client_class[0](*client_class[1], clean=True)
+    yield client_obj
+    client_class[0](*client_class[1], clean=True)
+
+
 class TestClient:
     def test_ls(self, client):
         assert [] == client.ls()
