@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/kwinata/pacco.svg?branch=master)](https://travis-ci.org/kwinata/pacco)
+[![Build Status](https://travis-ci.org/kwinata/pacco.svg?branch=release)](https://travis-ci.org/kwinata/pacco)
 [![PyPi version](https://pypip.in/v/pacco/badge.png)](https://pypi.org/project/pacco/)
 [![Maintainability](https://api.codeclimate.com/v1/badges/25d9932adf5b9cb51bbe/maintainability)](https://codeclimate.com/github/kwinata/pacco/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/25d9932adf5b9cb51bbe/test_coverage)](https://codeclimate.com/github/kwinata/pacco/test_coverage)
