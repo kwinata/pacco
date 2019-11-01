@@ -14,7 +14,9 @@ class PackageManagerFileBased(PackageManagerInterface):
         >>> from pacco.manager.utils.clients.nexus import NexusFileClient
         >>> client = LocalClient(clean=True)
         >>> import os
-        >>> if 'NEXUS_URL' in os.environ: client = NexusFileClient(os.environ['NEXUS_URL'], 'admin', 'admin123', clean=True)
+        >>> if 'NEXUS_URL' in os.environ:
+        ...     client = NexusFileClient(os.environ['NEXUS_URL'], 'admin', 'admin123', clean=True)
+        ...
         >>> pm = PackageManagerFileBased(client)
         >>> pm.list_package_registries()
         []

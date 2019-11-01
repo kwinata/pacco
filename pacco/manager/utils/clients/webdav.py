@@ -6,6 +6,7 @@ from __future__ import annotations
 import glob
 import logging
 import os
+from typing import Optional, Tuple
 
 import requests
 from numbers import Number
@@ -58,7 +59,10 @@ class OperationFailed(WebdavException):
         operation_name = self._OPERATIONS[method]
         self.reason = 'Failed to {operation_name} "{path}"'.format(**locals())
         expected_codes = (expected_code,) if isinstance(expected_code, Number) else expected_code
-        expected_codes_str = ", ".join('{0} {1}'.format(code, translate_http_code(code)) for code in expected_codes)
+        expected_codes_str = ", ".join(
+            '{0} {1}'.format(code, translate_http_code(code))
+            for code in expected_codes
+        )
         actual_code_str = translate_http_code(actual_code)
         msg = '''\
 {self.reason}.
@@ -69,34 +73,34 @@ class OperationFailed(WebdavException):
 
 
 class WebDavClient(FileBasedClientAbstract):
-    def __init__(self, host, abspath, username=None, password=None,
-                 verify_ssl=True, cert=None, clean=False):
+    def __init__(self, host_path: Tuple[str, str], credential: Optional[Tuple[str, str]] = None,
+                 cert=None, clean=False):
         self.session = requests.session()
         self.session.stream = True
 
-        self.__host = host
-        self.__abspath = abspath
-        self.url = host+abspath
-        self.session.verify = verify_ssl
+        self.__host = host_path[0]
+        self.__abspath = host_path[1]
+        self.url = "".join(host_path)
         self.session.cert = None
         if cert:
             self.session.cert = cert
-        if username and password:
-            self.session.auth = (username, password)
-        self.__username = username
-        self.__password = password
-
+            self.session.verify = True
+        if credential:
+            self.session.auth = credential
         if clean:
-            dir_names = self.ls()
-            print(dir_names)
-            for dir_name in dir_names:
-                self.rmdir(dir_name)
+            self.__clean()
+
+    def __clean(self):
+        dir_names = self.ls()
+        for dir_name in dir_names:
+            self.rmdir(dir_name)
 
     def __send(self, method, path, expected_code, **kwargs):
         url = self.url+path
         response = self.session.request(method, url, allow_redirects=False, **kwargs)
         if isinstance(expected_code, Number) and response.status_code != expected_code \
-                or not isinstance(expected_code, Number) and response.status_code not in expected_code:
+                or not isinstance(expected_code, Number)\
+                and response.status_code not in expected_code:
             raise OperationFailed(method, url, expected_code, response.status_code)
         return response
 
@@ -105,13 +109,16 @@ class WebDavClient(FileBasedClientAbstract):
         response = self.__send('PROPFIND', '', 207, headers=headers)
         tree = xmlTree.fromstring(response.content)
         elems = tree.findall('{DAV:}response')
-        results = [elem_to_path(elem) for elem in elems]
+        names = [elem_to_path(elem) for elem in elems]
+        return self.__strip_leading_path(names)
+
+    def __strip_leading_path(self, names):
         purged_result = []
-        for result in results:
-            if result.startswith('/'+self.__abspath):
-                result = result[len(self.__abspath)+1:].rstrip('/')
-                if result:
-                    purged_result.append(result)
+        for name in names:
+            if name.startswith('/' + self.__abspath):
+                name = name[len(self.__abspath) + 1:].rstrip('/')
+            if name:
+                purged_result.append(name)
         return purged_result
 
     def mkdir(self, name):
@@ -124,13 +131,11 @@ class WebDavClient(FileBasedClientAbstract):
 
     def dispatch_subdir(self, name: str) -> WebDavClient:
         name = str(name).rstrip('/') + '/'
-        return WebDavClient(host=self.__host,
-                            abspath=self.__abspath+name,
-                            username=self.__username,
-                            password=self.__password,
-                            verify_ssl=self.session.verify,
-                            cert=self.session.cert
-                            )
+        return WebDavClient(
+            host_path=(self.__host, self.__abspath+name),
+            credential=self.session.auth,
+            cert=self.session.cert
+        )
 
     def download_dir(self, download_path):
         self.dispatch_subdir('bin').__download_dir(download_path)

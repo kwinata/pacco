@@ -75,7 +75,11 @@ class WebDavRemote(RemoteFileBased):
 
     @staticmethod
     def create(name: str, serialized: Dict[str, str], clean=False) -> WebDavRemote:
-        client = WebDavClient(serialized['url'], serialized['abspath'], serialized['username'], serialized['password'], clean)
+        client = WebDavClient(
+            host_path=(serialized['url'], serialized['abspath']),
+            credential=(serialized['username'], serialized['password']),
+            clean=clean
+        )
         remote_object = WebDavRemote(name, serialized['remote_type'], client)
         remote_object.url = serialized['url']
         remote_object.abspath = serialized['abspath']

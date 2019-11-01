@@ -40,7 +40,9 @@ class NexusFileClient(FileBasedClientAbstract):
     def __try_connect_nexus(self):
         resp = None
         try:
-            resp = requests.post(self.__url + ".pacco", auth=(self.__username, self.__password), data=self.__dummy_stream)
+            resp = requests.post(self.__url + ".pacco",
+                                 auth=(self.__username, self.__password),
+                                 data=self.__dummy_stream)
         except requests.exceptions.ConnectionError:
             pass
         else:

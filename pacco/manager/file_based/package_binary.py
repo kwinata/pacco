@@ -16,7 +16,9 @@ class PackageBinaryFileBased(PackageBinaryInterface):
         >>> from pacco.manager.utils.clients.nexus import NexusFileClient
         >>> client = LocalClient(clean=True)
         >>> import os
-        >>> if 'NEXUS_URL' in os.environ: client = NexusFileClient(os.environ['NEXUS_URL'], 'admin', 'admin123', clean=True)
+        >>> if 'NEXUS_URL' in os.environ:
+        ...     client = NexusFileClient(os.environ['NEXUS_URL'], 'admin', 'admin123', clean=True)
+        ...
         >>> from pacco.manager.file_based.package_manager import PackageManagerFileBased
         >>> pm = PackageManagerFileBased(client)
         >>> pm.add_package_registry('openssl', ['os', 'compiler', 'version'])

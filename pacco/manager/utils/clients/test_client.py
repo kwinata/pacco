@@ -12,6 +12,8 @@ clients = [
     # (NexusFileClient, ['http://localhost:8081/nexus/content/sites/pacco/', 'admin', 'admin123']),
     (WebDavClient, ['http://localhost/', 'pacco/', 'webdav', 'webdav']),
 ]
+
+
 @pytest.fixture(scope="module", params=clients)
 def client_class(request):
     return request.param
