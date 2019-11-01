@@ -18,7 +18,7 @@ before_install:
   - tar -xvf pacco-nexus.tar.gz
   - sudo chown -R 200 ./nexus-travis
   - docker run -d -p 8081:8081 --name nexus -v $(pwd)/nexus-travis:/sonatype-work sonatype/nexus
-  - sleep 10
+  - sleep 60
   - curl http://localhost:8081/nexus/content/sites/pacco/
 
 
