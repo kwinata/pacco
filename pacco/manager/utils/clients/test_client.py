@@ -9,7 +9,7 @@ from pacco.manager.utils.clients.webdav import WebDavClient
 
 clients = [
     (LocalClient, []),
-    # (NexusFileClient, ['http://localhost:8081/nexus/content/sites/pacco/', 'admin', 'admin123']),
+    (NexusFileClient, ['http://localhost:8081/nexus/content/sites/pacco/', 'admin', 'admin123']),
     (WebDavClient, [('http://localhost/', 'pacco/'), ('webdav', 'webdav')]),
 ]
 

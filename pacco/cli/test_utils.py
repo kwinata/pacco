@@ -126,6 +126,7 @@ class Settings:
             'abspath': 'pacco/',
             'username': 'webdav',
             'password': 'webdav'
+        },
         {
             'name': 'local',
             'type': 'local',
