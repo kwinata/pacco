@@ -177,6 +177,7 @@ class TestBinary(PaccoTest):
         )
         assert os.path.isfile('openssl_download_path/sample.a')
         assert os.path.isfile('openssl_download_path/test/test.c')
+        shutil.rmtree('openssl_download_path')
 
     def test_binary_remove(self, binary):
         TestBinary.__upload_binary(binary)
