@@ -1,12 +1,10 @@
 import io
 import os
 import shlex
-import subprocess
 from pathlib import Path
 
-from pacco.cli.commands.pacco import Pacco as PaccoMain
+from pacco.cli.commands.pacco import Pacco
 from pacco.cli.commands.utils.output_stream import OutputStream
-from pacco.manager.remote_manager import RemoteManager
 
 
 class API:
@@ -14,7 +12,7 @@ class API:
     def __exec(command):
         stream = io.StringIO()
         stream_err = io.StringIO()
-        PaccoMain('', OutputStream(stream=stream, stream_err=stream_err), RemoteManager()).run(
+        Pacco('', OutputStream(stream=stream, stream_err=stream_err)).run(
             *(shlex.split(command)[1:])
         )
         if stream_err.getvalue():

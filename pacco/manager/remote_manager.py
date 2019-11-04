@@ -9,11 +9,6 @@ import yaml
 from pacco.manager.interfaces.package_manager import PackageManagerInterface
 from pacco.manager.remote_factory import instantiate_remote
 
-ALLOWED_REMOTE_TYPES = [
-    'local',
-    'nexus_site',
-    'webdav',
-]
 
 DEFAULT_REMOTE_NAME = 'default'
 
@@ -68,8 +63,6 @@ class RemoteManager:
 
             self.remotes = remotes
             self.default_remotes = default_remotes
-
-    def __del__(self):
         self.save()
 
     def save(self) -> None:
@@ -127,6 +120,7 @@ class RemoteManager:
         if name in self.list_remote():
             raise NameError("The remote with name {} already exists".format(name))
         self.remotes[name] = instantiate_remote(name, configuration)
+        self.save()
 
     def remove_remote(self, name: str) -> None:
         """
@@ -140,6 +134,7 @@ class RemoteManager:
         if name not in self.remotes:
             raise KeyError("The remote {} is not registered".format(name))
         del self.remotes[name]
+        self.save()
 
     def get_default(self) -> List[str]:
         """
@@ -163,6 +158,7 @@ class RemoteManager:
             if remote not in self.remotes:
                 raise KeyError("remote {} does not exist".format(remote))
         self.default_remotes = remotes
+        self.save()
 
     def default_download(self, package_name: str, assignment: Dict[str, str],
                          dir_path: str, fresh_download: Optional[bool] = False) -> None:
