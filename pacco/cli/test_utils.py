@@ -120,10 +120,8 @@ class Settings:
 
             # used by remote_factory
             'remote_type': 'webdav',
-            'url': 'http://localhost/',
-            'abspath': 'pacco/',
-            'username': 'webdav',
-            'password': 'webdav'
+            'host_path': ('http://localhost/', 'pacco/'),
+            'credential': ('webdav', 'webdav'),
         },
         {
             'name': 'local',

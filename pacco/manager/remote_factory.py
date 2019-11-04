@@ -1,14 +1,10 @@
-from pacco.manager.file_based.remote import LocalRemote, NexusSiteRemote, WebDavRemote
+from pacco.manager.file_based.package_manager import PackageManagerFileBased
 
 
-def instantiate_remote(name: str, serialized, clean=False):
-    if serialized['remote_type'] == 'local':
-        return LocalRemote.create(name, serialized, clean)
-    elif serialized['remote_type'] == 'nexus_site':
-        return NexusSiteRemote.create(name, serialized, clean)
-    elif serialized['remote_type'] == 'webdav':
-        return WebDavRemote.create(name, serialized, clean)
+def instantiate_remote(configuration, clean=False):
+    if configuration['remote_type'] in ['local', 'nexus_site', 'webdav']:
+        return PackageManagerFileBased(configuration, clean)
     else:
         raise ValueError("The remote_type {} is not supported, currently only supports [{}]".format(
-            serialized['remote_type'], ", ".join(['local', 'nexus_site'])
+            configuration['remote_type'], ", ".join(['local', 'nexus_site'])
         ))

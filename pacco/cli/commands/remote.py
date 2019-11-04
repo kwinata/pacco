@@ -41,10 +41,8 @@ class Remote(CommandAbstract):
             webdav_args = parsed_args.args.split(',')
             self.rm.add_remote(parsed_args.name, {
                 "remote_type": "webdav",
-                "url": webdav_args[0],
-                "abspath": webdav_args[1],
-                "username": webdav_args[2],
-                "password": webdav_args[3]
+                "host_path": (webdav_args[0], webdav_args[1]),
+                "credential": (webdav_args[2], webdav_args[3]),
             })
 
     def remove(self, *args):

@@ -78,9 +78,9 @@ class TestRemote(PaccoTest):
 @pytest.fixture(scope="function")
 def registry(remote):
     API.remote_add(remote)
-    instantiate_remote(remote['name'], remote, clean=True)
+    instantiate_remote(remote, clean=True)
     yield "openssl"
-    instantiate_remote(remote['name'], remote, clean=True)
+    instantiate_remote(remote, clean=True)
     API.remote_remove(remote)
 
 

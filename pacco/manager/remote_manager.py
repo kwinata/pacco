@@ -17,33 +17,8 @@ class RemoteManager:
     """
     Function to manage ``.pacco_config`` file as the storage for remote lists
     With ``RemoteManager``, you can manage multiple ``PackageManager`` s
-
-    Examples:
-        >>> open(os.path.join(str(Path.home()), ".pacco_config"), "w").close()
-        >>> os.remove(os.path.join(str(Path.home()), ".pacco_config"))
-        >>> rm = RemoteManager()
-        >>> rm.add_remote('local_test', {'remote_type':'local'})
-        >>> rm.list_remote()
-        ['local_test']
-        >>> rm.add_remote('local_test_2', {'remote_type':'local', 'path': 'storage'})
-        >>> sorted(rm.list_remote())
-        ['local_test', 'local_test_2']
-        >>> rm.set_default(['local_test_2', 'local_test'])
-        >>> rm.get_default()
-        ['local_test_2', 'local_test']
-        >>> rm.remove_remote('local_test')
-        Traceback (most recent call last):
-        ...
-        ValueError: The remote local_test is still in default remote, remove it first
-        >>> rm.set_default(['local_test_2'])
-        >>> rm.remove_remote('local_test')
-        >>> del rm  # auto save
-        >>> other_rm = RemoteManager()
-        >>> other_rm.list_remote()
-        ['local_test_2']
-        >>> other_rm.get_remote('local_test_2')
-        PackageManagerObject
     """
+    remotes: Dict[str, PackageManagerInterface]
 
     def __init__(self):
         self.__pacco_config = os.path.join(str(Path.home()), '.pacco_config')
@@ -58,7 +33,7 @@ class RemoteManager:
             remotes_serialized = pacco_config['remotes']
             default_remotes = pacco_config['default']
 
-            remotes = {name: instantiate_remote(name, remotes_serialized[name])
+            remotes = {name: instantiate_remote(remotes_serialized[name])
                        for name in remotes_serialized}
 
             self.remotes = remotes
@@ -70,7 +45,7 @@ class RemoteManager:
         Save the current state to ".pacco_config", this will also be done in the ``__del__``
         method, such that even if you forget to save, it will be auto saved when the program closes.
         """
-        serialized_remotes = {name: self.remotes[name].serialize() for name in self.remotes}
+        serialized_remotes = {name: self.remotes[name].configuration for name in self.remotes}
         with open(self.__pacco_config, "w") as f:
             yaml.dump({'remotes': serialized_remotes, 'default': self.default_remotes}, stream=f)
 
@@ -85,7 +60,7 @@ class RemoteManager:
         """
         if name not in self.remotes:
             raise KeyError("The remote named {} is not found".format(name))
-        return self.remotes[name].package_manager
+        return self.remotes[name]
 
     def list_remote(self) -> List[str]:
         """
@@ -119,7 +94,7 @@ class RemoteManager:
         """
         if name in self.list_remote():
             raise NameError("The remote with name {} already exists".format(name))
-        self.remotes[name] = instantiate_remote(name, configuration)
+        self.remotes[name] = instantiate_remote(configuration)
         self.save()
 
     def remove_remote(self, name: str) -> None:
@@ -170,38 +145,6 @@ class RemoteManager:
             assignment: the dictionary of the binary configuration
             dir_path: the download destination
             fresh_download: will not use cache if True
-        Examples:
-            >>> import os
-            >>> __ = os.system("rm -f ~/.pacco_config")
-            >>> __ = os.system('rm -rf download_folder download_folder2 local3 pacco_storage tempfolder ~/.pacco')
-            >>> rm = RemoteManager()
-            >>> rm.add_remote('local', {'remote_type': 'local'})
-            >>> pm = rm.get_remote('local')
-            >>> pm.add_package_registry('openssl', ['os'])
-            >>> pr = pm.get_package_registry('openssl')
-            >>> pr.add_package_binary({'os': 'osx'})
-            >>> pb = pr.get_package_binary({'os': 'osx'})
-            >>> os.makedirs('tempfolder')
-            >>> open("tempfolder/testfile", "w").close()
-            >>> pb.upload_content('tempfolder')
-            >>> rm.add_remote('local2', {'remote_type': 'local', 'path': 'pacco_storage'})
-            >>> pm2 = rm.get_remote('local2')
-            >>> pm2.add_package_registry('openssl', ['os'])
-            >>> rm.add_remote('local3', {'remote_type': 'local', 'path': 'local3'})
-            >>> rm.set_default(['local2', 'local3', 'local'])
-            >>> rm.default_download('openssl', {'os': 'osx'}, 'download_folder')
-            >>> os.listdir('download_folder')
-            ['testfile']
-            >>> rm.set_default(['local', 'local3'])
-            >>> rm.default_download('openssl', {'os': 'osx'}, 'download_folder2')
-            >>> os.listdir('download_folder2')
-            ['testfile']
-            >>> rm.set_default(['local3'])
-            >>> rm.default_download('openssl', {'os': 'osx'}, 'download_folder3')
-            Traceback (most recent call last):
-            ...
-            FileNotFoundError: Such binary does not exist in any remotes in the default remote list
-            >>> __ = os.system('rm -rf download_folder download_folder2 local3 pacco_storage tempfolder ~/.pacco')
         """
         for remote_name in self.default_remotes:
             remote = self.get_remote(remote_name)

@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Dict
 
 from pacco.manager.interfaces.package_registry import PackageRegistryInterface
 
@@ -9,8 +9,12 @@ class PackageManagerInterface:
     expected behavior defined below.
     """
 
-    def __init__(self):
+    def __init__(self, configuration: Dict[str, str]):
+        self.configuration = configuration
         pass
+
+    def __str__(self):
+        return "[{}, {}]".format(self.configuration['name'], self.configuration['remote_type'])
 
     def list_package_registries(self) -> List[str]:
         """

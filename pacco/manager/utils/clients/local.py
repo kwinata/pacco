@@ -23,7 +23,7 @@ class LocalClient(FileBasedClientAbstract):
         self.__bin_dir = os.path.join(self.__root_dir, 'bin')
 
         if clean:
-            self.rmdir(self.__root_dir)
+            shutil.rmtree(self.__root_dir)
             os.makedirs(self.__root_dir)
 
         self.bin_dir_for_cache = self.__bin_dir
