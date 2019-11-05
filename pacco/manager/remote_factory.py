@@ -1,7 +1,10 @@
+from typing import Dict
+
 from pacco.manager.file_based.package_manager import PackageManagerFileBased
+from pacco.manager.interfaces.package_manager import PackageManagerInterface
 
 
-def instantiate_remote(configuration, clean=False):
+def instantiate_remote(configuration: Dict[str, str], clean=False) -> PackageManagerInterface:
     if configuration['remote_type'] in ['local', 'nexus_site', 'webdav']:
         return PackageManagerFileBased(configuration, clean)
     else:

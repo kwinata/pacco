@@ -58,3 +58,10 @@ class PackageManagerInterface:
             FileNotFoundError: when that package is not found or it is not set properly.
         """
         raise NotImplementedError()
+
+    def try_download(self, package_name: str, assignment: Dict[str, str], fresh_download: bool, dir_path: str) -> bool:
+        if package_name in self.list_package_registries():
+            pr: PackageRegistryInterface = self.get_package_registry(package_name)
+            if pr.try_download(assignment, fresh_download, dir_path):
+                return True
+        return False

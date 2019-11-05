@@ -103,3 +103,10 @@ class PackageRegistryInterface:
             NameError: there already exist binary with the same configuration as new_assignment
         """
         raise NotImplementedError()
+
+    def try_download(self, assignment: Dict[str, str], fresh_download: bool, dir_path: str) -> bool:
+        if assignment in self.list_package_binaries():
+            pb: PackageBinaryInterface = self.get_package_binary(assignment)
+            pb.download_content(download_dir_path=dir_path, fresh_download=fresh_download)
+            return True
+        return False

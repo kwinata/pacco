@@ -148,18 +148,6 @@ class RemoteManager:
         """
         for remote_name in self.default_remotes:
             remote = self.get_remote(remote_name)
-            if RemoteManager.__try_download(remote, package_name, assignment, fresh_download, dir_path):
+            if remote.try_download(package_name, assignment, fresh_download, dir_path):
                 return
         raise FileNotFoundError("Such binary does not exist in any remotes in the default remote list")
-
-    @staticmethod
-    def __try_download(remote, package_name, assignment, fresh_download, dir_path) -> bool:
-        if package_name in remote.list_package_registries():
-            pr = remote.get_package_registry(package_name)
-            try:
-                pb = pr.get_package_binary(assignment)
-            except (KeyError, FileNotFoundError):
-                return False
-            else:
-                pb.download_content(dir_path, fresh_download)
-                return True
