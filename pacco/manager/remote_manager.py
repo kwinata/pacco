@@ -6,9 +6,8 @@ from typing import Dict, List, Optional
 
 import yaml
 
-from pacco.manager.interfaces.package_manager import PackageManagerInterface
-from pacco.manager.remote_factory import instantiate_remote
-
+from pacco.manager.file_based.package_manager import RemoteFileBased
+from pacco.manager.interfaces.package_manager import RemoteInterface
 
 DEFAULT_REMOTE_NAME = 'default'
 
@@ -16,9 +15,9 @@ DEFAULT_REMOTE_NAME = 'default'
 class RemoteManager:
     """
     Function to manage ``.pacco_config`` file as the storage for remote lists
-    With ``RemoteManager``, you can manage multiple ``PackageManager`` s
+    With ``RemoteManager``, you can manage multiple ``Remote`` s
     """
-    remotes: Dict[str, PackageManagerInterface]
+    remotes: Dict[str, RemoteInterface]
 
     def __init__(self):
         self.__pacco_config = os.path.join(str(Path.home()), '.pacco_config')
@@ -49,9 +48,9 @@ class RemoteManager:
         with open(self.__pacco_config, "w") as f:
             yaml.dump({'remotes': serialized_remotes, 'default': self.default_remotes}, stream=f)
 
-    def get_remote(self, name: str) -> PackageManagerInterface:
+    def get_remote(self, name: str) -> RemoteInterface:
         """
-        Get the ``PackageManager`` based on the remote name.
+        Get the ``Remote`` based on the remote name.
 
         Args:
             name: the name of the remote
@@ -151,3 +150,12 @@ class RemoteManager:
             if remote.try_download(package_name, assignment, fresh_download, dir_path):
                 return
         raise FileNotFoundError("Such binary does not exist in any remotes in the default remote list")
+
+
+def instantiate_remote(configuration: Dict[str, str], clean=False) -> RemoteInterface:
+    if configuration['remote_type'] in ['local', 'nexus_site', 'webdav']:
+        return RemoteFileBased(configuration, clean)
+    else:
+        raise ValueError("The remote_type {} is not supported, currently only supports [{}]".format(
+            configuration['remote_type'], ", ".join(['local', 'nexus_site'])
+        ))

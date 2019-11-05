@@ -3,7 +3,7 @@ from typing import List, Dict
 from pacco.manager.interfaces.package_registry import PackageRegistryInterface
 
 
-class PackageManagerInterface:
+class RemoteInterface:
     """
     Represent the existence of the manager in a remote. This class is the interface class with the
     expected behavior defined below.
@@ -65,3 +65,6 @@ class PackageManagerInterface:
             if pr.try_download(assignment, fresh_download, dir_path):
                 return True
         return False
+
+    def __repr__(self):
+        return "RemoteObject"

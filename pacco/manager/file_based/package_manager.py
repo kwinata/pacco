@@ -2,7 +2,7 @@ from typing import List, Dict, Optional
 
 from pacco.manager.utils.clients.abstract import FileBasedClientAbstract
 from pacco.manager.file_based.package_registry import PackageRegistryFileBased
-from pacco.manager.interfaces.package_manager import PackageManagerInterface
+from pacco.manager.interfaces.package_manager import RemoteInterface
 from pacco.manager.utils.clients.local import LocalClient
 from pacco.manager.utils.clients.nexus import NexusFileClient
 from pacco.manager.utils.clients.webdav import WebDavClient
@@ -28,9 +28,9 @@ def client_factory(configuration, clean):
         )
 
 
-class PackageManagerFileBased(PackageManagerInterface):
+class RemoteFileBased(RemoteInterface):
     """
-    An implementation of the PackageManager interface
+    An implementation of the Remote interface
 
     Examples:
         >>> from pacco.manager.utils.clients.local import LocalClient
@@ -40,7 +40,7 @@ class PackageManagerFileBased(PackageManagerInterface):
         >>> if 'NEXUS_URL' in os.environ:
         ...     client = NexusFileClient(os.environ['NEXUS_URL'], 'admin', 'admin123', clean=True)
         ...
-        >>> pm = PackageManagerFileBased(client)
+        >>> pm = RemoteFileBased(client)
         >>> pm.list_package_registries()
         []
         >>> pm.add_package_registry('openssl', ['os', 'compiler', 'version'])
@@ -61,7 +61,7 @@ class PackageManagerFileBased(PackageManagerInterface):
 
     def __init__(self, configuration: Dict[str, str], clean: Optional[bool] = False):
         self.client = client_factory(configuration, clean)
-        super(PackageManagerFileBased, self).__init__(configuration)
+        super(RemoteFileBased, self).__init__(configuration)
 
     def list_package_registries(self) -> List[str]:
         return sorted(self.client.ls())
@@ -82,6 +82,3 @@ class PackageManagerFileBased(PackageManagerInterface):
         if name not in dirs:
             raise FileNotFoundError("The package registry {} is not found".format(name))
         return PackageRegistryFileBased(name, self.client.dispatch_subdir(name))
-
-    def __repr__(self):
-        return "PackageManagerObject"

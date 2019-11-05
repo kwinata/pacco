@@ -6,7 +6,7 @@ import docker
 from docker.errors import NotFound
 
 from pacco.cli.test_utils import API, Settings
-from pacco.manager.remote_factory import instantiate_remote
+from pacco.manager.remote_manager import instantiate_remote
 
 
 class PaccoTest:

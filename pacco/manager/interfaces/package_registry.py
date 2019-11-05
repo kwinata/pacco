@@ -13,6 +13,9 @@ class PackageRegistryInterface:
         self.name = name
         self.params = params
 
+    def __repr__(self):
+        return "PR[{}, {}]".format(self.name, ', '.join(sorted(self.params)))
+
     def list_package_binaries(self) -> List[Dict[str, str]]:
         """
         List the package binaries registered in this package registry

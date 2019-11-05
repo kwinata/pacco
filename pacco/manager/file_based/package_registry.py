@@ -21,8 +21,8 @@ class PackageRegistryFileBased(PackageRegistryInterface):
         >>> if 'NEXUS_URL' in os.environ:
         ...     client = NexusFileClient(os.environ['NEXUS_URL'], 'admin', 'admin123', clean=True)
         ...
-        >>> from pacco.manager.file_based.package_manager import PackageManagerFileBased
-        >>> pm = PackageManagerFileBased(client)
+        >>> from pacco.manager.file_based.package_manager import RemoteFileBased
+        >>> pm = RemoteFileBased(client)
         >>> pm.add_package_registry('openssl', ['os', 'compiler', 'version'])
         >>> pr = pm.get_package_registry('openssl')
         >>> pr.list_package_binaries()
@@ -79,9 +79,6 @@ class PackageRegistryFileBased(PackageRegistryInterface):
         else:
             self.params = params
             self.client.mkdir(self.__serialize_params(self.params))
-
-    def __repr__(self):
-        return "PR[{}, {}]".format(self.name, ', '.join(sorted(self.params)))
 
     def __get_remote_params(self) -> Optional[List[str]]:
         params = None
