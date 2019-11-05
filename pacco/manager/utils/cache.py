@@ -27,7 +27,6 @@ class Cache:
 
     def upload_to_cache(self, registry_name: str, assignment: Dict[str, str], source_path: str) -> None:
         dir_name = Cache.__serialize(registry_name, assignment)
-        os.makedirs(dir_name, exist_ok=True)
         self.client.dispatch_subdir(dir_name).upload_dir(source_path)
 
     def get_path(self, registry_name: str, assignment: Dict[str, str]) -> str:
