@@ -1,5 +1,5 @@
 from pacco.cli.commands.utils.command_abstract import CommandAbstract
-from pacco.manager.remote_manager import ALLOWED_REMOTE_TYPES
+from pacco.manager.abstracts.remote import RemoteAbstract
 
 
 class Remote(CommandAbstract):
@@ -9,7 +9,7 @@ class Remote(CommandAbstract):
         """
         parser = self.init_parser('list')
         parser.parse_args(args)
-        remotes = self.rm.list_remote()
+        remotes: List[RemoteAbstract] = self.rm.list_remote()
         self.out.writeln(remotes)
 
     def add(self, *args):
@@ -18,7 +18,7 @@ class Remote(CommandAbstract):
         """
         parser = self.init_parser('add')
         parser.add_argument("name", help="remote name")
-        parser.add_argument("type", help="remote type", choices=ALLOWED_REMOTE_TYPES)
+        parser.add_argument("type", help="remote type", choices=['local', 'nexus_site', 'webdav'])
         parser.add_argument("args", help="remote args, for local, it's the path (can be empty), for"
                                          "nexus_site, it's the url, username, and password as comma separated value")
         parsed_args = parser.parse_args(args)
@@ -42,10 +42,8 @@ class Remote(CommandAbstract):
             webdav_args = parsed_args.args.split(',')
             self.rm.add_remote(parsed_args.name, {
                 "remote_type": "webdav",
-                "url": webdav_args[0],
-                "abspath": webdav_args[1],
-                "username": webdav_args[2],
-                "password": webdav_args[3]
+                "host_path": (webdav_args[0], webdav_args[1]),
+                "credential": (webdav_args[2], webdav_args[3]),
             })
 
     def remove(self, *args):

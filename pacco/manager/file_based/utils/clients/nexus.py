@@ -9,7 +9,7 @@ from typing import Optional, List
 import requests
 from bs4 import BeautifulSoup
 
-from pacco.manager.utils.clients.abstract import FileBasedClientAbstract
+from pacco.manager.file_based.utils.clients.abstract import FileBasedClientAbstract
 
 
 class NexusFileClient(FileBasedClientAbstract):
@@ -30,14 +30,14 @@ class NexusFileClient(FileBasedClientAbstract):
         if clean:
             self.__clean()
 
-    def __clean(self):
+    def __clean(self) -> None:
         if not self.__connected:
             raise ConnectionError("Cannot clean if not connected")
         files_and_dirs = self.__ls_unformatted()
         for name in files_and_dirs:
             self.__rm(name)
 
-    def __try_connect_nexus(self):
+    def __try_connect_nexus(self) -> None:
         resp = None
         try:
             resp = requests.post(self.__url + ".pacco",
@@ -123,7 +123,7 @@ class NexusFileClient(FileBasedClientAbstract):
         finally:
             os.chdir(prev_path)
 
-    def __reset_bin_folder(self):
+    def __reset_bin_folder(self) -> None:
         if 'bin' in self.__ls_unformatted():
             self.rmdir('bin')
         self.mkdir('bin')

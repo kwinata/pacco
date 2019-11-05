@@ -2,9 +2,9 @@ import os
 
 import pytest
 
-from pacco.manager.utils.clients.local import LocalClient
-from pacco.manager.utils.clients.nexus import NexusFileClient
-from pacco.manager.utils.clients.webdav import WebDavClient
+from pacco.manager.file_based.utils.clients.local import LocalClient
+from pacco.manager.file_based.utils.clients.nexus import NexusFileClient
+from pacco.manager.file_based.utils.clients.webdav import WebDavClient
 
 
 clients = [
