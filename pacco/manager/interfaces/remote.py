@@ -1,6 +1,7 @@
 from typing import List, Dict
 
 from pacco.manager.interfaces.package_registry import PackageRegistryInterface
+from pacco.manager.interfaces.registry_factory import create_registry
 
 
 class RemoteInterface:
@@ -44,6 +45,16 @@ class RemoteInterface:
         Exception:
             FileExistsError: raised if the package with the same name is found
         """
+        dirs = self.list_package_registries()
+        if name in dirs:
+            raise FileExistsError("The package registry {} is already found".format(name))
+        self.allocate_space(name)
+        create_registry(name, params=params, context=self.get_registry_context(name))
+
+    def allocate_space(self, name: str):
+        raise NotImplementedError()
+
+    def get_registry_context(self, name: str):
         raise NotImplementedError()
 
     def get_package_registry(self, name: str) -> PackageRegistryInterface:
@@ -57,7 +68,10 @@ class RemoteInterface:
         Exceptions:
             FileNotFoundError: when that package is not found or it is not set properly.
         """
-        raise NotImplementedError()
+        dirs = self.list_package_registries()
+        if name not in dirs:
+            raise FileNotFoundError("The package registry {} is not found".format(name))
+        return create_registry(name, context=self.get_registry_context(name))
 
     def try_download(self, package_name: str, assignment: Dict[str, str], fresh_download: bool, dir_path: str) -> bool:
         if package_name in self.list_package_registries():

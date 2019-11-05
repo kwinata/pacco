@@ -12,54 +12,6 @@ from pacco.manager.interfaces.package_registry import PackageRegistryInterface
 class PackageRegistryFileBased(PackageRegistryInterface):
     """
     An implementation of the PackageRegistry interface
-
-    Examples:
-        >>> from pacco.manager.utils.clients.local import LocalClient
-        >>> from pacco.manager.utils.clients.nexus import NexusFileClient
-        >>> client = LocalClient(clean=True)
-        >>> import os
-        >>> if 'NEXUS_URL' in os.environ:
-        ...     client = NexusFileClient(os.environ['NEXUS_URL'], 'admin', 'admin123', clean=True)
-        ...
-        >>> from pacco.manager.file_based.package_manager import RemoteFileBased
-        >>> pm = RemoteFileBased(client)
-        >>> pm.add_package_registry('openssl', ['os', 'compiler', 'version'])
-        >>> pr = pm.get_package_registry('openssl')
-        >>> pr.list_package_binaries()
-        []
-        >>> pr.add_package_binary({'os':'osx', 'compiler':'clang', 'version':'1.0'})
-        >>> pr.add_package_binary({'host_os':'osx', 'compiler':'clang', 'version':'1.0'})
-        Traceback (most recent call last):
-            ...
-        KeyError: "wrong settings key: ['compiler', 'host_os', 'version'] is not ['compiler', 'os', 'version']"
-        >>> pr.add_package_binary({'os':'osx', 'compiler':'clang', 'version':'1.0'})
-        Traceback (most recent call last):
-            ...
-        FileExistsError: such binary already exist
-        >>> len(pr.list_package_binaries())
-        1
-        >>> pr.add_package_binary({'os':'linux', 'compiler':'gcc', 'version':'1.0'})
-        >>> len(pr.list_package_binaries())
-        2
-        >>> pr.remove_package_binary({'os':'osx', 'compiler':'clang', 'version':'1.0'})
-        >>> len(pr.list_package_binaries())
-        1
-        >>> pr.get_package_binary({'os':'linux', 'compiler':'gcc', 'version':'1.0'})
-        PackageBinaryObject
-        >>> pr.add_package_binary({'os':'linux', 'compiler':'g++', 'version':'1.0'})
-        >>> pr.param_remove('compiler')
-        Traceback (most recent call last):
-        ...
-        NameError: Cannot remove parameter compiler since it will cause two binary to have the same value
-        >>> pr.param_add('stdlib', default_value='c++11')
-        >>> pr
-        PR[openssl, compiler, os, stdlib, version]
-        >>> old_assignment = {'os':'linux', 'compiler':'g++', 'version':'1.0', 'stdlib': 'c++11'}
-        >>> new_assignment = {'os':'linux', 'compiler':'g++', 'version':'1.0', 'stdlib': 'static_c++'}
-        >>> pr.reassign_binary(old_assignment, new_assignment)
-        >>> pr.param_remove('compiler')
-        >>> pr
-        PR[openssl, os, stdlib, version]
     """
     __params_prefix = '__params'
 
