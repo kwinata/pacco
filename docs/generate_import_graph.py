@@ -33,8 +33,6 @@ def main():
     print("digraph G {")
     print("  node [style=filled]; ratio = fill;")
     for file in files:
-        if file.startswith("pacco/cli"):
-            continue
         if "test" in file:
             continue
         if "__init__" in file:
@@ -44,9 +42,12 @@ def main():
             print('  "{}" -> "{}"'.format(
                 format_file_name(file),
                 extract_import_statements(import_statement)
-            ), end=' [color="0.348 0.839 0.839"];\n' if "utils" in import_statement else '\n')
-        if "utils" in file:
-            print('  "{}" [color="0.348 0.839 0.839"];'.format(format_file_name(file)))
+            ), end=' [color="salmon2"];\n' if "utils.clients" in import_statement
+                else '[color="cadetblue1"]\n' if "pacco/cli" in file else "\n")
+        if "utils/clients" in file:
+            print('  "{}" [color="salmon2"];'.format(format_file_name(file)))
+        if "pacco/cli" in file:
+            print('  "{}" [color="cadetblue1"];'.format(format_file_name(file)))
 
     print("}")
 
