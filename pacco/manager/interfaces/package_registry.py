@@ -44,9 +44,8 @@ class PackageRegistryInterface:
         if set(assignment.keys()) != set(self.params):
             raise KeyError("wrong settings key: {} is not {}".format(sorted(assignment.keys()),
                                                                      sorted(self.params)))
-        for existing_assignment in self.list_package_binaries():
-            if not (assignment.items() ^ existing_assignment.items()):
-                raise FileExistsError("such binary already exist")
+        if PackageRegistryInterface.check_assignment_in(assignment, self.list_package_binaries()):
+            raise FileExistsError("such binary already exist")
         self.allocate_space_for_binary(assignment)
 
     def get_package_binary(self, assignment: Dict[str, str]) -> PackageBinaryInterface:
@@ -64,11 +63,10 @@ class PackageRegistryInterface:
         if set(assignment.keys()) != set(self.params):
             raise KeyError("wrong settings key: {} is not {}".format(sorted(assignment.keys()),
                                                                      sorted(self.params)))
-        for existing_assignment in self.list_package_binaries():
-            if not (assignment.items() ^ existing_assignment.items()):
-                return create_binary_object(registry_name=self.name,
-                                            assignment=assignment,
-                                            context=self.get_binary_context(assignment))
+        if PackageRegistryInterface.check_assignment_in(assignment, self.list_package_binaries()):
+            return create_binary_object(registry_name=self.name,
+                                        assignment=assignment,
+                                        context=self.get_binary_context(assignment))
         raise FileNotFoundError("such configuration does not exist")
 
     def param_list(self) -> List[str]:
@@ -116,15 +114,21 @@ class PackageRegistryInterface:
         new_set_of_assignment = set()
         for assignment in self.list_package_binaries():
             del assignment[name]
-            for existing_assignment in new_set_of_assignment:
-                if not(existing_assignment.items() ^ assignment.items()):
-                    raise NameError("Cannot remove parameter {} since it will cause "
-                                    "two binary to have the same value".format(name))
+            if PackageRegistryInterface.check_assignment_in(assignment, list(new_set_of_assignment)):
+                raise NameError("Cannot remove parameter {} since it will cause "
+                                "two binary to have the same value".format(name))
             new_set_of_assignment.add(assignment)
         old_params = copy.deepcopy(self.params)
         self.params.remove(name)
         self.reset_remote_params(old_params, self.params)
         self.rename_serialized_assignment(lambda x: x.pop(name))
+
+    @staticmethod
+    def check_assignment_in(assignment: Dict[str, str], assignments: List[Dict[str, str]]):
+        for other_assignment in assignments:
+            if not (other_assignment.items() ^ assignment.items()):
+                return True
+        return False
 
     def reassign_binary(self, old_assignment: Dict[str, str], new_assignment: Dict[str, str]) -> None:
         """
@@ -141,19 +145,12 @@ class PackageRegistryInterface:
         if set(new_assignment.keys()) != set(self.params):
             raise KeyError("wrong settings key: {} is not {}".format(sorted(new_assignment.keys()),
                                                                      sorted(self.params)))
-        exists = False
-        clash = False
-        for existing_assignment in self.list_package_binaries():
-            if not(existing_assignment.items() ^ old_assignment.items()):
-                exists = True
-            if not(existing_assignment.items() ^ new_assignment.items()):
-                clash = True
-        if not exists:
+        if not PackageRegistryInterface.check_assignment_in(old_assignment, self.list_package_binaries()):
             raise ValueError("there is no binary that match the assignment")
-        elif clash:
+        if PackageRegistryInterface.check_assignment_in(new_assignment, self.list_package_binaries()):
             raise NameError("there already exist binary with same assignment with the new one")
-        else:
-            self.reset_binary_assignment(old_assignment, new_assignment)
+
+        self.reset_binary_assignment(old_assignment, new_assignment)
 
     def try_download(self, assignment: Dict[str, str], fresh_download: bool, dir_path: str) -> bool:
         if assignment in self.list_package_binaries():
