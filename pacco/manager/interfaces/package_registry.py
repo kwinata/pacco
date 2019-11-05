@@ -1,4 +1,5 @@
-from typing import Optional, List, Dict
+import copy
+from typing import Optional, List, Dict, Callable
 
 from pacco.manager.interfaces.binary_factory import create_binary_object
 from pacco.manager.interfaces.package_binary import PackageBinaryInterface
@@ -29,6 +30,9 @@ class PackageRegistryInterface:
         raise NotImplementedError()
 
     def initialize_remote_params(self, params: List[str]):
+        raise NotImplementedError()
+
+    def reset_remote_params(self, old_params: List[str], new_params: List[str]):
         raise NotImplementedError()
 
     def __repr__(self):
@@ -104,7 +108,7 @@ class PackageRegistryInterface:
         """
         List the declared parameters of the ```PackageRegistry```
         """
-        raise NotImplementedError()
+        return self.params
 
     def param_add(self, name: str, default_value: Optional[str] = "default") -> None:
         """
@@ -117,6 +121,20 @@ class PackageRegistryInterface:
         Exceptions:
             ValueError: if the param is already exist
         """
+        if name in self.params:
+            raise ValueError("{} already in params".format(name))
+        old_params = copy.deepcopy(self.params)
+        self.params.append(name)
+        self.reset_remote_params(old_params, self.params)
+        self.rename_serialized_assignment(lambda x: x.update({name: default_value}))
+
+    def rename_serialized_assignment(self, action: Callable[[Dict[str, str]], None]):
+        for assignment in self.list_package_binaries():
+            new_assignment = copy.deepcopy(assignment)
+            action(new_assignment)
+            self.reset_binary_assignment(assignment, new_assignment)
+
+    def reset_binary_assignment(self, assignment: Dict[str, str], new_assignment: Dict[str, str]):
         raise NotImplementedError()
 
     def param_remove(self, name: str) -> None:
@@ -129,7 +147,20 @@ class PackageRegistryInterface:
             ValueError: if the param name does not exist
             NameError: if the resulting assignments will have duplicate when the param is removed
         """
-        raise NotImplementedError()
+        if name not in self.params:
+            raise ValueError("{} not in params".format(name))
+        new_set_of_assignment = set()
+        for assignment in self.list_package_binaries():
+            del assignment[name]
+            for existing_assignment in new_set_of_assignment:
+                if not(existing_assignment.items() ^ assignment.items()):
+                    raise NameError("Cannot remove parameter {} since it will cause "
+                                    "two binary to have the same value".format(name))
+            new_set_of_assignment.add(assignment)
+        old_params = copy.deepcopy(self.params)
+        self.params.remove(name)
+        self.reset_remote_params(old_params, self.params)
+        self.rename_serialized_assignment(lambda x: x.pop(name))
 
     def reassign_binary(self, old_assignment: Dict[str, str], new_assignment: Dict[str, str]) -> None:
         """
@@ -143,7 +174,22 @@ class PackageRegistryInterface:
             ValueError: if there is no binary that match old_assignment
             NameError: there already exist binary with the same configuration as new_assignment
         """
-        raise NotImplementedError()
+        if set(new_assignment.keys()) != set(self.params):
+            raise KeyError("wrong settings key: {} is not {}".format(sorted(new_assignment.keys()),
+                                                                     sorted(self.params)))
+        exists = False
+        clash = False
+        for existing_assignment in self.list_package_binaries():
+            if not(existing_assignment.items() ^ old_assignment.items()):
+                exists = True
+            if not(existing_assignment.items() ^ new_assignment.items()):
+                clash = True
+        if not exists:
+            raise ValueError("there is no binary that match the assignment")
+        elif clash:
+            raise NameError("there already exist binary with same assignment with the new one")
+        else:
+            self.reset_binary_assignment(old_assignment, new_assignment)
 
     def try_download(self, assignment: Dict[str, str], fresh_download: bool, dir_path: str) -> bool:
         if assignment in self.list_package_binaries():
