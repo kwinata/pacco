@@ -6,7 +6,7 @@ import docker
 from docker.errors import NotFound
 
 from pacco.cli.test_utils import API, Settings
-from pacco.manager.remote_factory import instantiate_remote
+from pacco.manager.abstracts.remote_factory import create_remote_object
 
 
 class PaccoTest:
@@ -78,9 +78,9 @@ class TestRemote(PaccoTest):
 @pytest.fixture(scope="function")
 def registry(remote):
     API.remote_add(remote)
-    instantiate_remote(remote['name'], remote, clean=True)
+    create_remote_object(remote, clean=True)
     yield "openssl"
-    instantiate_remote(remote['name'], remote, clean=True)
+    create_remote_object(remote, clean=True)
     API.remote_remove(remote)
 
 
@@ -177,6 +177,7 @@ class TestBinary(PaccoTest):
         )
         assert os.path.isfile('openssl_download_path/sample.a')
         assert os.path.isfile('openssl_download_path/test/test.c')
+        shutil.rmtree('openssl_download_path')
 
     def test_binary_remove(self, binary):
         TestBinary.__upload_binary(binary)
