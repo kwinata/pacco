@@ -31,16 +31,25 @@ def format_file_name(file_name: str):
 def main():
     files = get_python_files()
     print("digraph G {")
+    print("  node [style=filled]; ratio = fill;")
     for file in files:
+        if file.startswith("pacco/cli"):
+            continue
         if "test" in file:
+            continue
+        if "__init__" in file:
             continue
         import_statements = get_import_statements(open(file, "r"))
         for import_statement in import_statements:
             print('  "{}" -> "{}"'.format(
                 format_file_name(file),
                 extract_import_statements(import_statement)
-            ))
+            ), end=' [color="0.348 0.839 0.839"];\n' if "utils" in import_statement else '\n')
+        if "utils" in file:
+            print('  "{}" [color="0.348 0.839 0.839"];'.format(format_file_name(file)))
+
     print("}")
+
 
 
 main()

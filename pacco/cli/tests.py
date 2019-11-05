@@ -6,7 +6,7 @@ import docker
 from docker.errors import NotFound
 
 from pacco.cli.test_utils import API, Settings
-from pacco.manager.remote_manager import instantiate_remote
+from pacco.manager.interfaces.remote_factory import create_remote_object
 
 
 class PaccoTest:
@@ -78,9 +78,9 @@ class TestRemote(PaccoTest):
 @pytest.fixture(scope="function")
 def registry(remote):
     API.remote_add(remote)
-    instantiate_remote(remote, clean=True)
+    create_remote_object(remote, clean=True)
     yield "openssl"
-    instantiate_remote(remote, clean=True)
+    create_remote_object(remote, clean=True)
     API.remote_remove(remote)
 
 

@@ -6,8 +6,8 @@ from typing import Dict, List, Optional
 
 import yaml
 
-from pacco.manager.file_based.remote import RemoteFileBased
 from pacco.manager.interfaces.remote import RemoteInterface
+from pacco.manager.interfaces.remote_factory import create_remote_object
 
 DEFAULT_REMOTE_NAME = 'default'
 
@@ -32,7 +32,7 @@ class RemoteManager:
             remotes_serialized = pacco_config['remotes']
             default_remotes = pacco_config['default']
 
-            remotes = {name: instantiate_remote(remotes_serialized[name])
+            remotes = {name: create_remote_object(remotes_serialized[name])
                        for name in remotes_serialized}
 
             self.remotes = remotes
@@ -93,7 +93,7 @@ class RemoteManager:
         """
         if name in self.list_remote():
             raise NameError("The remote with name {} already exists".format(name))
-        self.remotes[name] = instantiate_remote(configuration)
+        self.remotes[name] = create_remote_object(configuration)
         self.save()
 
     def remove_remote(self, name: str) -> None:
@@ -150,12 +150,3 @@ class RemoteManager:
             if remote.try_download(package_name, assignment, fresh_download, dir_path):
                 return
         raise FileNotFoundError("Such binary does not exist in any remotes in the default remote list")
-
-
-def instantiate_remote(configuration: Dict[str, str], clean=False) -> RemoteInterface:
-    if configuration['remote_type'] in ['local', 'nexus_site', 'webdav']:
-        return RemoteFileBased(configuration, clean)
-    else:
-        raise ValueError("The remote_type {} is not supported, currently only supports [{}]".format(
-            configuration['remote_type'], ", ".join(['local', 'nexus_site'])
-        ))
