@@ -49,3 +49,6 @@ class PackageBinaryInterface:
 
     def fresh_download(self, download_dir_path: str) -> None:
         raise NotImplementedError()
+
+    def upload_dir(self, dir_path: str) -> None:
+        raise NotImplementedError()

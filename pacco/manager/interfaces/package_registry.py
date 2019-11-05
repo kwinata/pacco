@@ -26,26 +26,8 @@ class PackageRegistryInterface:
             self.params = params
             self.initialize_remote_params(params)
 
-    def get_remote_params(self) -> Optional[List[str]]:
-        raise NotImplementedError()
-
-    def initialize_remote_params(self, params: List[str]):
-        raise NotImplementedError()
-
-    def reset_remote_params(self, old_params: List[str], new_params: List[str]):
-        raise NotImplementedError()
-
     def __repr__(self):
         return "PR[{}, {}]".format(self.name, ', '.join(sorted(self.params)))
-
-    def list_package_binaries(self) -> List[Dict[str, str]]:
-        """
-        List the package binaries registered in this package registry
-
-        Returns:
-            list of the package binary assignment dictionaries
-        """
-        raise NotImplementedError()
 
     def add_package_binary(self, assignment: Dict[str, str]) -> None:
         """
@@ -66,18 +48,6 @@ class PackageRegistryInterface:
             if not (assignment.items() ^ existing_assignment.items()):
                 raise FileExistsError("such binary already exist")
         self.allocate_space_for_binary(assignment)
-
-    def allocate_space_for_binary(self, assignment: Dict[str, str]) -> None:
-        raise NotImplementedError()
-
-    def remove_package_binary(self, assignment: Dict[str, str]):
-        """
-        Delete the package binary folder
-
-        Args:
-            assignment: the configuration of the the package binary to be deleted
-        """
-        raise NotImplementedError()
 
     def get_package_binary(self, assignment: Dict[str, str]) -> PackageBinaryInterface:
         """
@@ -100,9 +70,6 @@ class PackageRegistryInterface:
                                             assignment=assignment,
                                             context=self.get_binary_context(assignment))
         raise FileNotFoundError("such configuration does not exist")
-
-    def get_binary_context(self, assignment: Dict[str, str]):
-        raise NotImplementedError()
 
     def param_list(self) -> List[str]:
         """
@@ -133,9 +100,6 @@ class PackageRegistryInterface:
             new_assignment = copy.deepcopy(assignment)
             action(new_assignment)
             self.reset_binary_assignment(assignment, new_assignment)
-
-    def reset_binary_assignment(self, assignment: Dict[str, str], new_assignment: Dict[str, str]):
-        raise NotImplementedError()
 
     def param_remove(self, name: str) -> None:
         """
@@ -197,3 +161,39 @@ class PackageRegistryInterface:
             pb.download_content(download_dir_path=dir_path, fresh_download=fresh_download)
             return True
         return False
+
+    def get_remote_params(self) -> Optional[List[str]]:
+        raise NotImplementedError()
+
+    def initialize_remote_params(self, params: List[str]):
+        raise NotImplementedError()
+
+    def reset_remote_params(self, old_params: List[str], new_params: List[str]):
+        raise NotImplementedError()
+
+    def list_package_binaries(self) -> List[Dict[str, str]]:
+        """
+        List the package binaries registered in this package registry
+
+        Returns:
+            list of the package binary assignment dictionaries
+        """
+        raise NotImplementedError()
+
+    def reset_binary_assignment(self, assignment: Dict[str, str], new_assignment: Dict[str, str]):
+        raise NotImplementedError()
+
+    def get_binary_context(self, assignment: Dict[str, str]):
+        raise NotImplementedError()
+
+    def allocate_space_for_binary(self, assignment: Dict[str, str]) -> None:
+        raise NotImplementedError()
+
+    def remove_package_binary(self, assignment: Dict[str, str]):
+        """
+        Delete the package binary folder
+
+        Args:
+            assignment: the configuration of the the package binary to be deleted
+        """
+        raise NotImplementedError()

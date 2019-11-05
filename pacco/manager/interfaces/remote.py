@@ -17,24 +17,6 @@ class RemoteInterface:
     def __str__(self):
         return "[{}, {}]".format(self.configuration['name'], self.configuration['remote_type'])
 
-    def list_package_registries(self) -> List[str]:
-        """
-        List package registries in this package manager.
-
-        Returns:
-            The list of package registry name
-        """
-        raise NotImplementedError()
-
-    def remove_package_registry(self, name: str) -> None:
-        """
-        Delete a package registry from the package manager.
-
-        Args:
-            name: the name of the package registry to be deleted.
-        """
-        raise NotImplementedError()
-
     def add_package_registry(self, name: str, params: List[str]) -> None:
         """
         Add a new package registry to this package manager.
@@ -50,12 +32,6 @@ class RemoteInterface:
             raise FileExistsError("The package registry {} is already found".format(name))
         self.allocate_space(name)
         create_registry_object(name, params=params, context=self.get_registry_context(name))
-
-    def allocate_space(self, name: str):
-        raise NotImplementedError()
-
-    def get_registry_context(self, name: str):
-        raise NotImplementedError()
 
     def get_package_registry(self, name: str) -> PackageRegistryInterface:
         """
@@ -82,3 +58,27 @@ class RemoteInterface:
 
     def __repr__(self):
         return "RemoteObject"
+
+    def list_package_registries(self) -> List[str]:
+        """
+        List package registries in this package manager.
+
+        Returns:
+            The list of package registry name
+        """
+        raise NotImplementedError()
+
+    def remove_package_registry(self, name: str) -> None:
+        """
+        Delete a package registry from the package manager.
+
+        Args:
+            name: the name of the package registry to be deleted.
+        """
+        raise NotImplementedError()
+
+    def allocate_space(self, name: str):
+        raise NotImplementedError()
+
+    def get_registry_context(self, name: str):
+        raise NotImplementedError()

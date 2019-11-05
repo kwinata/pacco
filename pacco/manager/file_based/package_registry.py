@@ -28,7 +28,7 @@ class PackageRegistryFileBased(PackageRegistryInterface):
                 params = dir_name.split('==')[1:]
         return params
 
-    def initialize_remote_params(self, params: List[str]):
+    def initialize_remote_params(self, params: List[str]) -> None:
         self.client.mkdir(self.__serialize_params(self.params))
 
     @staticmethod
@@ -51,7 +51,7 @@ class PackageRegistryFileBased(PackageRegistryInterface):
             raise ValueError("Invalid dir_name syntax {}".format(dir_name))
         return {arg.split('=')[0]: arg.split('=')[1] for arg in dir_name.split('==')}
 
-    def __get_serialized_assignment_to_wrapper_mapping(self):
+    def __get_serialized_assignment_to_wrapper_mapping(self) -> Dict[str, str]:
         dir_names = self.client.ls()
         dir_names.remove(self.__serialize_params(self.params))
 
