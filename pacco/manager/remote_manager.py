@@ -6,8 +6,8 @@ from typing import Dict, List, Optional
 
 import yaml
 
-from pacco.manager.file_based.package_manager import RemoteFileBased
-from pacco.manager.interfaces.package_manager import RemoteInterface
+from pacco.manager.file_based.remote import RemoteFileBased
+from pacco.manager.interfaces.remote import RemoteInterface
 
 DEFAULT_REMOTE_NAME = 'default'
 

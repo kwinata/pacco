@@ -2,7 +2,7 @@ from typing import List, Dict, Optional
 
 from pacco.manager.utils.clients.abstract import FileBasedClientAbstract
 from pacco.manager.file_based.package_registry import PackageRegistryFileBased
-from pacco.manager.interfaces.package_manager import RemoteInterface
+from pacco.manager.interfaces.remote import RemoteInterface
 from pacco.manager.utils.clients.local import LocalClient
 from pacco.manager.utils.clients.nexus import NexusFileClient
 from pacco.manager.utils.clients.webdav import WebDavClient

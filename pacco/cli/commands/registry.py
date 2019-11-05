@@ -1,6 +1,8 @@
 import re
 
 from pacco.cli.commands.utils.command_abstract import CommandAbstract
+from pacco.manager.interfaces.remote import RemoteInterface
+from pacco.manager.interfaces.package_registry import PackageRegistryInterface
 
 
 class Registry(CommandAbstract):
@@ -47,8 +49,8 @@ class Registry(CommandAbstract):
         parser.add_argument("remote", help="remote name")
         parser.add_argument("name", help="registry name")
         parsed_args = parser.parse_args(args)
-        pm = self.rm.get_remote(parsed_args.remote)
-        pr = pm.get_package_registry(parsed_args.name)
+        pm: RemoteInterface = self.rm.get_remote(parsed_args.remote)
+        pr: PackageRegistryInterface = pm.get_package_registry(parsed_args.name)
         binaries = pr.list_package_binaries()
         serialized_binaries = []
         for binary in binaries:
