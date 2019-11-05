@@ -5,10 +5,10 @@ import string
 from typing import Optional, List, Dict
 
 from pacco.manager.file_based.utils.clients.abstract import FileBasedClientAbstract
-from pacco.manager.interfaces.package_registry import PackageRegistryInterface
+from pacco.manager.abstracts.package_registry import PackageRegistryAbstract
 
 
-class PackageRegistryFileBased(PackageRegistryInterface):
+class PackageRegistryFileBased(PackageRegistryAbstract):
     """
     An implementation of the PackageRegistry interface
     """

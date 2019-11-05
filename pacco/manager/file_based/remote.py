@@ -2,10 +2,10 @@ from typing import List, Dict, Optional
 
 from pacco.manager.file_based.utils.clients.client_factory import create_client_object
 from pacco.manager.file_based.utils.clients.abstract import FileBasedClientAbstract
-from pacco.manager.interfaces.remote import RemoteInterface
+from pacco.manager.abstracts.remote import RemoteAbstract
 
 
-class RemoteFileBased(RemoteInterface):
+class RemoteFileBased(RemoteAbstract):
     """
     An implementation of the Remote interface
     """

@@ -1,11 +1,11 @@
 import copy
 from typing import Optional, List, Dict, Callable
 
-from pacco.manager.interfaces.binary_factory import create_binary_object
-from pacco.manager.interfaces.package_binary import PackageBinaryInterface
+from pacco.manager.abstracts.binary_factory import create_binary_object
+from pacco.manager.abstracts.package_binary import PackageBinaryAbstract
 
 
-class PackageRegistryInterface:
+class PackageRegistryAbstract:
     """
     Represent the existence of a package (e.g. openssl) in the package manager.
     This class is the interface class with the expected behavior defined below.
@@ -44,11 +44,11 @@ class PackageRegistryInterface:
         if set(assignment.keys()) != set(self.params):
             raise KeyError("wrong settings key: {} is not {}".format(sorted(assignment.keys()),
                                                                      sorted(self.params)))
-        if PackageRegistryInterface.check_assignment_in(assignment, self.list_package_binaries()):
+        if PackageRegistryAbstract.check_assignment_in(assignment, self.list_package_binaries()):
             raise FileExistsError("such binary already exist")
         self.allocate_space_for_binary(assignment)
 
-    def get_package_binary(self, assignment: Dict[str, str]) -> PackageBinaryInterface:
+    def get_package_binary(self, assignment: Dict[str, str]) -> PackageBinaryAbstract:
         """
         Get a reference to the ``PackageBinary`` object based on the settings value
 
@@ -63,7 +63,7 @@ class PackageRegistryInterface:
         if set(assignment.keys()) != set(self.params):
             raise KeyError("wrong settings key: {} is not {}".format(sorted(assignment.keys()),
                                                                      sorted(self.params)))
-        if PackageRegistryInterface.check_assignment_in(assignment, self.list_package_binaries()):
+        if PackageRegistryAbstract.check_assignment_in(assignment, self.list_package_binaries()):
             return create_binary_object(registry_name=self.name,
                                         assignment=assignment,
                                         context=self.get_binary_context(assignment))
@@ -114,7 +114,7 @@ class PackageRegistryInterface:
         new_set_of_assignment = set()
         for assignment in self.list_package_binaries():
             del assignment[name]
-            if PackageRegistryInterface.check_assignment_in(assignment, list(new_set_of_assignment)):
+            if PackageRegistryAbstract.check_assignment_in(assignment, list(new_set_of_assignment)):
                 raise NameError("Cannot remove parameter {} since it will cause "
                                 "two binary to have the same value".format(name))
             new_set_of_assignment.add(assignment)
@@ -145,16 +145,16 @@ class PackageRegistryInterface:
         if set(new_assignment.keys()) != set(self.params):
             raise KeyError("wrong settings key: {} is not {}".format(sorted(new_assignment.keys()),
                                                                      sorted(self.params)))
-        if not PackageRegistryInterface.check_assignment_in(old_assignment, self.list_package_binaries()):
+        if not PackageRegistryAbstract.check_assignment_in(old_assignment, self.list_package_binaries()):
             raise ValueError("there is no binary that match the assignment")
-        if PackageRegistryInterface.check_assignment_in(new_assignment, self.list_package_binaries()):
+        if PackageRegistryAbstract.check_assignment_in(new_assignment, self.list_package_binaries()):
             raise NameError("there already exist binary with same assignment with the new one")
 
         self.reset_binary_assignment(old_assignment, new_assignment)
 
     def try_download(self, assignment: Dict[str, str], fresh_download: bool, dir_path: str) -> bool:
         if assignment in self.list_package_binaries():
-            pb: PackageBinaryInterface = self.get_package_binary(assignment)
+            pb: PackageBinaryAbstract = self.get_package_binary(assignment)
             pb.download_content(download_dir_path=dir_path, fresh_download=fresh_download)
             return True
         return False

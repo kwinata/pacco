@@ -3,10 +3,10 @@ import logging
 from typing import Optional, Dict
 
 from pacco.manager.file_based.utils.clients.abstract import FileBasedClientAbstract
-from pacco.manager.interfaces.package_binary import PackageBinaryInterface
+from pacco.manager.abstracts.package_binary import PackageBinaryAbstract
 
 
-class PackageBinaryFileBased(PackageBinaryInterface):
+class PackageBinaryFileBased(PackageBinaryAbstract):
     """
     An implementation of the PackageBinary interface
     """

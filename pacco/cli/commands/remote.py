@@ -1,5 +1,5 @@
 from pacco.cli.commands.utils.command_abstract import CommandAbstract
-from pacco.manager.interfaces.remote import RemoteInterface
+from pacco.manager.abstracts.remote import RemoteAbstract
 
 
 class Remote(CommandAbstract):
@@ -9,7 +9,7 @@ class Remote(CommandAbstract):
         """
         parser = self.init_parser('list')
         parser.parse_args(args)
-        remotes: List[RemoteInterface] = self.rm.list_remote()
+        remotes: List[RemoteAbstract] = self.rm.list_remote()
         self.out.writeln(remotes)
 
     def add(self, *args):

@@ -6,8 +6,8 @@ from typing import Dict, List, Optional
 
 import yaml
 
-from pacco.manager.interfaces.remote import RemoteInterface
-from pacco.manager.interfaces.remote_factory import create_remote_object
+from pacco.manager.abstracts.remote import RemoteAbstract
+from pacco.manager.abstracts.remote_factory import create_remote_object
 
 DEFAULT_REMOTE_NAME = 'default'
 
@@ -17,7 +17,7 @@ class RemoteManager:
     Function to manage ``.pacco_config`` file as the storage for remote lists
     With ``RemoteManager``, you can manage multiple ``Remote`` s
     """
-    remotes: Dict[str, RemoteInterface]
+    remotes: Dict[str, RemoteAbstract]
 
     def __init__(self):
         self.__pacco_config = os.path.join(str(Path.home()), '.pacco_config')
@@ -48,7 +48,7 @@ class RemoteManager:
         with open(self.__pacco_config, "w") as f:
             yaml.dump({'remotes': serialized_remotes, 'default': self.default_remotes}, stream=f)
 
-    def get_remote(self, name: str) -> RemoteInterface:
+    def get_remote(self, name: str) -> RemoteAbstract:
         """
         Get the ``Remote`` based on the remote name.
 

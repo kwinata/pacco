@@ -1,10 +1,10 @@
 from typing import Dict
 
 from pacco.manager.file_based.remote import RemoteFileBased
-from pacco.manager.interfaces.remote import RemoteInterface
+from pacco.manager.abstracts.remote import RemoteAbstract
 
 
-def create_remote_object(configuration: Dict[str, str], clean=False) -> RemoteInterface:
+def create_remote_object(configuration: Dict[str, str], clean=False) -> RemoteAbstract:
     if configuration['remote_type'] in ['local', 'nexus_site', 'webdav']:
         return RemoteFileBased(configuration, clean)
     else:

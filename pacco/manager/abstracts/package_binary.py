@@ -4,7 +4,7 @@ from typing import Optional, Dict
 from pacco.manager.utils.cache import Cache
 
 
-class PackageBinaryInterface:
+class PackageBinaryAbstract:
     """
         Represent the existence of a package (e.g. openssl) in the package manager
         This class is the interface class with the expected behavior defined below.

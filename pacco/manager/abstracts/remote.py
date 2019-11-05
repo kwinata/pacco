@@ -1,10 +1,10 @@
 from typing import List, Dict
 
-from pacco.manager.interfaces.package_registry import PackageRegistryInterface
-from pacco.manager.interfaces.registry_factory import create_registry_object
+from pacco.manager.abstracts.package_registry import PackageRegistryAbstract
+from pacco.manager.abstracts.registry_factory import create_registry_object
 
 
-class RemoteInterface:
+class RemoteAbstract:
     """
     Represent the existence of the manager in a remote. This class is the interface class with the
     expected behavior defined below.
@@ -33,7 +33,7 @@ class RemoteInterface:
         self.allocate_space(name)
         create_registry_object(name, params=params, context=self.get_registry_context(name))
 
-    def get_package_registry(self, name: str) -> PackageRegistryInterface:
+    def get_package_registry(self, name: str) -> PackageRegistryAbstract:
         """
         Get a reference to the ``PackageRegistry`` object based on the settings value
 
@@ -51,7 +51,7 @@ class RemoteInterface:
 
     def try_download(self, package_name: str, assignment: Dict[str, str], fresh_download: bool, dir_path: str) -> bool:
         if package_name in self.list_package_registries():
-            pr: PackageRegistryInterface = self.get_package_registry(package_name)
+            pr: PackageRegistryAbstract = self.get_package_registry(package_name)
             if pr.try_download(assignment, fresh_download, dir_path):
                 return True
         return False
