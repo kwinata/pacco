@@ -1,5 +1,6 @@
 from typing import Optional, List, Dict
 
+from pacco.manager.interfaces.binary_factory import create_binary_object
 from pacco.manager.interfaces.package_binary import PackageBinaryInterface
 
 
@@ -12,6 +13,23 @@ class PackageRegistryInterface:
     def __init__(self, name: str, params: Optional[List[str]] = None):
         self.name = name
         self.params = params
+
+        remote_params = self.get_remote_params()
+        if params is None and remote_params is None:
+            raise FileNotFoundError("you need to declare params if you are adding. if you are getting, this "
+                                    "means that the package registry is not properly set, you need to delete and "
+                                    "add again")
+        elif remote_params is not None:  # ignore the passed params and use the remote one
+            self.params = remote_params
+        else:
+            self.params = params
+            self.initialize_remote_params(params)
+
+    def get_remote_params(self) -> Optional[List[str]]:
+        raise NotImplementedError()
+
+    def initialize_remote_params(self, params: List[str]):
+        raise NotImplementedError()
 
     def __repr__(self):
         return "PR[{}, {}]".format(self.name, ', '.join(sorted(self.params)))
@@ -37,6 +55,15 @@ class PackageRegistryInterface:
             KeyError: raised if the set of keys in the passed ``assignment`` is different with ``params``
             FileExistsError: raised if a package binary with the same configuration already exist.
         """
+        if set(assignment.keys()) != set(self.params):
+            raise KeyError("wrong settings key: {} is not {}".format(sorted(assignment.keys()),
+                                                                     sorted(self.params)))
+        for existing_assignment in self.list_package_binaries():
+            if not (assignment.items() ^ existing_assignment.items()):
+                raise FileExistsError("such binary already exist")
+        self.allocate_space_for_binary(assignment)
+
+    def allocate_space_for_binary(self, assignment: Dict[str, str]) -> None:
         raise NotImplementedError()
 
     def remove_package_binary(self, assignment: Dict[str, str]):
@@ -60,6 +87,17 @@ class PackageRegistryInterface:
             KeyError: when the key of the settings passed is not correct
             FileNotFoundError: when there is no binary with the configuration of settings value
         """
+        if set(assignment.keys()) != set(self.params):
+            raise KeyError("wrong settings key: {} is not {}".format(sorted(assignment.keys()),
+                                                                     sorted(self.params)))
+        for existing_assignment in self.list_package_binaries():
+            if not (assignment.items() ^ existing_assignment.items()):
+                return create_binary_object(registry_name=self.name,
+                                            assignment=assignment,
+                                            context=self.get_binary_context(assignment))
+        raise FileNotFoundError("such configuration does not exist")
+
+    def get_binary_context(self, assignment: Dict[str, str]):
         raise NotImplementedError()
 
     def param_list(self) -> List[str]:

@@ -21,24 +21,16 @@ class PackageRegistryFileBased(PackageRegistryInterface):
         self.client = client
         super(PackageRegistryFileBased, self).__init__(name, params)
 
-        remote_params = self.__get_remote_params()
-        if params is None and remote_params is None:
-            raise FileNotFoundError("you need to declare params if you are adding. if you are getting, this "
-                                    "means that the package registry is not properly set, you need to delete and "
-                                    "add again")
-        elif remote_params is not None:  # ignore the passed params and use the remote one
-            self.params = remote_params
-        else:
-            self.params = params
-            self.client.mkdir(self.__serialize_params(self.params))
-
-    def __get_remote_params(self) -> Optional[List[str]]:
+    def get_remote_params(self) -> Optional[List[str]]:
         params = None
         dirs = self.client.ls()
         for dir_name in dirs:
             if PackageRegistryFileBased.__params_prefix in dir_name:
                 params = dir_name.split('==')[1:]
         return params
+
+    def initialize_remote_params(self, params: List[str]):
+        self.client.mkdir(self.__serialize_params(self.params))
 
     @staticmethod
     def __serialize_params(params: List[str]) -> str:
@@ -82,15 +74,9 @@ class PackageRegistryFileBased(PackageRegistryInterface):
     def __random_string(length: int) -> str:
         return ''.join(random.choices(string.ascii_uppercase + string.digits, k=length))
 
-    def add_package_binary(self, assignment: Dict[str, str]) -> None:
-        if set(assignment.keys()) != set(self.params):
-            raise KeyError("wrong settings key: {} is not {}".format(sorted(assignment.keys()),
-                                                                     sorted(self.params)))
-
+    def allocate_space_for_binary(self, assignment: Dict[str, str]) -> None:
         serialized_assignment = PackageRegistryFileBased.__serialize_assignment(assignment)
         mapping = self.__get_serialized_assignment_to_wrapper_mapping()
-        if serialized_assignment in mapping:
-            raise FileExistsError("such binary already exist")
 
         new_random_dir_name = PackageRegistryFileBased.__random_string(10)
         if new_random_dir_name in mapping.values():
@@ -105,19 +91,10 @@ class PackageRegistryFileBased(PackageRegistryInterface):
                               PackageRegistryFileBased.__serialize_assignment(assignment)
                           ])
 
-    def get_package_binary(self, assignment: Dict[str, str]) -> PackageBinaryFileBased:
+    def get_binary_context(self, assignment: Dict[str, str]):
         serialized_assignment = PackageRegistryFileBased.__serialize_assignment(assignment)
-        if set(assignment.keys()) != set(self.params):
-            raise KeyError("wrong settings key: {} is not {}".format(sorted(assignment.keys()),
-                                                                     sorted(self.params)))
-        if serialized_assignment not in self.__get_serialized_assignment_to_wrapper_mapping():
-            raise FileNotFoundError("such configuration does not exist")
-        return PackageBinaryFileBased(
-            self.client.dispatch_subdir(
-                self.__get_serialized_assignment_to_wrapper_mapping()[serialized_assignment]
-            ),
-            registry_name=self.name,
-            assignment=assignment,
+        return self.client.dispatch_subdir(
+            self.__get_serialized_assignment_to_wrapper_mapping()[serialized_assignment]
         )
 
     def __rename_serialized_assignment(self, action: Callable[[Dict[str, str]], None]):
