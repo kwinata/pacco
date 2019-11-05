@@ -6,7 +6,7 @@ import shutil
 from pathlib import Path
 from typing import Optional, List
 
-from pacco.manager.utils.clients.abstract import FileBasedClientAbstract
+from pacco.manager.file_based.utils.clients.abstract import FileBasedClientAbstract
 
 
 class LocalClient(FileBasedClientAbstract):

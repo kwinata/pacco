@@ -15,7 +15,7 @@ import xml.etree.cElementTree as xmlTree
 
 from http.client import responses as http_codes
 
-from pacco.manager.utils.clients.abstract import FileBasedClientAbstract
+from pacco.manager.file_based.utils.clients.abstract import FileBasedClientAbstract
 
 DOWNLOAD_CHUNK_SIZE_BYTES = 1 * 1024 * 1024
 

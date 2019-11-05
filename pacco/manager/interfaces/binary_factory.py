@@ -2,7 +2,7 @@ from typing import Dict, Any
 
 from pacco.manager.file_based.package_binary import PackageBinaryFileBased
 from pacco.manager.interfaces.package_binary import PackageBinaryInterface
-from pacco.manager.utils.clients.abstract import FileBasedClientAbstract
+from pacco.manager.file_based.utils.clients.abstract import FileBasedClientAbstract
 
 
 def create_binary_object(registry_name: str, assignment: Dict[str, str], context: Any) -> PackageBinaryInterface:

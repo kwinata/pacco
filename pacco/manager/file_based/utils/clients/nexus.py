@@ -9,7 +9,7 @@ from typing import Optional, List
 import requests
 from bs4 import BeautifulSoup
 
-from pacco.manager.utils.clients.abstract import FileBasedClientAbstract
+from pacco.manager.file_based.utils.clients.abstract import FileBasedClientAbstract
 
 
 class NexusFileClient(FileBasedClientAbstract):

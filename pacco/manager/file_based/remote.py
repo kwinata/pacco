@@ -1,7 +1,7 @@
 from typing import List, Dict, Optional
 
-from pacco.manager.utils.client_factory import create_client_object
-from pacco.manager.utils.clients.abstract import FileBasedClientAbstract
+from pacco.manager.file_based.utils.clients.client_factory import create_client_object
+from pacco.manager.file_based.utils.clients.abstract import FileBasedClientAbstract
 from pacco.manager.interfaces.remote import RemoteInterface
 
 
