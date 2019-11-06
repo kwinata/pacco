@@ -8,6 +8,7 @@ SPHINXBUILD   ?= sphinx-build
 SOURCEDIR     = source
 BUILDDIR      = build
 HTMLDIR       = ..
+HTMLDEVDIR    = ../dev/
 
 # Put it first so that "make" without argument is like "make help".
 help:
@@ -26,6 +27,25 @@ github:
 	@rm -f $(HTMLDIR)/searchindex.js
 	@cp -a $(BUILDDIR)/html/. $(HTMLDIR)
 	@touch $(HTMLDIR)/.nojekyll
+
+github_dev:
+	@git checkout dev
+	@git pull
+	@make html
+	@rm -rf $(HTMLDEVDIR)/_static/
+	@rm -rf $(HTMLDEVDIR)/_images/
+	@rm -rf $(HTMLDEVDIR)/.buildinfo
+	@rm -rf $(HTMLDEVDIR)/_sources/
+	@rm -f $(HTMLDEVDIR)/*.html
+	@rm -f $(HTMLDEVDIR)/objects.inv
+	@rm -f $(HTMLDEVDIR)/searchindex.js
+	@cp -a $(BUILDDIR)/html/. $(HTMLDEVDIR)
+	@touch $(HTMLDEVDIR)/.nojekyll
+	@git add .
+	@git stash
+	@git checkout gh-pages
+	@git stash apply
+
 
 # Catch-all target: route all unknown targets to Sphinx using the new
 # "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).
