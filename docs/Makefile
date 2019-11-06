@@ -27,12 +27,7 @@ github_release:
 	@rm -f $(HTMLDIR)/searchindex.js
 	@cp -a $(BUILDDIR)/html/. $(HTMLDIR)
 	@touch $(HTMLDIR)/.nojekyll
-	@git add -A
-	@git stash
-	@git checkout gh-pages
-	@git stash apply
-	@git commit -m "Make Github release"
-	@git commit push origin gh-pages
+
 
 github_dev:
 	@make html
