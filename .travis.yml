@@ -1,15 +1,26 @@
-# Disable sudo to speed up the build
-sudo: false
+services:
+  - docker
 
 language: python
 python: "3.7.5"
 
+env:
+  jobs:
+    NEXUS_URL="http://localhost:8081/nexus/content/sites/pacco/"
+
+before_install:
+  - docker pull sonatype/nexus
+  - tar -xvf pacco-nexus.tar.gz
+  - mv nexus-travis ~/nexus-travis
+  - sudo chown -R 200 ~/nexus-travis
+  - docker run -d -p 8081:8081 --name nexus -v $HOME/nexus-travis:/sonatype-work sonatype/nexus
+  - sleep 60
+  - docker logs nexus
+  - curl http://localhost:8081/nexus/content/sites/pacco/
+
 install:
   - pip install pytest-cov
   - pip install .
-  - git clone https://github.com/sstephenson/bats.git
-  - ./bats/install.sh bats_installation
-  - export PATH=$PWD/bats_installation/bin:$PATH
 
 before_script:
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
@@ -17,9 +28,9 @@ before_script:
   - ./cc-test-reporter before-build
 
 script:
-  - pytest --doctest-modules --cov=pacco --cov-config=.coveragerc --cov-report xml
-  - rm -rf ~/.pacco ~/.pacco_config
-  - bats --tap tests/cli.bats
+  - pytest pacco/cli/tests.py --cov=pacco --cov-config=.coveragerc
+  - pytest --doctest-modules --cov=pacco --cov-append --cov-config=.coveragerc --cov-report xml
+  - coverage report -m
 
 after_script:
   - ./cc-test-reporter format-coverage -t coverage.py
@@ -27,6 +38,6 @@ after_script:
 
 deploy:
   provider: script
-  script: bash scripts/pypi_publish.sh
+  script: bash pypi_publish.sh
   on:
-    branch: master
+    branch: release

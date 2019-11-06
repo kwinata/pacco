@@ -30,10 +30,10 @@ class LocalRemote(RemoteFileBased):
         super(LocalRemote, self).__init__(name, remote_type, client)
 
     @staticmethod
-    def create(name: str, serialized: Dict[str, str]) -> LocalRemote:
+    def create(name: str, serialized: Dict[str, str], clean=False) -> LocalRemote:
         if 'path' not in serialized:
             serialized['path'] = ""
-        return LocalRemote(name, serialized['remote_type'], serialized['path'])
+        return LocalRemote(name, serialized['remote_type'], serialized['path'], clean)
 
     def serialize(self) -> Dict[str, str]:
         return {'remote_type': 'local', 'path': self.__path}
@@ -48,8 +48,8 @@ class NexusSiteRemote(RemoteFileBased):
         super(NexusSiteRemote, self).__init__(name, remote_type, client)
 
     @staticmethod
-    def create(name: str, serialized: Dict[str, str]) -> NexusSiteRemote:
-        client = NexusFileClient(serialized['url'], serialized['username'], serialized['password'])
+    def create(name: str, serialized: Dict[str, str], clean=False) -> NexusSiteRemote:
+        client = NexusFileClient(serialized['url'], serialized['username'], serialized['password'], clean)
         remote_object = NexusSiteRemote(name, serialized['remote_type'], client)
         remote_object.url = serialized['url']
         remote_object.username = serialized['username']

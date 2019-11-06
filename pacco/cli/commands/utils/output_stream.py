@@ -2,9 +2,14 @@ import sys
 
 
 class OutputStream:
-    def __init__(self):
-        self._stream = sys.stdout
-        self._stream_err = sys.stderr
+    def __init__(self, stream=None, stream_err=None):
+        self._stream = stream
+        if self._stream is None:
+            self._stream = sys.stdout
+
+        self._stream_err = stream_err
+        if self._stream_err is None:
+            self._stream_err = sys.stderr
 
     def writeln(self, data, error=False):
         self.write(data, newline=True, error=error)
