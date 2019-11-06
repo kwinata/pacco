@@ -4,13 +4,15 @@ import pytest
 
 from pacco.manager.file_based.utils.clients.local import LocalClient
 from pacco.manager.file_based.utils.clients.nexus import NexusFileClient
+from pacco.manager.file_based.utils.clients.nexus3 import Nexus3Client
 from pacco.manager.file_based.utils.clients.webdav import WebDavClient
 
 
 clients = [
-    (LocalClient, []),
-    (NexusFileClient, ['http://localhost:8081/nexus/content/sites/pacco/', 'admin', 'admin123']),
-    (WebDavClient, [('http://localhost/', 'pacco/'), ('webdav', 'webdav')]),
+    # (LocalClient, []),
+    # (NexusFileClient, ['http://localhost:8081/nexus/content/sites/pacco/', 'admin', 'admin123']),
+    # (WebDavClient, [('http://localhost/', 'pacco/'), ('webdav', 'webdav')]),
+    (Nexus3Client, [('http://localhost:8082', '/'), 'pacco', ('admin', 'admin123')])
 ]
 
 
