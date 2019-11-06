@@ -103,6 +103,7 @@ class TestRegistry(PaccoTest):
     def test_registry_param_list(self, remote, registry):
         params = 'version,os,compiler'
         API.registry_add(remote['name'], registry, params)
+        print('lalas')
         assert API.registry_param_list(remote['name'], registry) == self.format_list(sorted(params.split(',')))
 
     @pytest.mark.parametrize("params,new_param",

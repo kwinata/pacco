@@ -152,4 +152,15 @@ class Settings:
             'username': __nexus_username,
             'password': __nexus_password,
         },
+        {
+            'name': 'nexus-remote3',
+            'type': 'nexus3',
+            'args': ['http://localhost:8082', 'pacco', 'admin', 'admin123'],
+
+            # used by remote_factory
+            'remote_type': 'nexus3',
+            'host_path': ('http://localhost:8082', '/'),
+            'repository_name': 'pacco',
+            'credential': ('admin', 'admin123'),
+        },
     ]
