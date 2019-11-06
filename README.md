@@ -11,9 +11,10 @@ Pacco is a simple package manager (used for prebuilt binary) that is interoperab
 ## Documentation
 
 Check out our documentation [here!](https://kwinata.github.io/pacco)
+The documentation for the development version is also available [here!](https://kwinata.github.io/pacco/dev)
 
 ## Install
-For the latest stable release, install by
+For the latest stable release, igithnstall by
 ```
 pip install pacco
 ```
