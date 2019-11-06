@@ -1,0 +1,258 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Pacco Documentation &mdash; Pacco - binary package manager  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Pacco - binary package manager
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api_docs/index.html">API Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../diagram.html">Design Diagram</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorial/index.html">Pacco Tutorial</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Pacco - binary package manager</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+      <li>Pacco Documentation</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/docs/source/index.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="pacco-documentation">
+<h1>Pacco Documentation<a class="headerlink" href="#pacco-documentation" title="Permalink to this headline">¶</a></h1>
+<img alt="../../_images/pacco3.png" src="../../_images/pacco3.png" />
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api_docs/index.html">API Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api_docs/classes.html">Classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_docs/clients.html">Clients</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_docs/remote_manager.html">Remote Manager</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="diagram.html">Design Diagram</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="diagram.html#class-diagram">Class Diagram</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial/index.html">Pacco Tutorial</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tutorial/index.html#quick-start">Quick Start</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial/index.html#next-step">Next step</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p>Pacco is intended to be used a simple tool for storing binaries. Most of the existing tools found available
+handles to much detail, usually because it is manifested as package manager for certain language.</p>
+<p>Pacco knows three kinds of things: package manager, package registry, and package binary.
+Package manager represent an existing of pacco managed “space”. Package manager will store several package registries.
+Each package registry represent a collection of binaries with different configuration. For example, we can have
+a package registry of “openssl”, which means it will store different variants or configurations of openssl.
+The different variants or configuration is stored as package binaries. Technically, it does not need to be a program
+binary, but rather any file. We store a directory inside the binary with the specified variant and configuration.</p>
+<p>For more examples, you can see the API docs.</p>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+    
+
+  <style>
+    /* Sidebar header (and topbar for mobile) */
+    .wy-side-nav-search, .wy-nav-top {
+      background: #424770;
+    }
+    /* Sidebar */
+    .wy-nav-side {
+      background: #525F7F;
+    }
+     /* unvisited link */
+    .wy-nav-content a:link {
+      color: #6772e5;
+    }
+
+    /* visited link */
+    .wy-nav-content a:visited {
+      color: #6772e5;
+    }
+
+    /* mouse over link */
+    .wy-nav-content a:hover {
+      color: #050505;
+    }
+
+    /* selected link */
+    .wy-nav-content a:active {
+      color: #050505;
+    }
+
+    code.docutils.literal {
+      color: #43458B;
+    }
+
+  </style>
+
+
+</body>
+</html>
