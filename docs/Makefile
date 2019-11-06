@@ -16,7 +16,9 @@ help:
 
 .PHONY: help Makefile
 
-github:
+github_release:
+	@git checkout release
+	@git pull
 	@make html
 	@rm -rf $(HTMLDIR)/_static/
 	@rm -rf $(HTMLDIR)/_images/
@@ -27,6 +29,12 @@ github:
 	@rm -f $(HTMLDIR)/searchindex.js
 	@cp -a $(BUILDDIR)/html/. $(HTMLDIR)
 	@touch $(HTMLDIR)/.nojekyll
+	@git add -A
+	@git stash
+	@git checkout gh-pages
+	@git stash apply
+	@git commit -m "Make Github release"
+	@git commit push origin gh-pages
 
 github_dev:
 	@git checkout dev
@@ -41,10 +49,12 @@ github_dev:
 	@rm -f $(HTMLDEVDIR)/searchindex.js
 	@cp -a $(BUILDDIR)/html/. $(HTMLDEVDIR)
 	@touch $(HTMLDEVDIR)/.nojekyll
-	@git add .
+	@git add -A
 	@git stash
 	@git checkout gh-pages
 	@git stash apply
+	@git commit -m "Make Github Dev"
+	@git commit push origin gh-pages
 
 
 # Catch-all target: route all unknown targets to Sphinx using the new
