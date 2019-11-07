@@ -10,6 +10,7 @@ from typing import List, Tuple, Optional
 import requests
 
 from pacco.manager.file_based.utils.clients.abstract import FileBasedClientAbstract
+from pacco.manager.file_based.utils.clients.helper import check_ascii
 
 
 class Nexus3Client(FileBasedClientAbstract):
@@ -102,6 +103,7 @@ class Nexus3Client(FileBasedClientAbstract):
         os.chdir(upload_path)
         try:
             for file_name in glob.iglob('**/*', recursive=True):
+                check_ascii(file_name)
                 if os.path.isdir(file_name):
                     continue
                 logging.info("Uploading file {}".format(file_name))

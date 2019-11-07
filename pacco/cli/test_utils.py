@@ -106,9 +106,7 @@ class Settings:
     local_pacco_path = os.path.join(__home_path, ".pacco")
     cache_path = os.path.join(__home_path, ".pacco_cache")
 
-    __nexus_url = os.getenv('NEXUS_URL', None)
-    # if not __nexus_url:
-    #     raise EnvironmentError("Please set NEXUS_URL environment variable")
+    __nexus_url = os.getenv('NEXUS_URL', 'http://localhost:8081/nexus/content/sites/pacco/')
     __nexus_username = os.getenv('NEXUS_USERNAME', 'admin')
     __nexus_password = os.getenv('NEXUS_PASSWORD', 'admin123')  # default in nexus2
 

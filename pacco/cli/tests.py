@@ -144,7 +144,9 @@ def binary(remote, registry):
         'registry': 'openssl',
         'params': params,
         'path': 'openssl_upload_dir',
-        'assignment_example': ",".join(["{}=test_value".format(param) for param in params]),
+        'assignment_example': ",".join(
+            ["{}=test_value".format(param) for param in params]
+        ),
     }
     shutil.rmtree('openssl_upload_dir')
 
