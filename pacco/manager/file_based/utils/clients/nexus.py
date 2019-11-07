@@ -43,6 +43,7 @@ class NexusFileClient(FileBasedClientAbstract):
     def __try_connect_nexus(self) -> None:
         resp = None
         if self.__session.get(self.__url + ".pacco").status_code == 200:
+            self.__connected = True
             return
         try:
             resp = self.__session.post(self.__url + ".pacco", data=self.__dummy_stream)
