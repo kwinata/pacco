@@ -22,6 +22,9 @@ class NexusFileClient(FileBasedClientAbstract):
         self.__url = url
         self.__username = username
         self.__password = password
+        self.__session = requests.session()
+        if username and password:
+            self.__session.auth = (username, password)
         self.__dummy_stream = io.StringIO(".pacco")
         self.__connected = False
         self.__bin_dir = self.__url + 'bin/'
@@ -39,10 +42,10 @@ class NexusFileClient(FileBasedClientAbstract):
 
     def __try_connect_nexus(self) -> None:
         resp = None
+        if self.__session.get(self.__url + ".pacco").status_code == 200:
+            return
         try:
-            resp = requests.post(self.__url + ".pacco",
-                                 auth=(self.__username, self.__password),
-                                 data=self.__dummy_stream)
+            resp = self.__session.post(self.__url + ".pacco", data=self.__dummy_stream)
         except requests.exceptions.ConnectionError:
             pass
         else:
@@ -60,7 +63,7 @@ class NexusFileClient(FileBasedClientAbstract):
     def __ls_unformatted(self, path: Optional[str] = "") -> List[str]:
         if path and path[:-1] != "/":
             path += "/"
-        resp = requests.get(self.__url + path, auth=(self.__username, self.__password))
+        resp = self.__session.get(self.__url + path)
         NexusFileClient.__validate_status_code(resp.status_code, [200])
         soup = BeautifulSoup(resp.content, 'html.parser')
         content = [str(tr.td.a.text) for tr in soup.find_all('tr')[2:]]  # skip table header and parent dir
@@ -73,12 +76,11 @@ class NexusFileClient(FileBasedClientAbstract):
         self.__rm(name+'/')
 
     def __rm(self, name: str) -> None:
-        resp = requests.delete(self.__url + name, auth=(self.__username, self.__password))
+        resp = self.__session.delete(self.__url + name)
         NexusFileClient.__validate_status_code(resp.status_code, [200, 204])
 
     def mkdir(self, name: str) -> None:
-        resp = requests.post(self.__url+name+"/.pacco", auth=(self.__username, self.__password),
-                             data=self.__dummy_stream)
+        resp = self.__session.post(self.__url+name+"/.pacco", data=self.__dummy_stream)
         NexusFileClient.__validate_status_code(resp.status_code, [200, 201])
 
     def dispatch_subdir(self, name: str) -> NexusFileClient:
@@ -93,7 +95,7 @@ class NexusFileClient(FileBasedClientAbstract):
         file_names = [name for name in dirs_and_files if name[-1] != '/']
         dir_names = [name for name in dirs_and_files if name[-1] == '/']
         for file_name in file_names:
-            resp = requests.get(self.__url+file_name, auth=(self.__username, self.__password))
+            resp = self.__session.get(self.__url+file_name)
             NexusFileClient.__validate_status_code(resp.status_code, [200])
             logging.info("Downloading file {}".format(file_name))
             with open(os.path.join(download_path, file_name), 'wb') as f:
@@ -116,7 +118,7 @@ class NexusFileClient(FileBasedClientAbstract):
                     continue
                 logging.info("Uploading file {}".format(file_name))
                 with open(file_name, 'rb') as f:
-                    resp = requests.post(self.__bin_dir + file_name, data=f, auth=(self.__username, self.__password))
+                    resp = self.__session.post(self.__bin_dir + file_name, data=f)
                 NexusFileClient.__validate_status_code(resp.status_code, [200, 201])
         except Exception as e:
             raise e
