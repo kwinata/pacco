@@ -161,34 +161,7 @@
 <dt id="pacco.manager.remote_manager.RemoteManager">
 <em class="property">class </em><code class="sig-prename descclassname">pacco.manager.remote_manager.</code><code class="sig-name descname">RemoteManager</code><a class="headerlink" href="#pacco.manager.remote_manager.RemoteManager" title="Permalink to this definition">¶</a></dt>
 <dd><p>Function to manage <code class="docutils literal notranslate"><span class="pre">.pacco_config</span></code> file as the storage for remote lists
-With <code class="docutils literal notranslate"><span class="pre">RemoteManager</span></code>, you can manage multiple <code class="docutils literal notranslate"><span class="pre">PackageManager</span></code> s</p>
-<p class="rubric">Examples</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">Path</span><span class="o">.</span><span class="n">home</span><span class="p">()),</span> <span class="s2">&quot;.pacco_config&quot;</span><span class="p">),</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">Path</span><span class="o">.</span><span class="n">home</span><span class="p">()),</span> <span class="s2">&quot;.pacco_config&quot;</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">rm</span> <span class="o">=</span> <span class="n">RemoteManager</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">rm</span><span class="o">.</span><span class="n">add_remote</span><span class="p">(</span><span class="s1">&#39;local_test&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;remote_type&#39;</span><span class="p">:</span><span class="s1">&#39;local&#39;</span><span class="p">})</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">rm</span><span class="o">.</span><span class="n">list_remote</span><span class="p">()</span>
-<span class="go">[&#39;local_test&#39;]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">rm</span><span class="o">.</span><span class="n">add_remote</span><span class="p">(</span><span class="s1">&#39;local_test_2&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;remote_type&#39;</span><span class="p">:</span><span class="s1">&#39;local&#39;</span><span class="p">,</span> <span class="s1">&#39;path&#39;</span><span class="p">:</span> <span class="s1">&#39;storage&#39;</span><span class="p">})</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">sorted</span><span class="p">(</span><span class="n">rm</span><span class="o">.</span><span class="n">list_remote</span><span class="p">())</span>
-<span class="go">[&#39;local_test&#39;, &#39;local_test_2&#39;]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">rm</span><span class="o">.</span><span class="n">set_default</span><span class="p">([</span><span class="s1">&#39;local_test_2&#39;</span><span class="p">,</span> <span class="s1">&#39;local_test&#39;</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">rm</span><span class="o">.</span><span class="n">get_default</span><span class="p">()</span>
-<span class="go">[&#39;local_test_2&#39;, &#39;local_test&#39;]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">rm</span><span class="o">.</span><span class="n">remove_remote</span><span class="p">(</span><span class="s1">&#39;local_test&#39;</span><span class="p">)</span>
-<span class="gt">Traceback (most recent call last):</span>
-<span class="c">...</span>
-<span class="gr">ValueError</span>: <span class="n">The remote local_test is still in default remote, remove it first</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">rm</span><span class="o">.</span><span class="n">set_default</span><span class="p">([</span><span class="s1">&#39;local_test_2&#39;</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">rm</span><span class="o">.</span><span class="n">remove_remote</span><span class="p">(</span><span class="s1">&#39;local_test&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">del</span> <span class="n">rm</span>  <span class="c1"># auto save</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">other_rm</span> <span class="o">=</span> <span class="n">RemoteManager</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">other_rm</span><span class="o">.</span><span class="n">list_remote</span><span class="p">()</span>
-<span class="go">[&#39;local_test_2&#39;]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">other_rm</span><span class="o">.</span><span class="n">get_remote</span><span class="p">(</span><span class="s1">&#39;local_test_2&#39;</span><span class="p">)</span>
-<span class="go">PackageManagerObject</span>
-</pre></div>
-</div>
+With <code class="docutils literal notranslate"><span class="pre">RemoteManager</span></code>, you can manage multiple <code class="docutils literal notranslate"><span class="pre">Remote</span></code> s</p>
 <dl class="method">
 <dt id="pacco.manager.remote_manager.RemoteManager.add_remote">
 <code class="sig-name descname">add_remote</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">configuration</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.manager.remote_manager.RemoteManager.add_remote" title="Permalink to this definition">¶</a></dt>
@@ -235,44 +208,8 @@ With <code class="docutils literal notranslate"><span class="pre">RemoteManager<
 <li><p><strong>fresh_download</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>]) – will not use cache if True</p></li>
 </ul>
 </dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">os</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">__</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s2">&quot;rm -f ~/.pacco_config&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">__</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s1">&#39;rm -rf download_folder download_folder2 local3 pacco_storage tempfolder ~/.pacco&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">rm</span> <span class="o">=</span> <span class="n">RemoteManager</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">rm</span><span class="o">.</span><span class="n">add_remote</span><span class="p">(</span><span class="s1">&#39;local&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;remote_type&#39;</span><span class="p">:</span> <span class="s1">&#39;local&#39;</span><span class="p">})</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pm</span> <span class="o">=</span> <span class="n">rm</span><span class="o">.</span><span class="n">get_remote</span><span class="p">(</span><span class="s1">&#39;local&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pm</span><span class="o">.</span><span class="n">add_package_registry</span><span class="p">(</span><span class="s1">&#39;openssl&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;os&#39;</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pr</span> <span class="o">=</span> <span class="n">pm</span><span class="o">.</span><span class="n">get_package_registry</span><span class="p">(</span><span class="s1">&#39;openssl&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pr</span><span class="o">.</span><span class="n">add_package_binary</span><span class="p">({</span><span class="s1">&#39;os&#39;</span><span class="p">:</span> <span class="s1">&#39;osx&#39;</span><span class="p">})</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pb</span> <span class="o">=</span> <span class="n">pr</span><span class="o">.</span><span class="n">get_package_binary</span><span class="p">({</span><span class="s1">&#39;os&#39;</span><span class="p">:</span> <span class="s1">&#39;osx&#39;</span><span class="p">})</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="s1">&#39;tempfolder&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">open</span><span class="p">(</span><span class="s2">&quot;tempfolder/testfile&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pb</span><span class="o">.</span><span class="n">upload_content</span><span class="p">(</span><span class="s1">&#39;tempfolder&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">rm</span><span class="o">.</span><span class="n">add_remote</span><span class="p">(</span><span class="s1">&#39;local2&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;remote_type&#39;</span><span class="p">:</span> <span class="s1">&#39;local&#39;</span><span class="p">,</span> <span class="s1">&#39;path&#39;</span><span class="p">:</span> <span class="s1">&#39;pacco_storage&#39;</span><span class="p">})</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pm2</span> <span class="o">=</span> <span class="n">rm</span><span class="o">.</span><span class="n">get_remote</span><span class="p">(</span><span class="s1">&#39;local2&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pm2</span><span class="o">.</span><span class="n">add_package_registry</span><span class="p">(</span><span class="s1">&#39;openssl&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;os&#39;</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">rm</span><span class="o">.</span><span class="n">add_remote</span><span class="p">(</span><span class="s1">&#39;local3&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;remote_type&#39;</span><span class="p">:</span> <span class="s1">&#39;local&#39;</span><span class="p">,</span> <span class="s1">&#39;path&#39;</span><span class="p">:</span> <span class="s1">&#39;local3&#39;</span><span class="p">})</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">rm</span><span class="o">.</span><span class="n">set_default</span><span class="p">([</span><span class="s1">&#39;local2&#39;</span><span class="p">,</span> <span class="s1">&#39;local3&#39;</span><span class="p">,</span> <span class="s1">&#39;local&#39;</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">rm</span><span class="o">.</span><span class="n">default_download</span><span class="p">(</span><span class="s1">&#39;openssl&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;os&#39;</span><span class="p">:</span> <span class="s1">&#39;osx&#39;</span><span class="p">},</span> <span class="s1">&#39;download_folder&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="s1">&#39;download_folder&#39;</span><span class="p">)</span>
-<span class="go">[&#39;testfile&#39;]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">rm</span><span class="o">.</span><span class="n">set_default</span><span class="p">([</span><span class="s1">&#39;local&#39;</span><span class="p">,</span> <span class="s1">&#39;local3&#39;</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">rm</span><span class="o">.</span><span class="n">default_download</span><span class="p">(</span><span class="s1">&#39;openssl&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;os&#39;</span><span class="p">:</span> <span class="s1">&#39;osx&#39;</span><span class="p">},</span> <span class="s1">&#39;download_folder2&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="s1">&#39;download_folder2&#39;</span><span class="p">)</span>
-<span class="go">[&#39;testfile&#39;]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">rm</span><span class="o">.</span><span class="n">set_default</span><span class="p">([</span><span class="s1">&#39;local3&#39;</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">rm</span><span class="o">.</span><span class="n">default_download</span><span class="p">(</span><span class="s1">&#39;openssl&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;os&#39;</span><span class="p">:</span> <span class="s1">&#39;osx&#39;</span><span class="p">},</span> <span class="s1">&#39;download_folder3&#39;</span><span class="p">)</span>
-<span class="gt">Traceback (most recent call last):</span>
-<span class="c">...</span>
-<span class="gr">FileNotFoundError</span>: <span class="n">Such binary does not exist in any remotes in the default remote list</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">__</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s1">&#39;rm -rf download_folder download_folder2 local3 pacco_storage tempfolder ~/.pacco&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-<dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -294,13 +231,13 @@ With <code class="docutils literal notranslate"><span class="pre">RemoteManager<
 <dl class="method">
 <dt id="pacco.manager.remote_manager.RemoteManager.get_remote">
 <code class="sig-name descname">get_remote</code><span class="sig-paren">(</span><em class="sig-param">name</em><span class="sig-paren">)</span><a class="headerlink" href="#pacco.manager.remote_manager.RemoteManager.get_remote" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the <code class="docutils literal notranslate"><span class="pre">PackageManager</span></code> based on the remote name.</p>
+<dd><p>Get the <code class="docutils literal notranslate"><span class="pre">Remote</span></code> based on the remote name.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>name</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – the name of the remote</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference internal" href="classes.html#pacco.manager.interfaces.package_manager.PackageManagerInterface" title="pacco.manager.interfaces.package_manager.PackageManagerInterface"><code class="xref py py-class docutils literal notranslate"><span class="pre">PackageManagerInterface</span></code></a></p>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">RemoteAbstract</span></code></p>
 </dd>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>the package manager object</p>
