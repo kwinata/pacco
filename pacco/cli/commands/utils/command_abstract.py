@@ -3,15 +3,16 @@ import inspect
 from typing import Dict, Callable
 
 from pacco import __version__ as client_version
+from pacco.manager.remote_manager import RemoteManager
 
 
 class CommandAbstract:
-    def __init__(self, name, output, remote_manager):
+    def __init__(self, name, output):
         if name:
             name += " "  # see show help below, we don't want double space for empty `name`
         self.name = name
         self.out = output
-        self.rm = remote_manager
+        self.rm = RemoteManager()
 
     def run(self, *args):
         """

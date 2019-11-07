@@ -3,7 +3,7 @@ from pathlib import Path
 
 from typing import Dict
 
-from pacco.manager.utils.clients import LocalClient
+from pacco.manager.file_based.utils.clients.local import LocalClient
 
 
 class Cache:

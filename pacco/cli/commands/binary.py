@@ -6,6 +6,9 @@ from pathlib import Path
 from typing import Dict
 
 from pacco.cli.commands.utils.command_abstract import CommandAbstract
+from pacco.manager.abstracts.package_binary import PackageBinaryAbstract
+from pacco.manager.abstracts.remote import RemoteAbstract
+from pacco.manager.abstracts.package_registry import PackageRegistryAbstract
 from pacco.manager.utils.cache import Cache
 
 
@@ -28,9 +31,9 @@ class Binary(CommandAbstract):
         settings_dict = Binary.__parse_settings_args(parsed_args.settings)
         if parsed_args.remote_name == 'default':
             self.rm.default_download(parsed_args.registry_name, settings_dict, parsed_args.dir_path)
-        pm = self.rm.get_remote(parsed_args.remote_name)
-        pr = pm.get_package_registry(parsed_args.registry_name)
-        pb = pr.get_package_binary(settings_dict)
+        pm: RemoteAbstract = self.rm.get_remote(parsed_args.remote_name)
+        pr: PackageRegistryAbstract = pm.get_package_registry(parsed_args.registry_name)
+        pb: PackageBinaryAbstract = pr.get_package_binary(settings_dict)
         pb.download_content(parsed_args.dir_path)
 
     def upload(self, *args):
@@ -43,7 +46,7 @@ class Binary(CommandAbstract):
         parsed_args = parser.parse_args(args)
 
         assignment = Binary.__parse_settings_args(parsed_args.settings)
-        pm = self.rm.get_remote(parsed_args.remote_name)
+        pm: RemoteAbstract = self.rm.get_remote(parsed_args.remote_name)
         pr = pm.get_package_registry(parsed_args.registry_name)
         try:
             pr.get_package_binary(assignment)

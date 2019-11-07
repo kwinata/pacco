@@ -8,19 +8,37 @@ env:
   jobs:
     NEXUS_URL="http://localhost:8081/nexus/content/sites/pacco/"
 
+env:
+  jobs:
+    NEXUS_URL="http://localhost:8081/nexus/content/sites/pacco/"
+
+
 before_install:
-  - docker pull sonatype/nexus
   - tar -xvf pacco-nexus.tar.gz
+  - tar -xvf pacco-nexus3.tar.gz
   - mv nexus-travis ~/nexus-travis
+  - mv nexus3-travis ~/nexus3-travis
   - sudo chown -R 200 ~/nexus-travis
+  - sudo chown -R 200 ~/nexus3-travis
+  - docker pull sonatype/nexus3
+  - docker run -d -p 8082:8081 --name nexus3 -v $HOME/nexus3-travis:/nexus-data sonatype/nexus3
+  - docker pull sonatype/nexus
   - docker run -d -p 8081:8081 --name nexus -v $HOME/nexus-travis:/sonatype-work sonatype/nexus
+  - docker pull sashgorokhov/webdav
+  - docker run --name webdav -p 80:80 -v /media:/media -d sashgorokhov/webdav
   - sleep 60
+  - docker logs webdav
   - docker logs nexus
+  - docker logs nexus3
+  - curl localhost --user webdav:webdav
   - curl http://localhost:8081/nexus/content/sites/pacco/
+  - curl http://localhost:8082/service/rest/repository/browse/pacco/
+
 
 install:
   - pip install pytest-cov
   - pip install .
+  - pip install -r test_requirements.txt
 
 before_script:
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
@@ -28,8 +46,7 @@ before_script:
   - ./cc-test-reporter before-build
 
 script:
-  - pytest pacco/cli/tests.py --cov=pacco --cov-config=.coveragerc
-  - pytest --doctest-modules --cov=pacco --cov-append --cov-config=.coveragerc --cov-report xml
+  - pytest pacco/cli/tests.py --cov=pacco --cov-config=.coveragerc --cov-report xml
   - coverage report -m
 
 after_script:

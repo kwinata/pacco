@@ -2,9 +2,11 @@ import os
 import shutil
 
 import pytest
+import docker
+from docker.errors import NotFound
 
 from pacco.cli.test_utils import API, Settings
-from pacco.manager.remote_factory import instantiate_remote
+from pacco.manager.abstracts.remote_factory import create_remote_object
 
 
 class PaccoTest:
@@ -15,6 +17,27 @@ class PaccoTest:
             shutil.rmtree(Settings.local_pacco_path)
         if os.path.exists(Settings.cache_path):
             shutil.rmtree(Settings.cache_path)
+        client = docker.from_env()
+        try:
+            webdav_container = client.containers.get('webdav')
+            webdav_container.start()
+        except NotFound:
+            print("Creating container")
+            webdav_container = client.containers.create(
+                "sashgorokhov/webdav:latest",
+                name="webdav",
+                ports={'80/tcp': 80},
+                volumes={'/media': {'bind': '/media', 'mode': 'rw'}},
+                environment={
+                    'USERNAME': 'webdav',
+                    'PASSWORD': 'webdav'
+                },
+                detach=True,
+            )
+            webdav_container.start()
+        webdav_container.exec_run('rm -rf /media/pacco')
+        webdav_container.exec_run('mkdir /media/pacco')
+        webdav_container.exec_run('chmod o+rwxs /media/pacco')
 
     def teardown_method(self, method):
         self.setup_method(method)
@@ -55,9 +78,9 @@ class TestRemote(PaccoTest):
 @pytest.fixture(scope="function")
 def registry(remote):
     API.remote_add(remote)
-    instantiate_remote(remote['name'], remote, clean=True)
+    create_remote_object(remote, clean=True)
     yield "openssl"
-    instantiate_remote(remote['name'], remote, clean=True)
+    create_remote_object(remote, clean=True)
     API.remote_remove(remote)
 
 
@@ -80,6 +103,7 @@ class TestRegistry(PaccoTest):
     def test_registry_param_list(self, remote, registry):
         params = 'version,os,compiler'
         API.registry_add(remote['name'], registry, params)
+        print('lalas')
         assert API.registry_param_list(remote['name'], registry) == self.format_list(sorted(params.split(',')))
 
     @pytest.mark.parametrize("params,new_param",
@@ -111,7 +135,9 @@ class TestRegistry(PaccoTest):
 def binary(remote, registry):
     API.registry_add(remote['name'], "openssl", "os,version")
     os.makedirs('openssl_upload_dir', exist_ok=True)
+    os.makedirs('openssl_upload_dir/test', exist_ok=True)
     open("openssl_upload_dir/sample.a", "w").close()
+    open("openssl_upload_dir/test/test.c", "w").close()
     params = 'os,version'.split(',')
     yield {
         'remote': remote['name'],
@@ -142,6 +168,8 @@ class TestBinary(PaccoTest):
 
     def test_binary_download(self, binary):
         TestBinary.__upload_binary(binary)
+        if os.path.isdir('openssl_download_path'):
+            shutil.rmtree('openssl_download_path')
         API.binary_download(
             binary['remote'],
             binary['registry'],
@@ -149,6 +177,8 @@ class TestBinary(PaccoTest):
             binary['assignment_example'],
         )
         assert os.path.isfile('openssl_download_path/sample.a')
+        assert os.path.isfile('openssl_download_path/test/test.c')
+        shutil.rmtree('openssl_download_path')
 
     def test_binary_remove(self, binary):
         TestBinary.__upload_binary(binary)
