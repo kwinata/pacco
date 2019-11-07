@@ -4,6 +4,9 @@ services:
 language: python
 python: "3.7.5"
 
+env:
+  jobs:
+    NEXUS_URL="http://localhost:8081/nexus/content/sites/pacco/"
 
 env:
   jobs:
@@ -52,6 +55,6 @@ after_script:
 
 deploy:
   provider: script
-  script: bash scripts/pypi_publish.sh
+  script: bash pypi_publish.sh
   on:
     branch: release
