@@ -1,12 +1,10 @@
 import io
 import os
 import shlex
-import subprocess
 from pathlib import Path
 
-from pacco.cli.commands.pacco import Pacco as PaccoMain
+from pacco.cli.commands.pacco import Pacco
 from pacco.cli.commands.utils.output_stream import OutputStream
-from pacco.manager.remote_manager import RemoteManager
 
 
 class API:
@@ -14,7 +12,7 @@ class API:
     def __exec(command):
         stream = io.StringIO()
         stream_err = io.StringIO()
-        PaccoMain('', OutputStream(stream=stream, stream_err=stream_err), RemoteManager()).run(
+        Pacco('', OutputStream(stream=stream, stream_err=stream_err)).run(
             *(shlex.split(command)[1:])
         )
         if stream_err.getvalue():
@@ -108,13 +106,21 @@ class Settings:
     local_pacco_path = os.path.join(__home_path, ".pacco")
     cache_path = os.path.join(__home_path, ".pacco_cache")
 
-    __nexus_url = os.getenv('NEXUS_URL', None)
-    # if not __nexus_url:
-    #     raise EnvironmentError("Please set NEXUS_URL environment variable")
+    __nexus_url = os.getenv('NEXUS_URL', 'http://localhost:8081/nexus/content/sites/pacco/')
     __nexus_username = os.getenv('NEXUS_USERNAME', 'admin')
     __nexus_password = os.getenv('NEXUS_PASSWORD', 'admin123')  # default in nexus2
 
     remotes = [
+        {
+            'name': 'webdav',
+            'type': 'webdav',
+            'args': ['http://localhost/', 'pacco/', 'webdav', 'webdav'],
+
+            # used by remote_factory
+            'remote_type': 'webdav',
+            'host_path': ('http://localhost/', 'pacco/'),
+            'credential': ('webdav', 'webdav'),
+        },
         {
             'name': 'local',
             'type': 'local',
@@ -143,5 +149,16 @@ class Settings:
             'url': __nexus_url,
             'username': __nexus_username,
             'password': __nexus_password,
+        },
+        {
+            'name': 'nexus-remote3',
+            'type': 'nexus3',
+            'args': ['http://localhost:8082', 'pacco', 'admin', 'admin123'],
+
+            # used by remote_factory
+            'remote_type': 'nexus3',
+            'host_path': ('http://localhost:8082', '/'),
+            'repository_name': 'pacco',
+            'credential': ('admin', 'admin123'),
         },
     ]
