@@ -10,6 +10,7 @@ import requests
 from bs4 import BeautifulSoup
 
 from pacco.manager.file_based.utils.clients.abstract import FileBasedClientAbstract
+from pacco.manager.file_based.utils.clients.helper import check_ascii
 
 
 class NexusFileClient(FileBasedClientAbstract):
@@ -115,6 +116,7 @@ class NexusFileClient(FileBasedClientAbstract):
         os.chdir(dir_path)
         try:
             for file_name in glob.iglob('**/*', recursive=True):
+                check_ascii(file_name)
                 if os.path.isdir(file_name):
                     continue
                 logging.info("Uploading file {}".format(file_name))

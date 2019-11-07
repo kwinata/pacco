@@ -14,8 +14,8 @@ class Cache:
     def __serialize(registry_name: str, assignment: Dict[str, str]):
         assignment['__pacco_registry_name'] = registry_name
         sorted_assignment_tuple = sorted(assignment.items(), key=lambda x: x[0])
-        zipped_assignment = ['='.join(pair) for pair in sorted_assignment_tuple]
-        return '=='.join(zipped_assignment)
+        zipped_assignment = ['__BINARY_ASSIGNMENT__'.join(pair) for pair in sorted_assignment_tuple]
+        return '__PARAM_SEPARATOR__'.join(zipped_assignment)
 
     def download_from_cache(self, registry_name: str, assignment: Dict[str, str], download_path: str) -> bool:
         dir_name = Cache.__serialize(registry_name, assignment)

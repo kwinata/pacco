@@ -25,7 +25,7 @@ class PackageRegistryFileBased(PackageRegistryAbstract):
         dirs = self.client.ls()
         for dir_name in dirs:
             if PackageRegistryFileBased.__params_prefix in dir_name:
-                params = dir_name.split('==')[1:]
+                params = dir_name.split('__PARAM_SEPARATOR__')[1:]
         return params
 
     def initialize_remote_params(self, params: List[str]) -> None:
@@ -34,7 +34,7 @@ class PackageRegistryFileBased(PackageRegistryAbstract):
     @staticmethod
     def __serialize_params(params: List[str]) -> str:
         params = sorted(params)
-        return '=='.join([PackageRegistryFileBased.__params_prefix] + params)
+        return '__PARAM_SEPARATOR__'.join([PackageRegistryFileBased.__params_prefix] + params)
 
     @staticmethod
     def __serialize_assignment(assignment: Dict[str, str]) -> str:
@@ -42,14 +42,14 @@ class PackageRegistryFileBased(PackageRegistryAbstract):
             if len(value) == 0:
                 raise ValueError("assignment value for param {} cannot be an empty string".format(key))
         sorted_assignment_tuple = sorted(assignment.items(), key=lambda x: x[0])
-        zipped_assignment = ['='.join(pair) for pair in sorted_assignment_tuple]
-        return '=='.join(zipped_assignment)
+        zipped_assignment = ['__BINARY_ASSIGNMENT__'.join(pair) for pair in sorted_assignment_tuple]
+        return '__PARAM_SEPARATOR__'.join(zipped_assignment)
 
     @staticmethod
     def __unserialize_assignment(dir_name: str) -> Dict[str, str]:
-        if not re.match(r"((\w+=\w+)==)*(\w+=\w+)", dir_name):
+        if not re.match(r"((\w+__BINARY_ASSIGNMENT__\w+)__PARAM_SEPARATOR__)*(\w+__BINARY_ASSIGNMENT__\w+)", dir_name):
             raise ValueError("Invalid dir_name syntax {}".format(dir_name))
-        return {arg.split('=')[0]: arg.split('=')[1] for arg in dir_name.split('==')}
+        return {arg.split('__BINARY_ASSIGNMENT__')[0]: arg.split('__BINARY_ASSIGNMENT__')[1] for arg in dir_name.split('__PARAM_SEPARATOR__')}
 
     def __get_serialized_assignment_to_wrapper_mapping(self) -> Dict[str, str]:
         dir_names = self.client.ls()

@@ -16,6 +16,7 @@ import xml.etree.cElementTree as xmlTree
 from http.client import responses as http_codes
 
 from pacco.manager.file_based.utils.clients.abstract import FileBasedClientAbstract
+from pacco.manager.file_based.utils.clients.helper import check_ascii
 
 DOWNLOAD_CHUNK_SIZE_BYTES = 1 * 1024 * 1024
 
@@ -154,6 +155,7 @@ class WebDavClient(FileBasedClientAbstract):
         os.chdir(upload_path)
         try:
             for file_name in glob.iglob('**/*', recursive=True):
+                check_ascii(file_name)
                 if os.path.isdir(file_name):
                     continue
                 logging.info("Uploading file {}".format(file_name))
