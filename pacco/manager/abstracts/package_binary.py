@@ -29,11 +29,13 @@ class PackageBinaryAbstract:
         """
         if self.cache_enabled and (not fresh_download) and \
                 self.cache.download_from_cache(self.registry_name, self.assignment, download_dir_path):
-            logging.info("use cache")
+            logging.info("Done, used cache to download (not downloading from server)")
             return
+        logging.info("Downloading from server")
         self.fresh_download(download_dir_path)
+        logging.info("Finish downloading")
         if self.cache_enabled:
-            logging.info("save cache")
+            logging.info("Save downloaded file to cache")
             self.cache.upload_to_cache(self.registry_name, self.assignment, download_dir_path)
 
     def upload_content(self, dir_path: str) -> None:
@@ -44,8 +46,11 @@ class PackageBinaryAbstract:
             dir_path: the path to the directory to be uploaded
         """
         self.upload_dir(dir_path)
+        logging.info("Finish uploading")
         if self.cache_enabled:
+            logging.info("Saving to cache")
             self.cache.upload_to_cache(self.registry_name, self.assignment, dir_path)
+            logging.info("Saved in cache")
 
     def fresh_download(self, download_dir_path: str) -> None:
         raise NotImplementedError()
