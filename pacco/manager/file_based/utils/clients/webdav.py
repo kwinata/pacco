@@ -145,6 +145,7 @@ class WebDavClient(FileBasedClientAbstract):
         dirs_and_files = self.ls()
         os.makedirs(download_path, exist_ok=True)
         for file_name in dirs_and_files:
+            logging.info(f"Downloading {file_name}")
             self.__download_file(file_name, os.path.join(download_path, file_name), (200, 301))
 
     def upload_dir(self, upload_path):
