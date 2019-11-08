@@ -1,6 +1,15 @@
 Quick Start
 ===========
 
+Video Tutorial
+--------------
+
+This is a video tutorial showing a brief overview of this quick start. You are recommended to be familiar with the
+:ref:`Remote, registry, and binary` and :ref:`Centralized` concept of pacco before watching this video.
+
+.. raw:: html
+   :file: assets/quick_start_video.html
+
 Installation
 ------------
 Make sure that you are using python >= 3.7
