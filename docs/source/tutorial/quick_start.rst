@@ -5,7 +5,8 @@ Video Tutorial
 --------------
 
 This is a video tutorial showing a brief overview of this quick start. You are recommended to be familiar with the
-:ref:`Remote, registry, and binary` and :ref:`Centralized` concept of pacco before watching this video.
+:ref:`Remote, registry, and binary` and :ref:`Centralized` concept of pacco before watching this video. If you feel
+that playing at full speed is a bit too fast, playing the video at 0.75 speed is also comfortable.
 
 .. raw:: html
    :file: assets/quick_start_video.html
