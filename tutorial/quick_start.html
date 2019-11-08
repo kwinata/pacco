@@ -1,0 +1,477 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Quick Start &mdash; Pacco - binary package manager  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Advanced Tutorial" href="advanced_tutorial.html" />
+    <link rel="prev" title="Pacco Tutorial" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Pacco - binary package manager
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introduction</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Pacco Tutorial</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Quick Start</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#video-tutorial">Video Tutorial</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#installation">Installation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#prepare-file-example">Prepare file example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#setup-the-remote-server">Setup the remote server</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#add-the-remote-server-to-pacco">Add the remote server to Pacco</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#setup-a-registry">Setup a registry</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#upload-binary">Upload binary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#using-the-binary">Using the binary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#download-to-project-directory">Download to project directory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#get-location-for-pointer-to-binary-cache-path">Get location for pointer to binary cache path</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#next-steps">Next steps</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="advanced_tutorial.html">Advanced Tutorial</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../api_docs/index.html">API Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../diagram.html">Design Diagram</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Pacco - binary package manager</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Pacco Tutorial</a> &raquo;</li>
+        
+      <li>Quick Start</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/tutorial/quick_start.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="quick-start">
+<h1>Quick Start<a class="headerlink" href="#quick-start" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="video-tutorial">
+<h2>Video Tutorial<a class="headerlink" href="#video-tutorial" title="Permalink to this headline">¶</a></h2>
+<p>This is a video tutorial showing a brief overview of this quick start. You are recommended to be familiar with the
+<span class="xref std std-ref">Remote, registry, and binary</span> and <a class="reference internal" href="../introduction.html#centralized"><span class="std std-ref">Centralized</span></a> concept of pacco before watching this video. If you feel
+that playing at full speed is a bit too fast, playing the video at 0.75 speed is also comfortable.</p>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/0eMs63oEhl8" frameborder="0"
+        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
+<div class="section" id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<p>Make sure that you are using python &gt;= 3.7
+Install the pacco from pip: <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">pacco</span></code> (or alternatively <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">pip</span> <span class="pre">install</span> <span class="pre">pacco</span></code> and check the
+installation by <code class="docutils literal notranslate"><span class="pre">pacco</span> <span class="pre">--version</span></code></p>
+</div>
+<div class="section" id="prepare-file-example">
+<h2>Prepare file example<a class="headerlink" href="#prepare-file-example" title="Permalink to this headline">¶</a></h2>
+<p>Let us download some file for example purposes:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ curl https://codeload.github.com/openssl/openssl/zip/OpenSSL_1_1_1d &gt; openssl.zip
+$ unzip openssl.zip
+$ rm openssl
+$ mv openssl-OpenSSL_1_1_1d openssl
+</pre></div>
+</div>
+</div>
+<div class="section" id="setup-the-remote-server">
+<h2>Setup the remote server<a class="headerlink" href="#setup-the-remote-server" title="Permalink to this headline">¶</a></h2>
+<p>For this tutorial, we will be using a locally hosted nexus2 docker server.
+You can see the guide for setting up the dockerized nexus from <a class="reference external" href="https://github.com/sonatype/docker-nexus">here</a>.
+After you run the server, add a hosted repository of provider <code class="docutils literal notranslate"><span class="pre">site</span></code>. The url that we will use for this example is
+<code class="docutils literal notranslate"><span class="pre">http://localhost:8081/nexus/content/sites/my-pacco-repo/</span></code>.</p>
+<p>If you feel that there is no need to or complicated to use the nexus server, you can opt to use the local server and
+you can still follow along this tutorial.</p>
+</div>
+<div class="section" id="add-the-remote-server-to-pacco">
+<h2>Add the remote server to Pacco<a class="headerlink" href="#add-the-remote-server-to-pacco" title="Permalink to this headline">¶</a></h2>
+<p>After you have set up the repository on the Nexus, now we can add it to the Pacco. Since we are setting up a remote,
+we can check what command do we need by using:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ pacco remote -h
+
+        pacco remote add           Add a remote.
+        pacco remote list          List existing remotes.
+        pacco remote list_default  List default remote(s).
+        pacco remote remove        Remove a remote.
+        pacco remote set_default   Set default remote(s).
+
+    Pacco remote commands. Type &#39;pacco remote &lt;command&gt; -h&#39; for help
+</pre></div>
+</div>
+<p>So clearly we need to add it first, you can see how to do it by:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ pacco remote add -h
+
+usage: pacco remote add [-h] name type args
+
+positional arguments:
+  name        remote name
+  type        remote type, choices: &#39;local&#39;, &#39;nexus_site&#39;, &#39;webdav&#39;, &#39;nexus3&#39;
+  args        remote args, a comma separated value(s) (with no space)
+              depending on the remote type. (1) For local, it&#39;s the path (can
+              be empty). (2) For nexus_site, it&#39;s the url, username, and
+              password. (3) For webdav, it&#39;s the host url, directory path,
+              username, and password (4) For nexus3, it&#39;s the host url,
+              repository name, username and password
+
+optional arguments:
+  -h, --help  show this help message and exit
+</pre></div>
+</div>
+<p>For now we will do:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ pacco remote add docker-remote nexus_site http://localhost:8081/nexus/content/sites/my-pacco-repo/,admin,admin123
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you do not need authentication or you just want to read from the server (no write), you might not need
+the username and password (or even you might not have one). In this case, you can just put the username and password
+empty, such that the <code class="docutils literal notranslate"><span class="pre">args</span></code> will become <code class="docutils literal notranslate"><span class="pre">http://localhost:8081/nexus/content/sites/my-pacco-repo/,,</span></code>.
+(note that you still need to put the <code class="docutils literal notranslate"><span class="pre">,,</span></code>)</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you use local remote instead, you can just do <code class="docutils literal notranslate"><span class="pre">pacco</span> <span class="pre">remote</span> <span class="pre">add</span> <span class="pre">{REMOTE_NAME}</span> <span class="pre">local</span></code>.</p>
+</div>
+<p>After you successfully added the remote, check it with:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ pacco remote list
+
+[&#39;docker-remote&#39;]
+</pre></div>
+</div>
+</div>
+<div class="section" id="setup-a-registry">
+<h2>Setup a registry<a class="headerlink" href="#setup-a-registry" title="Permalink to this headline">¶</a></h2>
+<p>Now, we shall add a registry to the remote. See how by checking:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ pacco registry -h
+
+  pacco registry add           Add registry to remote.
+  pacco registry binaries      List binaries of a registry from a specific remote.
+  pacco registry list          List registries of a remote.
+  pacco registry param_add     Add new parameter with default value to the binaries.
+  pacco registry param_list    List params of a registry.
+  pacco registry param_remove  Remove an existing parameter from all binaries.
+  pacco registry remove        Remove a registry from a specific remote.
+
+Pacco registry commands. Type &#39;pacco registry &lt;command&gt; -h&#39; for help
+</pre></div>
+</div>
+<p>Because we downloaded openssl in the <a class="reference internal" href="#prepare-file-example"><span class="std std-ref">Prepare file example</span></a>, we will name our registry to be just <code class="docutils literal notranslate"><span class="pre">openssl</span></code>.</p>
+<p>Let us check the arguments needed to add the registry:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ pacco remote add -h
+
+usage: pacco registry add [-h] remote name settings
+
+positional arguments:
+  remote      remote name
+  name        registry name
+  settings    settings key (e.g. os,version,obfuscation)
+
+optional arguments:
+  -h, --help  show this help message and exit
+</pre></div>
+</div>
+<p>Notice that we need to provide the argument settings. This settings is like the “parameter names” that we will use
+between the binaries associated with the registry. Since we are downloaded the openssl source (not binary), the
+settings keys “version” and “type” seems reasonable.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ pacco registry add docker-remote openssl version,type
+</pre></div>
+</div>
+<p>Now let’s check it:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ pacco registry list docker-remote
+
+[&#39;openssl&#39;]
+</pre></div>
+</div>
+<p>You can also check the parameter list set:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ pacco registry param_list docker-remote openssl
+
+[&#39;type&#39;, &#39;openssl&#39;]
+</pre></div>
+</div>
+</div>
+<div class="section" id="upload-binary">
+<h2>Upload binary<a class="headerlink" href="#upload-binary" title="Permalink to this headline">¶</a></h2>
+<p>Now we can upload the “binary” (though it’s actually a source code in our case). To see how we can do that</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ pacco binary -h
+
+  pacco binary download      Download from a specified or default remote. Will use cache if exists unless enforced by &#39;--fresh-download&#39; flag
+  pacco binary get_location  Get the path to the cache location for the binary.
+  pacco binary reassign      Change the assignment of a binary to a new one
+  pacco binary remove        Remove a binary from a remote
+  pacco binary upload        Upload binary to a specified remote and store it to cache.
+
+Pacco binary commands. Type &#39;pacco binary &lt;command&gt; -h&#39; for help
+
+usage: pacco binary download [-h] remote_name registry_name dir_path settings
+
+$ pacco binary download -h
+
+positional arguments:
+  remote_name    remote name
+  registry_name  registry name
+  dir_path       download path
+  settings       settings for the specified registry (e.g.
+                 os=linux,version=2.1.0,type=debug
+
+optional arguments:
+  -h, --help     show this help message and exit
+</pre></div>
+</div>
+<p>We need to make sure that the openssl directory is already in our working directory (or else you must provide the
+absolute path). Then we can upload it to the server</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ ls
+
+openssl
+
+$ ls openssl
+
+ACKNOWLEDGEMENTS Configurations   LICENSE          NOTES.PERL       README           apps             config.com       e_os.h           include          test
+AUTHORS          Configure        NEWS             NOTES.UNIX       README.ENGINE    appveyor.yml     crypto           engines          ms               tools
+CHANGES          FAQ              NOTES.ANDROID    NOTES.VMS        README.FIPS      build.info       demos            external         os-dep           util
+CONTRIBUTING     INSTALL          NOTES.DJGPP      NOTES.WIN        VMS              config           doc              fuzz             ssl
+
+$ pacco binary upload docker-remote openssl openssl version=1.1.1,type=d
+</pre></div>
+</div>
+<p>Now we can confirm that it is uploaded:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ pacco registry binaries docker-remote openssl
+
+[&#39;type=d,version=1.1.1&#39;]
+</pre></div>
+</div>
+<p>Though not recommended, you may also browse through your nexus server and you can see that it is uploaded.</p>
+<div class="align-center figure align-default">
+<img alt="../_images/screenshotNexus.png" src="../_images/screenshotNexus.png" />
+</div>
+</div>
+<div class="section" id="using-the-binary">
+<h2>Using the binary<a class="headerlink" href="#using-the-binary" title="Permalink to this headline">¶</a></h2>
+<p>There is two way of using the binary that is already uploaded, one is to download directly to your project directory,
+or get a pointer from pacco and use it from the pacco cache.</p>
+</div>
+<div class="section" id="download-to-project-directory">
+<h2>Download to project directory<a class="headerlink" href="#download-to-project-directory" title="Permalink to this headline">¶</a></h2>
+<p>The way you upload and download is similar, you need to specify the destination of the download and also the parameter
+settings. If the a binary with the same registry and same parameter assignment (regardless of the remote source) was
+downloaded previously, Pacco will just copy it from the cache (Pacco will automatically store to the cache for any
+download or upload action).
+You can enforce the download by adding the flag
+<code class="docutils literal notranslate"><span class="pre">--fresh-download</span></code>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ # remove pacco&#39;s cache
+$ rm -rf ~/.pacco
+$
+$ # download from server because the cache is empty
+$ pacco binary download docker-remote openssl ./openssl-download version=1.1.1,type=d
+$
+$ # will use the cache
+$ pacco binary download docker-remote openssl ./openssl-download version=1.1.1,type=d
+$
+$ # will download again from server and overwrite the cache
+$ pacco binary download docker-remote openssl ./openssl-download version=1.1.1,type=d  --fresh-download
+</pre></div>
+</div>
+</div>
+<div class="section" id="get-location-for-pointer-to-binary-cache-path">
+<h2>Get location for pointer to binary cache path<a class="headerlink" href="#get-location-for-pointer-to-binary-cache-path" title="Permalink to this headline">¶</a></h2>
+<p>As discussed previously, when you download a new binary, pacco will store it into a cache and
+will not re-download if the parameter configuration is the same. Because you
+might not want to have the whole copy for each of the project you are working on, pacco actually helps you to refer
+to the binary cache location by using <code class="docutils literal notranslate"><span class="pre">pacco</span> <span class="pre">binary</span> <span class="pre">get_location</span> <span class="pre">openssl</span> <span class="pre">version=1.1.1,type=d</span></code> . And it will output
+the directory of the installation
+<code class="docutils literal notranslate"><span class="pre">/Users/kevin/.pacco_cache/__pacco_registry_name=openssl==type=d==version=1.1.1/bin</span></code>. To utilize this even better,
+you shall not store the value directly in your project build script, but rather you can call the command online:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ export OPENSSL_DIR=$(pacco binary get_location openssl version=1.1.1,type=d)
+</pre></div>
+</div>
+<p>Now you can use the variable <code class="docutils literal notranslate"><span class="pre">OPENSSL_DIR</span></code> in your build script as you need.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Note that you shall not store the binary cache path given by pacco since it might get updated and
+the cache may be lost. You shall instead always use the <code class="docutils literal notranslate"><span class="pre">get_location</span></code> command.</p>
+</div>
+</div>
+<div class="section" id="next-steps">
+<h2>Next steps<a class="headerlink" href="#next-steps" title="Permalink to this headline">¶</a></h2>
+<p>Links to other tutorial.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="advanced_tutorial.html" class="btn btn-neutral float-right" title="Advanced Tutorial" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral float-left" title="Pacco Tutorial" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+    
+
+  <style>
+    code.docutils.literal {
+      background-color: #f8f8f8;
+      border-radius: 4px;
+      color: #404040;
+    }
+
+  </style>
+
+
+</body>
+</html>
