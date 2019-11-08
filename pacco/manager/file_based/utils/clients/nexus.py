@@ -103,6 +103,7 @@ class NexusFileClient(FileBasedClientAbstract):
             with open(os.path.join(download_path, file_name), 'wb') as f:
                 f.write(resp.content)
         for dir_name in dir_names:
+            logging.info("Downloading directory {}".format(dir_name))
             child_object = NexusFileClient(self.__url+dir_name, self.__username, self.__password)
             child_object.download_dir(os.path.join(download_path, dir_name))
 
