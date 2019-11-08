@@ -34,6 +34,7 @@ extensions = [
     'sphinx.ext.napoleon',  # for google style docstring,
     'sphinx_autodoc_typehints',
     'sphinx_rtd_theme',
+    'sphinx.ext.autosectionlabel',
 ]
 
 napoleon_google_docstring = True

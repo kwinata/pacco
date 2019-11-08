@@ -20,6 +20,10 @@ class Binary(CommandAbstract):
         return {token.split('=')[0]: token.split('=')[1] for token in settings_args.split(',')}
 
     def download(self, *args):
+        """
+        Download from a specified or default remote.
+        Will use cache if exists unless enforced by '--fresh-download' flag
+        """
         parser = self.init_parser('download')
         parser.add_argument("remote_name", help="remote name")
         parser.add_argument("registry_name", help="registry name")
@@ -37,6 +41,9 @@ class Binary(CommandAbstract):
         pb.download_content(parsed_args.dir_path)
 
     def upload(self, *args):
+        """
+        Upload binary to a specified remote and store it to cache.
+        """
         parser = self.init_parser('upload')
         parser.add_argument("remote_name", help="remote name")
         parser.add_argument("registry_name", help="registry name")
@@ -59,6 +66,9 @@ class Binary(CommandAbstract):
             pb.upload_content(parsed_args.dir_path)
 
     def remove(self, *args):
+        """
+        Remove a binary from a remote
+        """
         parser = self.init_parser('remove')
         parser.add_argument("remote_name", help="remote name")
         parser.add_argument("registry_name", help="registry name")
@@ -88,6 +98,9 @@ class Binary(CommandAbstract):
         pr.reassign_binary(old_assignment, new_assignment)
 
     def get_location(self, *args):
+        """
+        Get the path to the cache location for the binary.
+        """
         parser = self.init_parser('get_location')
         parser.add_argument("registry_name", help="registry name")
         parser.add_argument("settings", help="settings for the specified registry "

@@ -44,7 +44,7 @@ class CommandAbstract:
     def __get_commands(self) -> Dict[str, Callable]:
         result = {}
         for method_name, method in inspect.getmembers(self, predicate=inspect.ismethod):
-            if not method_name.startswith('_') and method_name not in ["run"]:
+            if not method_name.startswith('_') and method_name not in ["run", "init_parser"]:
                 result[method_name] = method
         return result
 

@@ -18,9 +18,13 @@ class Remote(CommandAbstract):
         """
         parser = self.init_parser('add')
         parser.add_argument("name", help="remote name")
-        parser.add_argument("type", help="remote type", choices=['local', 'nexus_site', 'webdav', 'nexus3'])
-        parser.add_argument("args", help="remote args, for local, it's the path (can be empty), for"
-                                         "nexus_site, it's the url, username, and password as comma separated value")
+        parser.add_argument("type", help="remote type, choices: 'local', 'nexus_site', 'webdav', 'nexus3'")
+        parser.add_argument("args", help="remote args, a comma separated value(s) (with no space) depending on the "
+                                         "remote type. "
+                                         "(1) For local, it's the path (can be empty). "
+                                         "(2) For nexus_site, it's the url, username, and password. "
+                                         "(3) For webdav, it's the host url, directory path, username, and password "
+                                         "(4) For nexus3, it's the host url, repository name, username and password")
         parsed_args = parser.parse_args(args)
         if parsed_args.type == "local":
             path = parsed_args.args
@@ -53,6 +57,8 @@ class Remote(CommandAbstract):
                 "repository_name": nexus3_args[1],
                 "credential": (nexus3_args[2], nexus3_args[3]),
             })
+        else:
+            raise NameError("The remote type you provided is not valid.")
 
     def remove(self, *args):
         """
