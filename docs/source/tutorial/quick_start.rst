@@ -11,27 +11,14 @@ Prepare file example
 --------------------
 Let us download some file for example purposes::
 
-    curl https://codeload.github.com/openssl/openssl/zip/OpenSSL_1_1_1d > openssl.zip
-    unzip openssl.zip
+    $ curl https://codeload.github.com/openssl/openssl/zip/OpenSSL_1_1_1d > openssl.zip
+    $ unzip openssl.zip
+    $ rm openssl
+    $ mv openssl-OpenSSL_1_1_1d openssl
 
-
-Setup a remote
---------------
-As discussed, Pacco has :ref:`Remote, registry and binary`. We can check the command
-for each of the the three things by::
-
-    $ pacco -h
-
-        pacco binary
-        pacco registry
-        pacco remote
-
-    Pacco commands. Type 'pacco <command> -h' for help
-
-But before that, we need to set up the server first.
 
 Setup the remote server
-^^^^^^^^^^^^^^^^^^^^^^^
+-----------------------
 For this tutorial, we will be using a locally hosted nexus2 docker server.
 You can see the guide for setting up the dockerized nexus from `here <https://github.com/sonatype/docker-nexus>`_.
 After you run the server, add a hosted repository of provider ``site``. The url that we will use for this example is
@@ -40,8 +27,8 @@ After you run the server, add a hosted repository of provider ``site``. The url 
 If you feel that there is no need to or complicated to use the nexus server, you can opt to use the local server and
 you can still follow along this tutorial.
 
-Pacco remote add
-^^^^^^^^^^^^^^^^
+Add the remote server to Pacco
+------------------------------
 After you have set up the repository on the Nexus, now we can add it to the Pacco. Since we are setting up a remote,
 we can check what command do we need by using::
 
@@ -158,31 +145,91 @@ Now we can upload the "binary" (though it's actually a source code in our case).
 
     Pacco binary commands. Type 'pacco binary <command> -h' for help
 
-``pacco binary upload docker-remote openssl ./openssl version=1.1.1,type=d``
+    usage: pacco binary download [-h] remote_name registry_name dir_path settings
 
-Now you shall be able to browse your nexus and see that the files is uploaded.
+    $ pacco binary download -h
 
-Using
------
+    positional arguments:
+      remote_name    remote name
+      registry_name  registry name
+      dir_path       download path
+      settings       settings for the specified registry (e.g.
+                     os=linux,version=2.1.0,type=debug
 
+    optional arguments:
+      -h, --help     show this help message and exit
+
+
+We need to make sure that the openssl directory is already in our working directory (or else you must provide the
+absolute path). Then we can upload it to the server ::
+
+    $ ls
+
+    openssl
+
+    $ ls openssl
+
+    ACKNOWLEDGEMENTS Configurations   LICENSE          NOTES.PERL       README           apps             config.com       e_os.h           include          test
+    AUTHORS          Configure        NEWS             NOTES.UNIX       README.ENGINE    appveyor.yml     crypto           engines          ms               tools
+    CHANGES          FAQ              NOTES.ANDROID    NOTES.VMS        README.FIPS      build.info       demos            external         os-dep           util
+    CONTRIBUTING     INSTALL          NOTES.DJGPP      NOTES.WIN        VMS              config           doc              fuzz             ssl
+
+    $ pacco binary upload docker-remote openssl openssl version=1.1.1,type=d
+
+Now we can confirm that it is uploaded::
+
+    $ pacco registry binaries docker-remote openssl
+
+    ['type=d,version=1.1.1']
+
+Though not recommended, you may also browse through your nexus server and you can see that it is uploaded.
+
+.. figure:: assets/screenshotNexus.png
+    :figclass: align-center
+
+Using the binary
+----------------
 There is two way of using the binary that is already uploaded, one is to download directly to your project directory,
 or get a pointer from pacco and use it from the pacco cache.
 
-Download to project
-^^^^^^^^^^^^^^^^^^^
-``pacco binary download docker-remote openssl ./openssl-download version=1.1.1,type=d``
+Download to project directory
+-----------------------------
+The way you upload and download is similar, you need to specify the destination of the download and also the parameter
+settings. If the a binary with the same registry and same parameter assignment (regardless of the remote source) was
+downloaded previously, Pacco will just copy it from the cache (Pacco will automatically store to the cache for any
+download or upload action).
+You can enforce the download by adding the flag
+``--fresh-download``. ::
 
-Use cache
-^^^^^^^^^
-When you download a new binary, pacco will actually store it into a cache and will not redownload if the parameter
-configuration is the same. (you can force a fresh download by adding the flag ``--fresh-download``). Because you
+    $ # remove pacco's cache
+    $ rm -rf ~/.pacco
+    $
+    $ # download from server because the cache is empty
+    $ pacco binary download docker-remote openssl ./openssl-download version=1.1.1,type=d
+    $
+    $ # will use the cache
+    $ pacco binary download docker-remote openssl ./openssl-download version=1.1.1,type=d
+    $
+    $ # will download again from server and overwrite the cache
+    $ pacco binary download docker-remote openssl ./openssl-download version=1.1.1,type=d  --fresh-download
+
+Get location for pointer to binary cache path
+---------------------------------------------
+As discussed previously, when you download a new binary, pacco will store it into a cache and
+will not re-download if the parameter configuration is the same. Because you
 might not want to have the whole copy for each of the project you are working on, pacco actually helps you to refer
 to the binary cache location by using ``pacco binary get_location openssl version=1.1.1,type=d`` . And it will output
 the directory of the installation
 ``/Users/kevin/.pacco_cache/__pacco_registry_name=openssl==type=d==version=1.1.1/bin``. To utilize this even better,
 you shall not store the value directly in your project build script, but rather you can call the command online::
 
-    export OPENSSL_DIR=$(pacco binary get_location openssl version=1.1.1,type=d)
+    $ export OPENSSL_DIR=$(pacco binary get_location openssl version=1.1.1,type=d)
 
 Now you can use the variable ``OPENSSL_DIR`` in your build script as you need.
 
+.. warning::    Note that you shall not store the binary cache path given by pacco since it might get updated and
+                the cache may be lost. You shall instead always use the ``get_location`` command.
+
+Next steps
+----------
+Links to other tutorial.
