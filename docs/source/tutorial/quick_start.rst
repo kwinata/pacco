@@ -242,4 +242,4 @@ Now you can use the variable ``OPENSSL_DIR`` in your build script as you need.
 
 Next steps
 ----------
-Links to other tutorial.
+You can read our :ref:`Advanced Guide`.

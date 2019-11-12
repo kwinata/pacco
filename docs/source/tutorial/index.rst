@@ -6,4 +6,4 @@ Pacco Tutorial
    :maxdepth: 1
 
    quick_start
-   advanced_tutorial
+   advanced_guide
