@@ -7,6 +7,8 @@
 # Pacco
 ![](docs/source/_images/pacco.png)
 
+> The development of this project is discontinued because of its usage being obsolete.
+
 Pacco is a simple package manager (used for prebuilt binary) that is interoperable with Nexus repository manager.
 
 ## Documentation
