@@ -1,4 +1,4 @@
 requests==2.22.0
 beautifulsoup4==4.8.0
-PyYAML==5.1.2
+PyYAML==5.4
 https://github.com/kwinata/nexus3-cli/archive/kwinata_master.zip
